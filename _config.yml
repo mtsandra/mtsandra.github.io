@@ -19,7 +19,7 @@ NickName: 'Leksa'
 webtitle: 'Aleksandra T. Ma'
 bio: 'one day at a time'
 about: true
-aboutyou: 'Hello, nice to meet you! My name is Aleksandra Ma, and I'm currently an Advisory Consultant at Deloitte. My main project lies in building an end-to-end data pipeline for high profile streaming service companies, in which I design text normalization processes and manage visualization dashboards. I've also had work experience in third party data usage compliance and software license review. In my free time, I like to explore all sorts of cool things about music and audio.'
+aboutyou: 'Hi, nice to meet you! My name is Aleksandra Ma, and I'm currently an Advisory Consultant at Deloitte. My main project lies in building an end-to-end data pipeline for high profile streaming service companies, in which I design text normalization processes and manage visualization dashboards. I've also had work experience in third party data usage compliance and software license review. In my free time, I like to explore all sorts of cool things about music and audio.'
 portraits: '/assets/profile.JPG' # your portraits image file path
 
 # SNS
