@@ -1,12 +1,9 @@
 github_users:
-  - torvalds
-  - alshedivat
+  - mtsandra
+  - AleksandraMaa
 
 github_repos:
-  - alshedivat/al-folio
-  - twbs/bootstrap
-  - jekyll/jekyll
-  - jquery/jquery
+  - BITSS-OPA/opa-deworming
+  - BITSS-OPA/Tutorials
+  - TSOx2AIC/data-visualisation-web
   - FortAwesome/Font-Awesome
-  - jpswalsh/academicons
-  - mathjax/MathJax
