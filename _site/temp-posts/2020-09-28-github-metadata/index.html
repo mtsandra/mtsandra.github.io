@@ -9,9 +9,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>projects | Aleksandra T. Ma</title>
+    <title>a post with github metadata | Aleksandra T. Ma</title>
     <meta name="author" content="Aleksandra T. Ma" />
-    <meta name="description" content="A growing collection of your cool projects." />
+    <meta name="description" content="a quick run down on accessing github metadata." />
 
 
     <!-- Bootstrap & MDB -->
@@ -31,7 +31,7 @@
     <link rel="shortcut icon" href="/assets/img/favicon.jpeg"/>
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="http://localhost:4000/projects/">
+    <link rel="canonical" href="http://localhost:4000/temp-posts/2020-09-28-github-metadata/">
     
     <!-- Dark Mode -->
     
@@ -75,8 +75,8 @@
               </li>
 
               <!-- Other pages -->
-              <li class="nav-item active">
-                <a class="nav-link" href="/projects/">projects<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">projects</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" href="/repositories/">repositories</a>
@@ -100,163 +100,64 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">projects</h1>
-            <p class="post-description">A growing collection of your cool projects.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <!-- pages/projects.md -->
-<div class="projects">
-  <!-- Display categorized projects -->
-  <h2 class="category">work</h2>
-  <!-- Generate cards for each project -->
-  <div class="grid">
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/1_project/">
-      <div class="card hoverable">
-<figure>
+  <header class="post-header">
+    <h1 class="post-title">a post with github metadata</h1>
+    <p class="post-meta">September 28, 2020</p>
+    <p class="post-tags">
+      <a href="/blog/2020"> <i class="fas fa-calendar fa-sm"></i> 2020 </a>
+        ·  
+        <a href="/blog/category/sample-posts%20external-services">
+          <i class="fas fa-tag fa-sm"></i> sample-posts external-services</a>  
+          
 
-  <picture>
-    
+    </p>
+  </header>
 
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/12.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+  <article class="post-content">
+    <p>A sample blog page that demonstrates the accessing of github meta data.</p>
 
-  </picture>
+<h2 id="what-does-github-metadata-do">What does Github-MetaData do?</h2>
+<ul>
+  <li>Propagates the site.github namespace with repository metadata</li>
+  <li>Setting site variables :
+    <ul>
+      <li>site.title</li>
+      <li>site.description</li>
+      <li>site.url</li>
+      <li>site.baseurl</li>
+    </ul>
+  </li>
+  <li>Accessing the metadata - duh.</li>
+  <li>Generating edittable links.</li>
+</ul>
 
-</figure>
+<h2 id="additional-reading">Additional Reading</h2>
+<ul>
+  <li>If you’re recieving incorrect/missing data, you may need to perform a Github API<a href="https://github.com/jekyll/github-metadata/blob/master/docs/authentication.md" target="_blank" rel="noopener noreferrer"> authentication</a>.</li>
+  <li>Go through this <a href="https://jekyll.github.io/github-metadata/" target="_blank" rel="noopener noreferrer">README</a> for more details on the topic.</li>
+  <li>
+<a href="https://github.com/jekyll/github-metadata/blob/master/docs/site.github.md" target="_blank" rel="noopener noreferrer">This page</a> highlights all the feilds you can access with github-metadata.
+<br>
+</li>
+</ul>
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 1</h2>
-          <p class="card-text">a project with a background image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+<h2 id="example-metadata">Example MetaData</h2>
+<ul>
+  <li>Host Name :</li>
+  <li>URL :</li>
+  <li>BaseURL :</li>
+  <li>Archived :</li>
+  <li>Contributors :</li>
+</ul>
+
+
+  </article>
+
 </div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/2_project/">
-      <div class="card hoverable">
-<figure>
-
-  <picture>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/3.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 2</h2>
-          <p class="card-text">a project with a background image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">
-      <div class="card hoverable">
-<figure>
-
-  <picture>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/7.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 3</h2>
-          <p class="card-text">a project that redirects to another website</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-  </div>
-  <h2 class="category">fun</h2>
-  <!-- Generate cards for each project -->
-  <div class="grid">
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/4_project/">
-      <div class="card hoverable">
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 4</h2>
-          <p class="card-text">another without an image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/5_project/">
-      <div class="card hoverable">
-<figure>
-
-  <picture>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/1.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 5</h2>
-          <p class="card-text">a project with a background image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/6_project/">
-      <div class="card hoverable">
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 6</h2>
-          <p class="card-text">a project with no image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-  </div>
-</div>
-
-          </article>
-
-        </div>
 
     </div>
 

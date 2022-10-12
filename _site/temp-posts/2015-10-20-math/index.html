@@ -9,9 +9,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>projects | Aleksandra T. Ma</title>
+    <title>a post with math | Aleksandra T. Ma</title>
     <meta name="author" content="Aleksandra T. Ma" />
-    <meta name="description" content="A growing collection of your cool projects." />
+    <meta name="description" content="an example of a blog post with some math" />
 
 
     <!-- Bootstrap & MDB -->
@@ -31,7 +31,7 @@
     <link rel="shortcut icon" href="/assets/img/favicon.jpeg"/>
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="http://localhost:4000/projects/">
+    <link rel="canonical" href="http://localhost:4000/temp-posts/2015-10-20-math/">
     
     <!-- Dark Mode -->
     
@@ -75,8 +75,8 @@
               </li>
 
               <!-- Other pages -->
-              <li class="nav-item active">
-                <a class="nav-link" href="/projects/">projects<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">projects</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" href="/repositories/">repositories</a>
@@ -100,163 +100,49 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">projects</h1>
-            <p class="post-description">A growing collection of your cool projects.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <!-- pages/projects.md -->
-<div class="projects">
-  <!-- Display categorized projects -->
-  <h2 class="category">work</h2>
-  <!-- Generate cards for each project -->
-  <div class="grid">
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/1_project/">
-      <div class="card hoverable">
-<figure>
+  <header class="post-header">
+    <h1 class="post-title">a post with math</h1>
+    <p class="post-meta">October 20, 2015</p>
+    <p class="post-tags">
+      <a href="/blog/2015"> <i class="fas fa-calendar fa-sm"></i> 2015 </a>
+        ·  
+        <a href="/blog/tag/formatting%20math">
+          <i class="fas fa-hashtag fa-sm"></i> formatting math</a>  
+          
+        ·  
+        <a href="/blog/category/sample-posts">
+          <i class="fas fa-tag fa-sm"></i> sample-posts</a>  
+          
 
-  <picture>
-    
+    </p>
+  </header>
 
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/12.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+  <article class="post-content">
+    <p>This theme supports rendering beautiful math in inline and display modes using <a href="https://www.mathjax.org/" target="_blank" rel="noopener noreferrer">MathJax 3</a> engine. You just need to surround your math expression with <code class="language-plaintext highlighter-rouge">$$</code>, like <code class="language-plaintext highlighter-rouge">$$ E = mc^2 $$</code>. If you leave it inside a paragraph, it will produce an inline expression, just like \(E = mc^2\).</p>
 
-  </picture>
+<p>To use display mode, again surround your expression with <code class="language-plaintext highlighter-rouge">$$</code> and place it as a separate paragraph. Here is an example:</p>
 
-</figure>
+\[\sum_{k=1}^\infty |\langle x, e_k \rangle|^2 \leq \|x\|^2\]
 
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 1</h2>
-          <p class="card-text">a project with a background image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
+<p>You can also use <code class="language-plaintext highlighter-rouge">\begin{equation}...\end{equation}</code> instead of <code class="language-plaintext highlighter-rouge">$$</code> for display mode math.
+MathJax will automatically number equations:</p>
+
+<p>\begin{equation}
+\label{eq:cauchy-schwarz}
+\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
+\end{equation}</p>
+
+<p>and by adding <code class="language-plaintext highlighter-rouge">\label{...}</code> inside the equation environment, we can now refer to the equation using <code class="language-plaintext highlighter-rouge">\eqref</code>.</p>
+
+<p>Note that MathJax 3 is <a href="https://docs.mathjax.org/en/latest/upgrading/whats-new-3.0.html" target="_blank" rel="noopener noreferrer">a major re-write of MathJax</a> that brought a significant improvement to the loading and rendering speed, which is now <a href="http://www.intmath.com/cg5/katex-mathjax-comparison.php" target="_blank" rel="noopener noreferrer">on par with KaTeX</a>.</p>
+
+  </article>
+
 </div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/2_project/">
-      <div class="card hoverable">
-<figure>
-
-  <picture>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/3.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 2</h2>
-          <p class="card-text">a project with a background image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">
-      <div class="card hoverable">
-<figure>
-
-  <picture>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/7.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 3</h2>
-          <p class="card-text">a project that redirects to another website</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-  </div>
-  <h2 class="category">fun</h2>
-  <!-- Generate cards for each project -->
-  <div class="grid">
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/4_project/">
-      <div class="card hoverable">
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 4</h2>
-          <p class="card-text">another without an image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/5_project/">
-      <div class="card hoverable">
-<figure>
-
-  <picture>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/1.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 5</h2>
-          <p class="card-text">a project with a background image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-<!-- _includes/projects.html -->
-<div class="grid-sizer"></div>
-<div class="grid-item">
-  <a href="/projects/6_project/">
-      <div class="card hoverable">
-        <div class="card-body">
-          <h2 class="card-title text-lowercase">project 6</h2>
-          <p class="card-text">a project with no image</p>
-          <div class="row ml-1 mr-1 p-0">
-          </div>
-        </div>
-      </div>
-    </a>
-</div>
-  </div>
-</div>
-
-          </article>
-
-        </div>
 
     </div>
 
