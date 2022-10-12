@@ -1,2 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-10-11T22:02:06-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">Building My Website with Jekyll (customized al-folio)</title><link href="http://localhost:4000/blog/2022/jekyll-website/" rel="alternate" type="text/html" title="Building My Website with Jekyll (customized al-folio)" /><published>2022-10-11T00:00:00-04:00</published><updated>2022-10-11T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/jekyll-website</id><content type="html" xml:base="http://localhost:4000/blog/2022/jekyll-website/"><![CDATA[]]></content><author><name></name></author><category term="tutorial" /><category term="tech-tutorial" /><summary type="html"><![CDATA[My website setup process with bug fix]]></summary></entry><entry><title type="html">What Surveillance Capitalism Means to Democracy in Today’s Digital Age</title><link href="http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age/" rel="alternate" type="text/html" title="What Surveillance Capitalism Means to Democracy in Today’s Digital Age" /><published>2020-03-15T22:10:38-04:00</published><updated>2020-03-15T22:10:38-04:00</updated><id>http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age</id><content type="html" xml:base="http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age/"><![CDATA[]]></content><author><name></name></author><summary type="html"><![CDATA[&#x201C;Absolute power corrupts absolutely.&#x201D;&#x200A;&#x2014;&#x200A;Lord ActonContinue reading on The Startup »]]></summary></entry></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-10-11T23:08:18-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Building My Website with GitHub Pages</title><link href="http://localhost:4000/blog/2022/jekyll-website/" rel="alternate" type="text/html" title="Building My Website with GitHub Pages" /><published>2022-10-11T00:00:00-04:00</published><updated>2022-10-11T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/jekyll-website</id><content type="html" xml:base="http://localhost:4000/blog/2022/jekyll-website/"><![CDATA[<p>I’ve always wanted a neat little personal website to consolidate my writings and personal projects (both artistic and technical) in one place. Ideally, it would be minimalistic and not too complicated to maintain. I’m also cheap, so I don’t want to pay for website hosting. All these factors made Github Pages the perfect site for me – free with a little bit of work.</p>
+
+<p>Turns out I’m a little bit particular when it comes to the website aesthetics. My first choice is <a href="https://github.com/xukimseven/HardCandy-Jekyll">HardCandy</a> because of Marceline from Adventure Time (I love BMO!) used in the demo. But the template is a little outdated and I couldn’t get it to work. Then I came across the <a href="https://github.com/alshedivat/al-folio">al-folio</a> template, which is what my current website is built off of.</p>
+
+<p>I have limited experience with Jekyll before, so I did this weirdly satisfying step by step <a href="https://jekyllrb.com/docs/step-by-step/01-setup/">tutorial</a> on the Jekyll official website to help me understand how Jekyll sites work. I found the below command really helpful, it allows your work-in-progress website hosted on the local server to reload automatically as you are making updates. Note that updates made to the _config.yml do not refresh until you restart your server. But for other updates, it refreshes automatically.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jekyll serve --livereload
+</code></pre></div></div>
+
+<p>Once it worked fine on my local environment, I decided to deploy it to my github.io server to make sure this template works before I’d spend way too much time invested in it. Morphe’s Law kicked in again, GitHub was throwing me an error in the build workflow :sweat_smile:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>github-pages 227 | Error: Liquid syntax error (line 5): Unknown tag 'twitter'
+</code></pre></div></div>
+<p>I tried a couple of solutions on al-folio’s GitHub repository (shoutout to them for keeping it active and alive), but none of them worked. I even tried the manual deployment option listed in their Readme file. Frustrated, I forced myself to take a magic walk break. I love walk breaks, the problems I’m stuck on are usually resolved magically after my walk break. Anyways, it’s because the deploy file has the source branch as <code class="language-plaintext highlighter-rouge">master</code>, but GitHub’s default branch has been renamed to <code class="language-plaintext highlighter-rouge">main</code>. I changed all the “master” in <code class="language-plaintext highlighter-rouge">./bin/deploy</code> to “main”.</p>
+
+<p>I also want to point out that it is essential to make sure that your GitHub Pages is deployed from <code class="language-plaintext highlighter-rouge">gh-pages</code> and not <code class="language-plaintext highlighter-rouge">main</code>. You can change this in the Settings page of your github.io repository.</p>
+
+<p>After both things are done, I pushed the updated code to my github.io repository, and it worked!! :heart_eyes: Now I have a working personal website!’</p>
+
+<h4 id="resources">Resources</h4>
+
+<p>For a step by step set up using the al-folio template, please refer to their README file <a href="https://github.com/alshedivat/al-folio">here</a>. I found it to be really simple and effective. This blog post is to document my first encounter with Jekyll and I’m hoping it could help anyone who is having trouble with the same build error.</p>
+
+<p>See you next time! :laughing:</p>
+
+<p>-ATM</p>]]></content><author><name></name></author><category term="tutorial" /><category term="tech-tutorial" /><summary type="html"><![CDATA[My website setup process with bug fix]]></summary></entry><entry><title type="html">你的心里有个魔鬼</title><link href="http://localhost:4000/blog/2021/monster-poem-chinese/" rel="alternate" type="text/html" title="你的心里有个魔鬼" /><published>2021-01-14T00:00:00-05:00</published><updated>2021-01-14T00:00:00-05:00</updated><id>http://localhost:4000/blog/2021/monster-poem-chinese</id><content type="html" xml:base="http://localhost:4000/blog/2021/monster-poem-chinese/"><![CDATA[<p>**</p>
+
+<p>你的心里有个魔鬼</p>
+
+<p>一个加勒比海的美人鱼</p>
+
+<p>一个美杜莎</p>
+
+<p>一个漩涡</p>
+
+<p>一个黑洞</p>
+
+<p>一座废墟</p>
+
+<p>一片虚无</p>
+
+<p>**</p>
+
+<p>你被封锁住了</p>
+
+<p>你的恐惧</p>
+
+<p>你的想象</p>
+
+<p>你的不知所措</p>
+
+<p>你的无所作为</p>
+
+<p>你的斤斤计较</p>
+
+<p>你被幻象误导了</p>
+
+<p>你的孤芳自赏</p>
+
+<p>顾影自怜</p>
+
+<p>自我麻痹</p>
+
+<p>自我安慰</p>
+
+<p>**</p>
+
+<p>不讨喜，又可悲</p>]]></content><author><name></name></author><category term="poem" /><category term="chinese" /><summary type="html"><![CDATA[poem written during a rather dark period of my life]]></summary></entry><entry><title type="html">What Surveillance Capitalism Means to Democracy in Today’s Digital Age</title><link href="http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age/" rel="alternate" type="text/html" title="What Surveillance Capitalism Means to Democracy in Today’s Digital Age" /><published>2020-03-15T22:10:38-04:00</published><updated>2020-03-15T22:10:38-04:00</updated><id>http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age</id><content type="html" xml:base="http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age/"><![CDATA[]]></content><author><name></name></author><summary type="html"><![CDATA[&#x201C;Absolute power corrupts absolutely.&#x201D;&#x200A;&#x2014;&#x200A;Lord ActonContinue reading on The Startup »]]></summary></entry></feed>

@@ -1,0 +1,14 @@
+I"	<p>I’ve always wanted a neat little personal website to consolidate my writings and personal projects (both artistic and technical) in one place. Ideally, it would be minimalistic and not too complicated to maintain. I’m also cheap, so I don’t want to pay for website hosting. All these factors made Github Pages the perfect site for me – free with a little bit of work.</p>
+
+<p>Turns out I’m a little bit particular when it comes to the website aesthetics. My first choice is <a href="https://github.com/xukimseven/HardCandy-Jekyll">HardCandy</a> because of Marceline from Adventure Time (I love BMO!) used in the demo. But the template is a little outdated and I couldn’t get it to work. Then I came across the <a href="https://github.com/alshedivat/al-folio">al-folio</a> template, which is what my current website is built off of.</p>
+
+<p>I have limited experience with Jekyll before, so I did this weirdly satisfying step by step <a href="https://jekyllrb.com/docs/step-by-step/01-setup/">tutorial</a> on the Jekyll official website to help me understand how Jekyll sites work. I found the below command really helpful, it allows your work-in-progress website hosted on the local server to reload automatically as you are making updates. Note that updates made to the _config.yml do not refresh until you restart your server. But for other updates, it refreshes automatically.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jekyll serve --livereload
+</code></pre></div></div>
+
+<p>Once it worked fine on my local environment, I decided to deploy it to my github.io server to make sure this template works before I’d spend way too much time invested in it. Morphe’s Law kicked in again, GitHub was throwing me an error in the build workflow :sweat_smile:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>github-pages 227 | Error: Liquid syntax error (line 5): Unknown tag 'twitter'
+</code></pre></div></div>
+<p>I tried a couple of solutions on al-folio’s GitHub repository (shoutout to them for keeping it active and alive), but none of them worked. I even tried the manual deployment option listed in their Readme file. Frustrated, I forced myself to take a magic walk break.</p>
+:ET

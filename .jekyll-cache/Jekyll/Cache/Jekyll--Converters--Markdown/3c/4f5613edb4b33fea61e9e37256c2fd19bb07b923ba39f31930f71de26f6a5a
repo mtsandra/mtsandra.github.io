@@ -1,0 +1,12 @@
+I"<p>I’ve always wanted a neat little personal website to consolidate my writings and personal projects (both artistic and technical) in one place. Ideally, it would be minimalistic and not too complicated to maintain. I’m also cheap, so I don’t want to pay for website hosting. All these factors made Github Pages the perfect site for me – free with a little bit of work.</p>
+
+<p>Turns out I’m a little bit particular when it comes to the website aesthetics. My first choice is <a href="https://github.com/xukimseven/HardCandy-Jekyll">HardCandy</a> because of Marceline from Adventure Time (I love BMO!) used in the demo. But the template is a little outdated and I couldn’t get it to work. Then I came across the <a href="https://github.com/alshedivat/al-folio">al-folio</a> template, which is what my current website is built off of.</p>
+
+<p>I have</p>
+
+<blockquote>
+  <p>Error: Liquid syntax error (line 5): Unknown tag ‘twitter’</p>
+</blockquote>
+
+<p>{% highlight c++ linenos %}  <br /> code code code <br /> {% endhighlight %}</p>
+:ET
