@@ -29,16 +29,24 @@
 - title: Experience
   type: time_table
   contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
+    - title: Analytics Consultant
+      institution: Deloitte & Touche LLP, Risk & Financial Advisory
+      year: 2021 - Present
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
+        - title: "Data Analytics | Global Subscription Streaming Service Client" 
           contents:
-            - Sub-description 1.
-            - Sub-description 2.
+            - Developed from scratch a rule-based cost account name normalization pipeline for 190+ productions (15000+ account names) across different genres and production studios using SQL and Python
+            - "Clustered vendor names on 30,000+ ledger transactions using NLP methods: cosine similarity and tf-idf"
+            - Separated independent contractor person names from organizations using Named Entity Recognition
+            - Built and deployed 6 Tableau dashboards that were well-received by Head of Production Finance and provided biweekly trainings to Production Finance Executives on Tableau navigation and tooling
+            - Lead a team of 6 off-shore members and report directly to Head of Production Finance
+        - title: "Advertising Risk | Global Social Media Client" 
+          contents:
+            - Created and deployed automation scripts in Google Apps Script that improved spreadsheet efficiency by 60%
+            - Performed data usage compliance assessments for 200+ third party advertisers and measurement partners
+
+
+
     - title: Visiting Professor
       institution: California Institute of Technology, Pasadena, California, US
       year: 1933

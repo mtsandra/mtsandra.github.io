@@ -1,0 +1,182 @@
+I"n<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;figure&gt;
+</code></pre></div></div>
+
+<picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/read-me-tag.jpeg" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+<p>&lt;/figure&gt;</p>
+
+<div class="row">
+    
+    <div class="col-sm mt-3 mt-md-0">
+        <p style="background-color: #F0F0F0; font-size: 14px; font-color: #808080; padding: 10px; border-radius: 10px;
+        font-family: monospace;
+        letter-spacing: .08em;
+        margin: 0 auto;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: .17em solid pink;
+        animation: typing 3.5s steps(30, end), blinking-cursor .5s step-end infinite;
+        max-width: auto">
+        01/27/2018<br />
+        Shot on Canon 7D<br />
+        Model: Manana Hakobyan<br />
+        Location: UC Botanical Garden<br />
+        Photographer/Editor: Leksa <br />
+        Inspiration: Alice in Wonderland
+        </p>
+
+    </div>
+    
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <br />
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/rabbit.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="the rabit is late" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <br />
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/censored.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="alice is gone" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <br />
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/stickie.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="sticky note style collage" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <br />
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/lost.PNG" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <br />
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/changed.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="Alice has changed" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <br />
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/gray-palm-tree.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="No caption palm tree" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <br />
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/forever.JPG" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="How long is forever?" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        <br />
+        <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/imagination.PNG" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="example image" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+:ET

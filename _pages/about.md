@@ -15,7 +15,7 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Hello! Nice to meet you :) My name is Aleksandra, or Sandra for short. 
+Hello! Nice to meet you :) My name is Aleksandra, or Leksa for short. 
 
 I graduated from UC Berkeley Statistics & Data Science in 2020. Now I'm a consultant at Deloitte, where I build and manage a data analytics engine for a global subscription streaming service client with my awesome teammates.
 

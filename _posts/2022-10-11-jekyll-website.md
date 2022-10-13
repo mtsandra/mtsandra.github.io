@@ -26,7 +26,7 @@ I tried a couple of solutions on al-folio's GitHub repository (shoutout to them 
 
 I also want to point out that it is essential to make sure that your GitHub Pages is deployed from ```gh-pages``` and not ```main```. You can change this in the Settings page of your github.io repository. 
 
-After both things are done, I pushed the updated code to my github.io repository, and it worked!! :heart_eyes: Now I have a working personal website!'
+After both things are done, I pushed the updated code to my github.io repository, and it worked!! :heart_eyes: Now I have a working personal website!
 
 #### Resources
 
