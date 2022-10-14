@@ -29,8 +29,8 @@
 - title: Experience
   type: time_table
   contents:
-    - title: Analytics Consultant
-      institution: Deloitte & Touche LLP, Risk & Financial Advisory
+    - title: Deloitte & Touche LLP, Risk & Financial Advisory
+      institution: Analytics Consultant
       year: 2021 - Present
       description:
         - title: "Data Analytics | Global Subscription Streaming Service Client" 
@@ -46,58 +46,25 @@
             - Performed data usage compliance assessments for 200+ third party advertisers and measurement partners
 
 
-
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
+    - title: UC Berkeley Center for Effective Global Action
+      institution: Research Assitant
+      year: 2020 - 2021
       description:
-        - Description 1.
-        - Description 2.
+        - Built and maintained an R Shiny web app to assist policymakers with understanding research papers on social and fiscal deworming impacts in developing countries under different assumptions
+        - Deployed the whole project in cloud for transparency after aesthetics enhancement through HTML & CSS
+        - Wrote tutorials on topics including R Shiny, Git, and mentored undergraduate researchers
 
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
-
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
-      description:
-
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
-
-- title: Open Source Projects
+- title: Leadership & Teaching
   type: time_table
   contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
-
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 1921
-      items: 
-        - Nobel Prize in Physics 
-        - Matteucci Medal
-    - year: 2029
-      items: 
-        - Max Planck Medal
-
-- title: Academic Interests
-  type: nested_list
-  contents:
-    - title: Topic 1.
-      items: 
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
-      items:
-        - Description 1.
-        - Description 2.
-
-- title: Other Interests
-  type: list
-  contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+    - title: Ascend at Berkeley
+      year: 2019
+      institution: President
+      description: 
+        - Organized and hosted a multi-round <a href='https://www.linkedin.com/pulse/travonde-bridging-generations-nga-nguyen-1f/'>tech case competition</a> featuring 8 pioneer judges, including the Apple co-founder Steve Wozniak, and 200+ students participated 
+        - Led the 64-member organization, including overseeing 34 hosted events and handling a budget of $12,000+
+    - title: InAmerica Education
+      year: 2017
+      institution: Teacher
+      description: 
+        - Wrote and taught lessons in TOEFL Writing, Speaking, and SAT Grammar and Math
