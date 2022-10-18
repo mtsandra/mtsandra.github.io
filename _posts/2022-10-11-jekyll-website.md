@@ -2,9 +2,9 @@
 layout: post
 title:  "Building My Website with GitHub Pages"
 date:   2022-10-11
-description: My website setup process with bug fix
-tags: tech-tutorial
-categories: tutorial
+description: My website setup process with bug fix for the al-polio template
+tags: tech tutorial
+categories: tech-tutorial
 comments: false
 ---
 
