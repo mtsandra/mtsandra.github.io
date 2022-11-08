@@ -1,5 +1,831 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-10-19T01:37:35-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">托福满分备考经验 | My Advice for High TOEFL Score</title><link href="http://localhost:4000/blog/2022/toefl-writing/" rel="alternate" type="text/html" title="托福满分备考经验 | My Advice for High TOEFL Score" /><published>2022-10-15T00:00:00-04:00</published><updated>2022-10-15T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/toefl-writing</id><content type="html" xml:base="http://localhost:4000/blog/2022/toefl-writing/"><![CDATA[<p>我最近申请美国研究生卡耐基梅伦的计算机专业不接受五年以外的托福成绩, 所以不得不考了一次托福, 准备了大概一天做了一套模拟题熟悉了一下, 考了满分, 想在这里跟大家分享一下经验.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-11-08T00:19:59-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 4 (RNN)</title><link href="http://localhost:4000/blog/2022/dl4mir-4/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 4 (RNN)" /><published>2022-10-23T00:00:00-04:00</published><updated>2022-10-23T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-4</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-4/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>. I’d like to give a shoutout to Chris Olah’s wonderful explanation on LSTM as well.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="recurrent-neural-network">Recurrent Neural Network</h2>
+<p><img src="/assets/img/dl4mir/image18.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p>RNNs are usually used for data that are in sequence and lists. For example, speech recognition, translation, image captioning, etc.</p>
+
+<p>A more detailed look at the recurrent layer and an unfolded RNN with 3 time stamps:</p>
+
+<p><img src="/assets/img/dl4mir/image20.png" alt="rnn" width="50%" style="padding-bottom:0.5em;" /><br /></p>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image19.png" alt="rnn" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p. 8</div>
+
+<ul>
+  <li>
+    <p>f<sub>out</sub> is usually soft-max/sigmoid, etc.</p>
+  </li>
+  <li>
+    <p>f<sub>h</sub> is usually tanh or ReLU</p>
+  </li>
+  <li>
+    <p>h<sub>t</sub> is hidden vector of the network that stores info at time t</p>
+  </li>
+  <li>
+    <p>U, V, W are matrices with trainable weights of the recurrent layer</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h2 id="lstm-long-short-term-memory">LSTM (Long Short Term Memory)</h2>
+
+<p>LSTM is a special kind of RNN. The additive connections between time-steps help gradient flow, remedying the vanishing gradient problem (see below for where the additive connections come from in LSTM)</p>
+
+<p>Standard RNNs handle short term dependencies pretty well, but not long term dependencies. LSTM handles this long term dependency.</p>
+
+<ul>
+  <li>
+    <p>Short Term Dependency Example: clouds in the [] &lt;- it’s easy for RNN to predict sky</p>
+  </li>
+  <li>
+    <p>Long Term Dependency Example: I grew up in France.(…) I speak [] &lt;- hard for RNN to predict French</p>
+  </li>
+</ul>
+
+<p>Inside the LSTM unit (a “cell”), there are gates (forget gate, input gate, and output gate). There are also states: hidden state and cell state. We’ll look at the LSTM unit step by step.</p>
+
+<p><img src="/assets/img/dl4mir/image21.png" alt="rnn1" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h4 id="terminology-alert">Terminology Alert!**</h4>
+
+<p><strong>Hidden state: (in both standard RNN and LSTM)</strong></p>
+
+<ul>
+  <li>Working memory capability that carries information from immediately previous events and overwrites at every step uncontrollably</li>
+</ul>
+
+<p><strong>Cell state: (only in LSTM)</strong></p>
+
+<ul>
+  <li>
+    <p>Long term memory capability that stores and loads information of not necessarily immediately previous events</p>
+  </li>
+  <li>
+    <p>Can be considered at a conveyor belt that carries the memory of previous events</p>
+  </li>
+</ul>
+
+<p><strong>Gates:</strong></p>
+
+<p>“A gate is a vector-multiplication node where the input is multiplied by a same-sized vector to attenuate the amount of input.”</p>
+
+<p>The three gates mentioned above usually contains a sigmoid layer coupled with tanh layer. The sigmoid layer returns a value between (0,1) that determines what part of data needs to be forgotten, updated, and outputted. Remember they have different weights (see formula below.)</p>
+
+<h5 id="step-1-forget-gate-layer---determine-what-information-to-forget">Step 1: Forget Gate Layer - Determine what information to forget</h5>
+
+<p>It is worth noting that we are not actually doing the forgetting here. We are only running the previous hidden state and the current input date through a sigmoid layer and decide what information to forget.</p>
+
+<p>Example: The store owner saw the little girl. We might want to forget the gender pronoun of the store owner here to update it with the little girl’s. Step 1 is to decide we are forgetting store owner’s gender.</p>
+
+<p><img src="/assets/img/dl4mir/image22.png" alt="rnn2" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h5 id="step-2-input-gate-layer---determine-what-information-to-update-and-store-in-our-cell-state">Step 2: Input Gate Layer - Determine what information to update and store in our cell state</h5>
+
+<p>The sigmoid layer determines which values we update. Tanh layer transforms the input layer into the range between (-1,1). We still have not combined these two layers to create an update to the cell state yet.</p>
+
+<p>Example: The store owner (he) saw the little girl. <em>She</em> was looking at candy bars. We need to determine that we need to add in the gender pronoun of the little girl.
+<img src="/assets/img/dl4mir/image23.png" alt="rnn3" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h5 id="step-3-cell-state-update---element-wise-operation-to-make-updates">Step 3: Cell State Update - element-wise operation to make updates</h5>
+
+<p>Now we take the information that we’ve determined to forget during the forget gate layer and apply it to the cell state. Then we multiply the input gate sigmoid layer with the newly transformed values from tanh layer and add it to our cell state.
+<img src="/assets/img/dl4mir/image24.png" alt="rnn4" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h5 id="step-4-output-gate-layer---determine-what-we-are-outputting">Step 4: Output Gate Layer - Determine what we are outputting</h5>
+
+<p>Similar to the structure of the input gate layer, the output gate layer also consists of two parts: sigmoid layer to determine what information to output, and tanh layer to transform the cell state data to have a range of (-1,1). Then we multiply them and output the transformed value of the data that we want the model to output.
+<img src="/assets/img/dl4mir/image25.png" alt="rnn5" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p><br /></p>
+
+<h3 id="recurrent-layers-and-music">Recurrent Layers and Music</h3>
+
+<p>Shift invariance cannot be incorporated in the computation inside recurrent layers, so recurrent layers may be suitable for <strong>the sequence of features.</strong></p>
+
+<p>The number of hidden nodes in a layer is one of the hyperparametes and can be chosen through trial and error.</p>
+
+<p><strong>Length of the recurrent layer can be controlled</strong> to optimize the computational cost. Onset detection can use a short time frame, whereas chord recognition may benefit from longer inputs.</p>
+
+<p>For many MIR problems, inputs from the future can help the prediction, so <strong>bi-directional RNN</strong> can be worth trying. We can think of it as having another recurrent layer in parallel that works in the reversed time order.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="solving-mir-problems-practical-advice">Solving MIR Problems: Practical Advice</h2>
+
+<h5 id="data-preprocessing">Data Preprocessing</h5>
+
+<ul>
+  <li>
+    <p>It’s crucial to preprocess the data because it affects the training speed.</p>
+  </li>
+  <li>
+    <p>Usually logarithmic mapping of magnitudes is used to condition the data distributions and result in better performance</p>
+  </li>
+  <li>
+    <p>Some preprocessing methods did <strong>not</strong> improve model performance:</p>
+
+    <ul>
+      <li>
+        <p>spectral whitening</p>
+      </li>
+      <li>
+        <p>normalize local contrasts (did not work well in CV)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Optimize the signal processing parameters such as the number of FFTs, mel bins, window and hop sizes, and the sampling rate.</p>
+
+    <ul>
+      <li>Audio signals are often downmixed and downsampled to 8-16Hz</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="aggregating-information">Aggregating information</h5>
+
+<ul>
+  <li>
+    <p>Time varying problems, which are problems with a short decision time scale (chord recognition, onset detection) require a prediction per unit time</p>
+  </li>
+  <li>
+    <p>Time invariant problems, which are problems with a long decision time scale (key detection, music tagging), require a method to aggregate features over time. Methods are listed as below:</p>
+
+    <ul>
+      <li>
+        <p>Pooling: common example would be using max pooling layers over time or frequency axis</p>
+      </li>
+      <li>
+        <p>Strided convolutions: convolutional layers that have strides bigger than 1. The effects are similar to max pooling, but we should not set strides to be smaller than kernel size. Otherwise not all of the input will be convolved.</p>
+      </li>
+      <li>
+        <p>Recurrent layers: can learn to summarize features in any axis, but it takes more computation and data than the previous two methods. So it is usually used in the last layer.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="depth-of-networks">Depth of networks</h5>
+
+<ul>
+  <li>
+    <p>Bottom line is that the neural network should be deep enough to approximate the relationship between the input and the output</p>
+  </li>
+  <li>
+    <p>CNNs have been increasing in both MIR and other domains, which is also allowed by recent advancement in computational savings.</p>
+  </li>
+  <li>
+    <p>RNNs have increased slowly because 1) stacking recurrent layers does not incorporate feature hiearchy and 2) recurrent layers are already deep along the time axis, so depth matters less</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h3 id="resources">Resources:</h3>
+
+<p>Chris Olah’s blog about RNN and LSTM <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">here</a></p>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 4 introduces RNN and LSTM. It also includes some practical advice on handling MIR problems.]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 3 (CNN)</title><link href="http://localhost:4000/blog/2022/dl4mir-3/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 3 (CNN)" /><published>2022-10-22T00:00:00-04:00</published><updated>2022-10-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-3</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-3/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="convolution">Convolution</h2>
+
+<p>I struggled for a long time to understand what convolution means. Turns out it can be explained from different perspectives. Chris Olah has this amazing <a href="https://colah.github.io/posts/2014-07-Understanding-Convolutions/">explanation</a> of convolution from probability’s perspective.</p>
+
+<p><img src="/assets/img/dl4mir/image13.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /> <br />
+Mathematical definition: t here can be treat as a constant that changes. So in the context of signal processing, it can be thought of filter g is reversed, and then slides along the horizontal axis. For every position, we calculate the area of the intersection between f and g. This area is the convolution value at the specific position. See the gif from convolution Wikipedia page. <br /><br />
+<img src="/assets/img/dl4mir/moving.gif" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p><img src="/assets/img/dl4mir/image14.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /><br />
+In convolutional neural networks, the filters are not reversed. It is technically called cross-correlation.</p>
+
+<p><img src="/assets/img/dl4mir/image15.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p><br /><br /></p>
+
+<h3 id="how-2d-convolutional-network-works-with-multiple-channels">How 2D Convolutional Network works with multiple channels</h3>
+
+<p><img src="/assets/img/dl4mir/image16.png" alt="formula" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<ul>
+  <li>
+    <p>Input: multiple channels of 2D arrays. in total K channels</p>
+  </li>
+  <li>
+    <p>Kernel: small 2D array of weights</p>
+
+    <ul>
+      <li>4D array for all the kernels in one layer, which means for all k and j: (h,l, K, J)</li>
+    </ul>
+  </li>
+  <li>
+    <p>Filter: a collection of kernels</p>
+
+    <ul>
+      <li>
+        <p>the number of kernels in a filter = the number of input channels = K</p>
+      </li>
+      <li>
+        <p>each channel will have one unique kernel to slide through</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Output channels: equivalent to the neurons in that layer. in total J channels</p>
+
+    <ul>
+      <li>1 filter only yields 1 output channel</li>
+    </ul>
+  </li>
+  <li>
+    <p>There’s only 1 bias term for each filter</p>
+  </li>
+</ul>
+
+<p>Example input has 3 channels (K = 3), each channel is 5x5. Kernel is 3x3.</p>
+
+<p>Step 1: Each unique kernel in a filter will go through each input channel and yield a processed version of that input channel. So we will get K unique kernels.</p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/cnn1.gif" alt="CNN 1" width="100%" style="padding-bottom:0.5em;" />
+Reference image is from Irhum Shafkat's Medium article.</div>
+
+<p>Step 2: Sum over all the processed versions to get one output channel</p>
+
+<p><img src="/assets/img/dl4mir/cnn2.gif" alt="CNN 2" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<p>Step 3: Add in the bias term for this filter to get the final output channel. Note this will be y<sub>j</sub></p>
+
+<p><img src="/assets/img/dl4mir/cnn3.gif" alt="CNN 3" width="50%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p><strong>Subsampling:</strong></p>
+
+<p>Usually convolutional layers are used with pooling layers. For example, a maxpool.</p>
+
+<ul>
+  <li>
+    <p>Pooling layer reduces the size of feature maps by downsampling them with an operation.</p>
+
+    <ul>
+      <li>
+        <p>Max function tests if there exists an activation in a local region, but discards the precise location of the activation</p>
+      </li>
+      <li>
+        <p>Average operation usually not used, but it is applied globally after the last convolutional layer to summarize the feature map activation on the whole area of input, when input size varies</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/dl4mir/image17.png" alt="formula" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h3 id="cnn--music">CNN &amp; Music</h3>
+
+<ul>
+  <li>
+    <p>Example use cases where CNN could be used in music:</p>
+
+    <ul>
+      <li>
+        <p>1D convolutional kernel that learns fundamental frequencies from raw audio samples</p>
+      </li>
+      <li>
+        <p>Apply 2D convolutional layers to 2D time-frequency representations</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Kernel size: determines maximum size of a component that the kernel can precisely capture in the layer</p>
+
+    <ul>
+      <li>
+        <p>Not too small: should at least be big enough to capture the difference between the two patterns you are trying to capture</p>
+      </li>
+      <li>
+        <p>When the kernel is big, best to use it with a stacked convolution layers with subsamplings so that small distortions can be allowed. This is because kernel does not allow invariance in it.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>CNN is shift invariant, which means the output will shift with the input but it stays otherwise unchanged. To put it plainly, a cat can be moved to another location of the image, but CNN will still be able to detect the cat.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+<p><br /></p>
+
+<h3 id="resources">Resources:</h3>
+
+<p>Kunlun Bai’s Medium article about different types of convolutions in CNNs <a href="https://towardsdatascience.com/a-comprehensive-introduction-to-different-types-of-convolutions-in-deep-learning-669281e58215">here</a></p>
+
+<p>Irhum Shafkat’s Medium article with awesome visualizations <a href="https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1">here</a></p>
+
+<p>Chris Olah’s blog about CNNs <a href="http://colah.github.io/posts/2014-07-Conv-Nets-Modular/">here</a></p>
+
+<p>GA Tech’s Polo Club of Data Science’s Interactive CNN learner in browser <a href="https://poloclub.github.io/cnn-explainer/#article-convolution">here</a></p>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 3 introduces convolution and convolutional neural network.]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 2</title><link href="http://localhost:4000/blog/2022/dl4mir-2/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 2" /><published>2022-10-21T00:00:00-04:00</published><updated>2022-10-21T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-2</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-2/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="music-information-retrieval">Music Information Retrieval</h2>
+
+<h4 id="background-of-mir">Background of MIR</h4>
+
+<ul>
+  <li>
+    <p>Usually means audio content, but also extends to lyrics, music metadata, or user listening history</p>
+  </li>
+  <li>
+    <p>Audio can be complemented with cultural and social background like genre or era to solve MIR topics</p>
+  </li>
+  <li>
+    <p>Lyric analysis is also MIR, but might not have much to do with audio content</p>
+  </li>
+</ul>
+
+<h4 id="problems-in-mir">Problems in MIR</h4>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image11.png" alt="mir problems" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p.6</div>
+
+<p><strong>Subjectivity</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: Absolute ground truth does not exist</p>
+  </li>
+  <li>
+    <p>Example: music genres, the mood for a song, listening context, music tags</p>
+  </li>
+  <li>
+    <p>Counter example: pitch, tempo are more defined, but sometimes also ambiguous</p>
+  </li>
+  <li>
+    <p>Why deep learning has achieved good results: it is difficult to manually design useful features when we cannot exactly analyze the logic behind subjectivity</p>
+  </li>
+</ul>
+
+<p><strong>Decision Time Scale</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: unit time length the prediction is made on</p>
+  </li>
+  <li>
+    <p>Example:</p>
+
+    <ul>
+      <li>
+        <p>Long decision time scale (time invariant problems): tempo and key usually do not change in an excerpt</p>
+      </li>
+      <li>
+        <p>Short decision time scale (time-varying problems): melody extraction usually uses time frames that are really short</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="audio-data-representations">Audio Data Representations</h3>
+
+<ul>
+  <li>
+    <p>General background: audio signals are 1D, time-frequency representations are 2D and have a couple of options (listed below)</p>
+  </li>
+  <li>
+    <p>Important to pre-process the data and optimize the effective representation of audio data to save computational costs</p>
+  </li>
+  <li>
+    <p>2D representations can be considered as images but there are differences between images and time-frequency representations</p>
+
+    <ul>
+      <li>
+        <p>Images are usually locally correlated (meaning nearby pixels will have similar intensities and colors)</p>
+      </li>
+      <li>
+        <p>But spectrograms are often harmonic correlations. Their correlations might be far down the frequency axis and the local correlations are weaker</p>
+      </li>
+      <li>
+        <p>Scale invariance is expected for visual object recognition but probably not for audio-related tasks.</p>
+
+        <ul>
+          <li>Here scale invariance means if you enlarge a picture of a cat, the model will still be able to recognize that it’s a cat.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image12.png" alt="mir problems" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p.6</div>
+
+<p><strong>Audio Signals</strong></p>
+
+<ul>
+  <li>
+    <p>Samples of the digital audio signals</p>
+  </li>
+  <li>
+    <p>Usually not the most popular choice, considering the sheer amount of data and the expensive cost of computation</p>
+
+    <ul>
+      <li>Sampling rate is usually 44100 Hz, which means one second of audio will have 44100 samples</li>
+    </ul>
+  </li>
+  <li>
+    <p>But recently one-dimensional convolutions can be used to learn an alternative of existing time-frequency conversions</p>
+  </li>
+</ul>
+
+<p><strong>Short Time Fourier Transform</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: The procedure for computing STFTs is to divide a longer time signal into shorter segments of equal length and then compute the Fourier transform separately on each shorter segment.</p>
+  </li>
+  <li>
+    <p>(+) Computes faster than other time-frequency representations thanks to FFTs</p>
+  </li>
+  <li>
+    <p>(+) invertible to the audio signal, thus can be used in sonification of learned features and source separation</p>
+  </li>
+  <li>
+    <p>(-) its frequencies are linearly centered and do not match the frequency resolution of human auditory system -&gt; mel spectrogram is</p>
+  </li>
+  <li>
+    <p>(-) not as efficient in size as mel sepctrogram (log scale), but also not as raw as audio signals</p>
+  </li>
+  <li>
+    <p>(-) it is not musically motivated like CQT</p>
+  </li>
+</ul>
+
+<p><strong>Mel Spectrogram</strong></p>
+
+<ul>
+  <li>
+    <p>2D representation that is optimized for human auditory perception.</p>
+  </li>
+  <li>
+    <p>(+) It compresses the STFT in frequency axis to match the logarithmic frequency scale of human hearing - hence efficient in size but preserves the most perceptually important information</p>
+  </li>
+  <li>
+    <p>(-) not invertible to audio signals</p>
+  </li>
+  <li>
+    <p>Popular for tagging, boundary detection, onset detection, and learning latent features of music recommendation due to its close proximity to human auditory perception.</p>
+  </li>
+</ul>
+
+<p><strong>Constant-Q Transform (CQT)</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: It is also a 2D time-frequency representation that provide log-scale centered frequencies. It perfectly matches the frequency distribution of pitches</p>
+  </li>
+  <li>
+    <p>(+) Perfectly matches the pitch frequency distribution so it should be used where fundamental frequencies of notes should be identified</p>
+
+    <ul>
+      <li>Example: Chord recognition and transcription</li>
+    </ul>
+  </li>
+  <li>
+    <p>(-) Computation is heavier than the other two</p>
+  </li>
+</ul>
+
+<p><strong>Chromagram</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: Pitch class profile, provides the energy distribution on a set of pitch class (from C to B)</p>
+  </li>
+  <li>
+    <p>It is more processed than other representations and can be used as a feature by itself, just like MFCC</p>
+  </li>
+</ul>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 2 provides background on music information retrieval and audio representations.]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 1</title><link href="http://localhost:4000/blog/2022/dl4mir-1/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 1" /><published>2022-10-20T00:00:00-04:00</published><updated>2022-10-20T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-1</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-1/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="brief-context-on-deep-learning">Brief Context on Deep Learning</h2>
+
+<h4 id="development-history-of-neural-networks">Development history of Neural Networks</h4>
+
+<ul>
+  <li>
+    <p>Error backpropagation: way to apply the gradient descent algorithm for deep neural networks</p>
+  </li>
+  <li>
+    <p>Convolutional neural network was introduced to recognize handwritten digits.</p>
+  </li>
+  <li>
+    <p>Long short-term memory recurrent unit was introduced for sequence modelling.</p>
+
+    <ul>
+      <li>Sequence models input and output streams of data. For example, text streams and audio clips. Applications include speech recognition, sentiment classification, and video activity recognition</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="recent-advancements-that-contributed-to-modern-deep-learning">Recent Advancements that Contributed to Modern Deep Learning</h4>
+
+<ul>
+  <li>
+    <p>Optimization technique: Training speed has improved by using rectified linear units (ReLUs) instead of sigmoid functions</p>
+  </li>
+  <li>
+    <p>Parallel computing on graphical computing units (GPUs) also encourages large-scale training</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="deep-learning-vs-conventional-machine-learning">Deep Learning vs Conventional Machine Learning</h2>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image1.png" alt="deep learning vs conventional machine learning" width="100%" style="padding-bottom:0.5em;" />Diagram for Conventional Machine Learning vs Deep Learning
+
+</div>
+
+<h4 id="conventional-machine-learning">Conventional machine learning</h4>
+
+<ul>
+  <li>
+    <p>Hand designing the features &amp; the machine learning a classifier</p>
+
+    <ul>
+      <li>
+        <p>Using MFCCs as inputs to train a classifier because we already know that MFCC can provide relevant information for the task</p>
+      </li>
+      <li>
+        <p>Only part of the model learns from the data (classifier part), the MFCCs are calculated by us and not learned by the model from the data</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="deep-learning">Deep Learning</h4>
+
+<ul>
+  <li>
+    <p>Both the feature extraction and the classifier part comes from the model.</p>
+
+    <ul>
+      <li>
+        <p>Having multiple layers coupled with the nonlinear activation functions allows the model to learn complicated relationships between inputs and outputs</p>
+      </li>
+      <li>
+        <p>Input and output might not be directly correlated. For example, input can be audio signals but output can be genres.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="when-to-use-deep-networks">When to use Deep Networks?</h4>
+
+<ul>
+  <li>
+    <p>When there are at least 1000 samples. Samples here do not necessarily mean number of tracks, it should be specific to the task that you are performing.</p>
+
+    <ul>
+      <li>For example, you don’t need a lot of tracks to train a model on chord recognition - as long as you have enough chords in those tracks</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="what-to-do-if-theres-not-enough-data">What to do if there’s not enough data?</h4>
+
+<ul>
+  <li>
+    <p><strong>Data augmentation:</strong> adding some sort of distortion while preserving the core properties. This step is also highly dependent on task.</p>
+
+    <ul>
+      <li>
+        <p>Example: time stretching and pitch scaling for genre classification</p>
+      </li>
+      <li>
+        <p>Note that this will not work for key or tempo detection</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Transfer learning</strong>: reusing a network that is previously trained on another task(source task) for current task (target tasks)</p>
+
+    <ul>
+      <li>
+        <p>Assuming that there are similarities in the source task and target tasks, so that the pre-trained networks can actually provide relevant representations</p>
+      </li>
+      <li>
+        <p>The pre-trained network serves as a <em>feature extractor</em> and learns a shallow classifier</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Random Weights Network</strong>: also known as networks without training.</p>
+
+    <ul>
+      <li>
+        <p>Network structure is built based on a strong assumption of the feature hierarchy, so the procedure is not completely random</p>
+      </li>
+      <li>
+        <p>Similar to transfer learning, random weights network also can serve as a <em>feature extractor</em></p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="designing--training-a-deep-neural-network">Designing &amp; Training a Deep Neural Network</h2>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image2.png" alt="neural network structure" width="100%" style="padding-bottom:0.5em;" />
+Sneak peek of the overall structure of a deep neural network with 3 hidden layers.
+
+</div>
+
+<p><br /></p>
+
+<p>Here we assume you have a basic understanding of what a standard neural network looks like and how forward propagation and back propagation works. If not, I recommend this 12-min long <a href="https://youtu.be/EVeqrPGfuCY">video</a> by Andrew Ng.</p>
+
+<h4 id="gradient-descent">Gradient Descent</h4>
+
+<p><img src="/assets/img/dl4mir/image3.png" alt="gradient update" width="30%" style="padding-bottom:0.5em;" /></p>
+
+<ul>
+  <li>
+    <p>Training speed affects the overall performance because a significant difference on the training speed may result in different convergences of the training. We need to control the learning rate and the gradient smartly to optimize the training speed.</p>
+  </li>
+  <li>
+    <p>Learning rate η: can be adaptively controlled. When it is far away from local minima, our gradient should take big steps, but when it gets closer, it should take smaller steps.</p>
+
+    <ul>
+      <li>ADAM is an optimizer that uses learning rate. It is an extension to the stochastic gradient descent</li>
+    </ul>
+  </li>
+  <li>
+    <p>Gradient ∇J(w): due to backpropagation, gradient at l-th layer is affected by the gradient at l +1th layer.</p>
+  </li>
+  <li>
+    <p>Reminder on different types of gradient descent algorithms: batch Gradient Descent, Mini-batch Gradient Descent, Stochastic Gradient Descent</p>
+  </li>
+</ul>
+
+<h4 id="activation-functions">Activation functions</h4>
+
+<h5 id="why-do-we-need-activation-functions">Why do we need activation functions?</h5>
+
+<p>Activation functions determines whether or not a node is considered to be activated or deactivated.</p>
+
+<p>We also use it to add nonlinearity into our model. We need nonlinearity because real world data is complex and cannot be captured only through a linear model. It is also worth noting that without a <em>non-linear</em> activation function in the network, a NN, no matter how many layers it had, would behave just like a single-layer perceptron, because summing these layers would give you just another linear function.</p>
+
+<h5 id="sigmoid-vs-tanh-vs-relu-vs-leaky-relu-and-softmax">sigmoid vs tanh vs ReLU vs leaky ReLU and softmax</h5>
+
+<p><strong>Sigmoid</strong>: output range (0,1)
+<img src="/assets/img/dl4mir/image4.png" alt="sigmoid" width="80%" style="padding-bottom:0.5em;" /></p>
+
+<ol>
+  <li>
+    <p>Not centered around zero, all its output are positive. <br /><img src="/assets/img/dl4mir/image5.png" alt="y" width="30%" style="padding-bottom:0.5em;" /> f here is the sigmoid activation function.<br />We have <img src="/assets/img/dl4mir/image6.png" alt="derivative" width="30%" style="padding-bottom:0.5em;" /> as the gradient. Because x<sub>i</sub> (output from sigmoid layer) is always positive, the gradient is also always either positive or negative. But to get the optimum value, weights sometimes take on opposite signs. This will cause zig zag behavior.</p>
+  </li>
+  <li>
+    <p>In the blue box, the gradient vanishes when the input values are too big or too small (vanishing gradient problem)</p>
+  </li>
+</ol>
+
+<p><strong>Tanh</strong>: output range (-1,1)</p>
+
+<p><img src="/assets/img/dl4mir/image7.png" alt="tanh" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p>Similar to sigmoid, it also has the vanishing gradient problem. But it is zero centered.</p>
+
+<p><strong>ReLU -</strong> output range: [0, infinity)</p>
+
+<p><img src="/assets/img/dl4mir/image8.png" alt="ReLU" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p>R(x) = max(0, x)</p>
+
+<p>(+) Faster to converge compared with other activation function. Computationally inexpensive.</p>
+
+<p>(-) It’s likely when we are updating the weights, the output of a neuron is always x&lt;0. Hence, ReLU always sets it to 0. If this happens, the neuron just never gets activated and does not make contributions.</p>
+
+<p><strong>Leaky ReLU</strong></p>
+
+<p><img src="/assets/img/dl4mir/image9.png" alt="leaky ReLU" width="80%" style="padding-bottom:0.5em;" /><br />
+Instead of the standard ReLU, it adds a parameter alpha that avoids having a “dead” neuron.</p>
+
+<p><strong>Softmax</strong></p>
+
+<p>Softmax is only applied in the last layer to predict probability values in classification tasks.</p>
+
+<p>The input vectors need to be mutually exclusive, and the probability output needs to sum up to 1.<br />
+<img src="/assets/img/dl4mir/image10.png" alt="softmax" width="80%" style="padding-bottom:0.5em;" /></p>
+
+<h3 id="deep-neural-networks-for-mir">Deep Neural Networks for MIR</h3>
+
+<p>This series will also cover convolutional neural network (part 3) and recurrent neural network (part 4) in details. Here we briefly discuss dense layers.</p>
+
+<p><strong>Dense Layers in Music</strong></p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image2.png" alt="neural network structure" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p. 6
+
+</div>
+<p>There could be dense layer that only looks at the current frame like d1, but there could also be dense layers with contexts that look at multiple frames like d2.</p>
+
+<ul>
+  <li>
+    <p>Note: A dense layer does not facilitate a shift or scale invariance.</p>
+
+    <ul>
+      <li>
+        <p>Example: A STFT with frame length of 257 will be mapped from 257 dimensional space to a V-dimensional space (where V is the number of nodes in a hidden layer)</p>
+      </li>
+      <li>
+        <p>Even a tiny shift in frequency will be a different representation in</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>We usually combine dense layers with CNNs or RNNs for various MIR tasks.</p>
+  </li>
+</ul>
+
+<h4 id="resources">Resources:</h4>
+
+<p>Stackoverflow answer about why we need nonlinearity in Neural Network <a href="https://stackoverflow.com/a/9783865">here</a></p>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 1 sets the foundation for deep learning concepts.]]></summary></entry><entry><title type="html">Building My Website with GitHub Pages</title><link href="http://localhost:4000/blog/2022/jekyll-website/" rel="alternate" type="text/html" title="Building My Website with GitHub Pages" /><published>2022-10-11T00:00:00-04:00</published><updated>2022-10-11T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/jekyll-website</id><content type="html" xml:base="http://localhost:4000/blog/2022/jekyll-website/"><![CDATA[<p>I’ve always wanted a neat little personal website to consolidate my writings and personal projects (both artistic and technical) in one place. Ideally, it would be minimalistic and not too complicated to maintain. I’m also cheap, so I don’t want to pay for website hosting. All these factors made Github Pages the perfect site for me – free with a little bit of work.</p>
+
+<p>Turns out I’m a little bit particular when it comes to the website aesthetics. My first choice is <a href="https://github.com/xukimseven/HardCandy-Jekyll">HardCandy</a> because of Marceline from Adventure Time (I love BMO!) used in the demo. But the template is a little outdated and I couldn’t get it to work. Then I came across the <a href="https://github.com/alshedivat/al-folio">al-folio</a> template, which is what my current website is built off of.</p>
+
+<p>I have limited experience with Jekyll before, so I did this weirdly satisfying step by step <a href="https://jekyllrb.com/docs/step-by-step/01-setup/">tutorial</a> on the Jekyll official website to help me understand how Jekyll sites work. I found the below command really helpful, it allows your work-in-progress website hosted on the local server to reload automatically as you are making updates. Note that updates made to the _config.yml do not refresh until you restart your server. But for other updates, it refreshes automatically.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jekyll serve --livereload
+</code></pre></div></div>
+
+<p>Once it worked fine on my local environment, I decided to deploy it to my github.io server to make sure this template works before I’d spend way too much time invested in it. Morphe’s Law kicked in again, GitHub was throwing me an error in the build workflow :sweat_smile:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>github-pages 227 | Error: Liquid syntax error (line 5): Unknown tag 'twitter'
+</code></pre></div></div>
+<p>I tried a couple of solutions on al-folio’s GitHub repository (shoutout to them for keeping it active and alive), but none of them worked. I even tried the manual deployment option listed in their Readme file. Frustrated, I forced myself to take a magic walk break. I love walk breaks, the problems I’m stuck on are usually resolved magically after my walk break. Anyways, it’s because the deploy file has the source branch as <code class="language-plaintext highlighter-rouge">master</code>, but GitHub’s default branch has been renamed to <code class="language-plaintext highlighter-rouge">main</code>. I changed all the “master” in <code class="language-plaintext highlighter-rouge">./bin/deploy</code> to “main”.</p>
+
+<p>I also want to point out that it is essential to make sure that your GitHub Pages is deployed from <code class="language-plaintext highlighter-rouge">gh-pages</code> and not <code class="language-plaintext highlighter-rouge">main</code>. You can change this in the Settings page of your github.io repository.</p>
+
+<p>After both things are done, I pushed the updated code to my github.io repository, and it worked!! :heart_eyes: Now I have a working personal website!</p>
+
+<h4 id="resources">Resources</h4>
+
+<p>For a step by step set up using the al-folio template, please refer to their README file <a href="https://github.com/alshedivat/al-folio">here</a>. I found it to be really simple and effective. This blog post is to document my first encounter with Jekyll and I’m hoping it could help anyone who is having trouble with the same build error.</p>
+
+<p>See you next time! :laughing:</p>
+
+<p>-ATM</p>]]></content><author><name></name></author><category term="tech-tutorial" /><category term="tech" /><category term="tutorial" /><summary type="html"><![CDATA[My website setup process with bug fix for the al-polio template]]></summary></entry><entry><title type="html">托福满分备考经验 | My Advice for High TOEFL Score</title><link href="http://localhost:4000/blog/2022/toefl-writing/" rel="alternate" type="text/html" title="托福满分备考经验 | My Advice for High TOEFL Score" /><published>2022-10-08T00:00:00-04:00</published><updated>2022-10-08T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/toefl-writing</id><content type="html" xml:base="http://localhost:4000/blog/2022/toefl-writing/"><![CDATA[<p>我最近申请美国研究生卡耐基梅伦的计算机专业不接受五年以外的托福成绩, 所以不得不考了一次托福, 准备了大概一天做了一套模拟题熟悉了一下, 考了满分, 想在这里跟大家分享一下经验.</p>
 
 <h3 id="背景-woman_technologist">背景 :woman_technologist:</h3>
 
@@ -174,31 +1000,7 @@
 
 <p><br />
 希望大家早日和托福分手!! 考上自己理想的学校!! 加油 :fuelpump: :bulb: <br /><br />
-<img src="/assets/img/toefl/bmo.jpg" width="100%" /></p>]]></content><author><name></name></author><category term="English-learning" /><category term="tutorial" /><category term="chinese" /><summary type="html"><![CDATA[This post is written in Chinese (for now).]]></summary></entry><entry><title type="html">Building My Website with GitHub Pages</title><link href="http://localhost:4000/blog/2022/jekyll-website/" rel="alternate" type="text/html" title="Building My Website with GitHub Pages" /><published>2022-10-11T00:00:00-04:00</published><updated>2022-10-11T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/jekyll-website</id><content type="html" xml:base="http://localhost:4000/blog/2022/jekyll-website/"><![CDATA[<p>I’ve always wanted a neat little personal website to consolidate my writings and personal projects (both artistic and technical) in one place. Ideally, it would be minimalistic and not too complicated to maintain. I’m also cheap, so I don’t want to pay for website hosting. All these factors made Github Pages the perfect site for me – free with a little bit of work.</p>
-
-<p>Turns out I’m a little bit particular when it comes to the website aesthetics. My first choice is <a href="https://github.com/xukimseven/HardCandy-Jekyll">HardCandy</a> because of Marceline from Adventure Time (I love BMO!) used in the demo. But the template is a little outdated and I couldn’t get it to work. Then I came across the <a href="https://github.com/alshedivat/al-folio">al-folio</a> template, which is what my current website is built off of.</p>
-
-<p>I have limited experience with Jekyll before, so I did this weirdly satisfying step by step <a href="https://jekyllrb.com/docs/step-by-step/01-setup/">tutorial</a> on the Jekyll official website to help me understand how Jekyll sites work. I found the below command really helpful, it allows your work-in-progress website hosted on the local server to reload automatically as you are making updates. Note that updates made to the _config.yml do not refresh until you restart your server. But for other updates, it refreshes automatically.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jekyll serve --livereload
-</code></pre></div></div>
-
-<p>Once it worked fine on my local environment, I decided to deploy it to my github.io server to make sure this template works before I’d spend way too much time invested in it. Morphe’s Law kicked in again, GitHub was throwing me an error in the build workflow :sweat_smile:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>github-pages 227 | Error: Liquid syntax error (line 5): Unknown tag 'twitter'
-</code></pre></div></div>
-<p>I tried a couple of solutions on al-folio’s GitHub repository (shoutout to them for keeping it active and alive), but none of them worked. I even tried the manual deployment option listed in their Readme file. Frustrated, I forced myself to take a magic walk break. I love walk breaks, the problems I’m stuck on are usually resolved magically after my walk break. Anyways, it’s because the deploy file has the source branch as <code class="language-plaintext highlighter-rouge">master</code>, but GitHub’s default branch has been renamed to <code class="language-plaintext highlighter-rouge">main</code>. I changed all the “master” in <code class="language-plaintext highlighter-rouge">./bin/deploy</code> to “main”.</p>
-
-<p>I also want to point out that it is essential to make sure that your GitHub Pages is deployed from <code class="language-plaintext highlighter-rouge">gh-pages</code> and not <code class="language-plaintext highlighter-rouge">main</code>. You can change this in the Settings page of your github.io repository.</p>
-
-<p>After both things are done, I pushed the updated code to my github.io repository, and it worked!! :heart_eyes: Now I have a working personal website!</p>
-
-<h4 id="resources">Resources</h4>
-
-<p>For a step by step set up using the al-folio template, please refer to their README file <a href="https://github.com/alshedivat/al-folio">here</a>. I found it to be really simple and effective. This blog post is to document my first encounter with Jekyll and I’m hoping it could help anyone who is having trouble with the same build error.</p>
-
-<p>See you next time! :laughing:</p>
-
-<p>-ATM</p>]]></content><author><name></name></author><category term="tech-tutorial" /><category term="tech" /><category term="tutorial" /><summary type="html"><![CDATA[My website setup process with bug fix for the al-polio template]]></summary></entry><entry><title type="html">你的心里有个魔鬼</title><link href="http://localhost:4000/blog/2021/monster-poem-chinese/" rel="alternate" type="text/html" title="你的心里有个魔鬼" /><published>2021-01-14T00:00:00-05:00</published><updated>2021-01-14T00:00:00-05:00</updated><id>http://localhost:4000/blog/2021/monster-poem-chinese</id><content type="html" xml:base="http://localhost:4000/blog/2021/monster-poem-chinese/"><![CDATA[<p>**</p>
+<img src="/assets/img/toefl/bmo.jpg" width="100%" /></p>]]></content><author><name></name></author><category term="English-learning" /><category term="tutorial" /><category term="chinese" /><summary type="html"><![CDATA[I recently got full score in TOEFL and wrote down some of my hacks. This post is written in Chinese (for now).]]></summary></entry><entry><title type="html">你的心里有个魔鬼</title><link href="http://localhost:4000/blog/2021/monster-poem-chinese/" rel="alternate" type="text/html" title="你的心里有个魔鬼" /><published>2021-01-14T00:00:00-05:00</published><updated>2021-01-14T00:00:00-05:00</updated><id>http://localhost:4000/blog/2021/monster-poem-chinese</id><content type="html" xml:base="http://localhost:4000/blog/2021/monster-poem-chinese/"><![CDATA[<p>**</p>
 
 <p>你的心里有个魔鬼</p>
 
@@ -240,4 +1042,27 @@
 
 <p>**</p>
 
-<p>不讨喜，又可悲</p>]]></content><author><name></name></author><category term="poem" /><category term="chinese" /><summary type="html"><![CDATA[poem written during a rather dark period of my life]]></summary></entry><entry><title type="html">What Surveillance Capitalism Means to Democracy in Today’s Digital Age</title><link href="http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age/" rel="alternate" type="text/html" title="What Surveillance Capitalism Means to Democracy in Today’s Digital Age" /><published>2020-03-15T22:10:38-04:00</published><updated>2020-03-15T22:10:38-04:00</updated><id>http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age</id><content type="html" xml:base="http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age/"><![CDATA[]]></content><author><name></name></author><summary type="html"><![CDATA[&#x201C;Absolute power corrupts absolutely.&#x201D;&#x200A;&#x2014;&#x200A;Lord ActonContinue reading on The Startup »]]></summary></entry></feed>
+<p>不讨喜，又可悲</p>]]></content><author><name></name></author><category term="poem" /><category term="chinese" /><summary type="html"><![CDATA[poem written during a rather dark period of my life]]></summary></entry><entry><title type="html">What Surveillance Capitalism Means to Democracy in Today’s Digital Age</title><link href="http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age/" rel="alternate" type="text/html" title="What Surveillance Capitalism Means to Democracy in Today’s Digital Age" /><published>2020-03-15T22:10:38-04:00</published><updated>2020-03-15T22:10:38-04:00</updated><id>http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age</id><content type="html" xml:base="http://localhost:4000/blog/2020/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age/"><![CDATA[]]></content><author><name></name></author><summary type="html"><![CDATA[&#x201C;Absolute power corrupts absolutely.&#x201D;&#x200A;&#x2014;&#x200A;Lord ActonContinue reading on The Startup »]]></summary></entry><entry><title type="html">What Surveillance Captalism Means to Democracy in Today’s Digital Age</title><link href="http://localhost:4000/blog/2020/surveillance-capitalism/" rel="alternate" type="text/html" title="What Surveillance Captalism Means to Democracy in Today’s Digital Age" /><published>2020-03-15T00:00:00-04:00</published><updated>2020-03-15T00:00:00-04:00</updated><id>http://localhost:4000/blog/2020/surveillance-capitalism</id><content type="html" xml:base="http://localhost:4000/blog/2020/surveillance-capitalism/"><![CDATA[<p>Read a nicely formatted version on Medium <a href="https://medium.com/swlh/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age-498e659a1d4">here</a>.
+<br /></p>
+
+<hr />
+
+<p>Ever since the dot com boom in the early 2000s, our lives have been saturated by technology in every aspect and have been made much more convenient by the services tech corporations provide. After two decades flew by, the Internet has become the extension of the real world and one of the most significant infrastructures of today’s society. We engage in daily activities, make important life decisions, and expose sensitive information on this platform, which allows the tech corporations to collect this user information and use it to train their algorithms. We as users, on the other hand, are unaware of which part of the traces we leave online is collected as data, and most importantly, how these tech corporations handle our data. This huge asymmetry of knowledge and transparency has exposed us to surveillance capitalism and puts democracy at stake.</p>
+
+<p><strong><em>Introduction to Surveillance Capitalism</em></strong></p>
+
+<p>Shoshana Zuboff, a Harvard Business School professor emerita with decades of experience studying issues of labor and power in the digital economy, defines surveillance capitalism as a “radically disembedded and extractive variant of information capitalism” based on the commodification of “reality” and its transformation into behavioral data for analysis and sales. One important characteristic of traditional capitalists is that they claim things outside the market such as rivers and mountains and take them into the market dynamics as commodities. Similarly, surveillance capitalists like Google were also looking for their free target outside the conventional market in the early 2000s, and they saw the vast potential in commodifying people’s private experience. The surveillance capitalists build platforms such as social media to collect data, they use the data to train predictive models, and their final products are the predictions of what their users will do. In this case, it is not their users that are the business customers, but the companies that need these prediction results to make decisions like when to send the targeted ads, how much to charge for insurance for different people, etc.</p>
+
+<p><strong><em>Indications of Surveillance Capitalism</em></strong></p>
+
+<p>In Zuboff’s article “Big Other: Surveillance Capitalism and the Prospects of an Information Civilization”, she argues that surveillance capitalism “ aims to predict and modify human behavior as a means to produce revenue and market control.” Surveillance capitalists know that the monetization potentials linked to accurate data capture and analysis are enormous. In order to get the most accurate models, tech corporations need to get not only a massive amount of data but also a variety of data. Because technology is still a largely unrestricted and lawless land, tech firms have developed lots of ways to convert the real world into data points as well. Virtual assistants such as Amazon Alexa are brought into people’s homes and said to be listening to people’s conversations; insurance tracking devices are promoted by auto insurance companies to decide on how much an individual should pay for insurance; CCTV surveillance cameras are installed in different neighborhoods, which leaves people’s facial expressions that are highly indicative of their future behaviors free for the companies to grab.</p>
+
+<p>Unfortunately, these new opportunities and incentives to capture data can sometimes challenge people’s privacy and even violate rights and laws. This prompts the big tech corporations such as Google and Facebook to obscure their operations and algorithms in order to take advantage of the uninformed data subjects. They expect to get opposition along the way but as previously mentioned, they will already have accumulated a substantial amount of resources to defend themselves at low cost.</p>
+
+<p>The technology that backs up this surveillance capitalism develops at an unprecedented speed, which puts people in a brand new position where very few people understand the logic and consequences of the work of these corporations. As a result, there is a law gap between technological development and defensive barriers. The opacity that the tech corporations choose to hide behind did not help with connecting the gap, especially knowing that their ultimate goal is to modify and swing behavior. Zuboff argues that under the framework of surveillance capitalism, the global architecture of computer mediation turns the electronic text of the bounded organization into an intelligent world-spanning organism that she defines as the Big Other. Those with the material, knowledge, and financial resources participate in the Big Other economics, and the markets in behavioral control get to decide who can gain access to the Big Other. Markets and democracies are no longer reciprocal to each other; rather, populations depend on the markets so much that the data they are supposed to own is just free data capture targets. As Zuboff said, “Under surveillance capitalism, democracy no longer functions as a means to prosperity; democracy threatens surveillance revenues.”</p>
+
+<p>The opacity that big tech corporations choose to take on catalyzes the formation of a black box society where we know only the output, but not the process leading to the output. As James Arvanitakis states, “In a democracy, we assume that we understand where the information comes from, but this is no longer the case.” The asymmetry of knowledge crashes democracy from both above and below. From above, it increases the social inequality in this digital era. Internet was built to spread and democratize knowledge, but surveillance capitalists see their users’ rights of knowing as an obstacle on their way to higher efficiency. From below, it is nearly impossible for users to combat surveillance capitalism. Since the product is the certainty of behavior predictions, the surveillance capitalists aim to interfere with our own decision making without the users knowing through subliminal cues and micro-targeting.</p>
+
+<hr />
+
+<p>As we entered the digital era, the Internet has become the basic infrastructure of today’s economy. However, if our infrastructure is full of cameras and strings that can be pulled to manipulate the majority, the power will naturally fall into the hands of the minority who has all the information. As Lord Acton once said, “Absolute power corrupts absolutely.” Democracy will be threatened, and there will be bigger social inequality issues. The good news is, surveillance capitalism is still a relatively new phenomenon that has lasted for about 20 years, and legislative institutions have started to take measures to regulate the operation and ownership of the Internet. European Union has recently come up with General Data Protection Regulation, which aims to protect the users’ privacy; every state in the United States has its own breach disclosure law; pioneer tech companies such as Facebook have also shown interest in cooperating with the legislative institutions after Mark Zuckerberg was called in front of Congress. This is still a long fight, but I do have hope in everyone in the ecosystem figuring out a solution, not at the sacrifice of users’ privacy.</p>]]></content><author><name></name></author><category term="opinion" /><category term="data-ethics" /><category term="tech" /><summary type="html"><![CDATA["Absolute power corrupts absolutely." - Lord Acton]]></summary></entry></feed>

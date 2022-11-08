@@ -1,0 +1,191 @@
+I"J<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this field in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="music-information-retrieval">Music Information Retrieval</h2>
+
+<h4 id="background-of-mir">Background of MIR</h4>
+
+<ul>
+  <li>
+    <p>Usually means audio content, but also extends to lyrics, music metadata, or user listening history</p>
+  </li>
+  <li>
+    <p>Audio can be complemented with cultural and social background like genre or era to solve MIR topics</p>
+  </li>
+  <li>
+    <p>Lyric analysis is also MIR, but might not have much to do with audio content</p>
+  </li>
+</ul>
+
+<h4 id="problems-in-mir">Problems in MIR</h4>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image11.png" alt="mir problems" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p.6</div>
+
+<p><strong>Subjectivity</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: Absolute ground truth does not exist</p>
+  </li>
+  <li>
+    <p>Example: music genres, the mood for a song, listening context, music tags</p>
+  </li>
+  <li>
+    <p>Counter example: pitch, tempo are more defined, but sometimes also ambiguous</p>
+  </li>
+  <li>
+    <p>Why deep learning has achieved good results: it is difficult to manually design useful features when we cannot exactly analyze the logic behind subjectivity</p>
+  </li>
+</ul>
+
+<p><strong>Decision Time Scale</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: unit time length the prediction is made on</p>
+  </li>
+  <li>
+    <p>Example:</p>
+
+    <ul>
+      <li>
+        <p>Long decision time scale (time invariant problems): tempo and key usually do not change in an excerpt</p>
+      </li>
+      <li>
+        <p>Short decision time scale (time-varying problems): melody extraction usually uses time frames that are really short</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="audio-data-representations">Audio Data Representations</h3>
+
+<ul>
+  <li>
+    <p>General background: audio signals are 1D, time-frequency representations are 2D and have a couple of options (listed below)</p>
+  </li>
+  <li>
+    <p>Important to pre-process the data and optimize the effective representation of audio data to save computational costs</p>
+  </li>
+  <li>
+    <p>2D representations can be considered as images but there are differences between images and time-frequency representations</p>
+
+    <ul>
+      <li>
+        <p>Images are usually locally correlated (meaning nearby pixels will have similar intensities and colors)</p>
+      </li>
+      <li>
+        <p>But spectrograms are often harmonic correlations. Their correlations might be far down the frequency axis and the local correlations are weaker</p>
+      </li>
+      <li>
+        <p>Scale invariance is expected for visual object recognition but probably not for audio-related tasks.</p>
+
+        <ul>
+          <li>Here scale invariance means if you enlarge a picture of a cat, the model will still be able to recognize that it’s a cat.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image12.png" alt="mir problems" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p.6</div>
+
+<p><strong>Audio Signals</strong></p>
+
+<ul>
+  <li>
+    <p>Samples of the digital audio signals</p>
+  </li>
+  <li>
+    <p>Usually not the most popular choice, considering the sheer amount of data and the expensive cost of computation</p>
+
+    <ul>
+      <li>Sampling rate is usually 44100 Hz, which means one second of audio will have 44100 samples</li>
+    </ul>
+  </li>
+  <li>
+    <p>But recently one-dimensional convolutions can be used to learn an alternative of existing time-frequency conversions</p>
+  </li>
+</ul>
+
+<p><strong>Short Time Fourier Transform</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: The procedure for computing STFTs is to divide a longer time signal into shorter segments of equal length and then compute the Fourier transform separately on each shorter segment.</p>
+  </li>
+  <li>
+    <p>(+) Computes faster than other time-frequency representations thanks to FFTs</p>
+  </li>
+  <li>
+    <p>(+) invertible to the audio signal, thus can be used in sonification of learned features and source separation</p>
+  </li>
+  <li>
+    <p>(-) its frequencies are linearly centered and do not match the frequency resolution of human auditory system -&gt; mel spectrogram is</p>
+  </li>
+  <li>
+    <p>(-) not as efficient in size as mel sepctrogram (log scale), but also not as raw as audio signals</p>
+  </li>
+  <li>
+    <p>(-) it is not musically motivated like CQT</p>
+  </li>
+</ul>
+
+<p><strong>Mel Spectrogram</strong></p>
+
+<ul>
+  <li>
+    <p>2D representation that is optimized for human auditory perception.</p>
+  </li>
+  <li>
+    <p>(+) It compresses the STFT in frequency axis to match the logarithmic frequency scale of human hearing - hence efficient in size but preserves the most perceptually important information</p>
+  </li>
+  <li>
+    <p>(-) not invertible to audio signals</p>
+  </li>
+  <li>
+    <p>Popular for tagging, boundary detection, onset detection, and learning latent features of music recommendation due to its close proximity to human auditory perception.</p>
+  </li>
+</ul>
+
+<p><strong>Constant-Q Transform (CQT)</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: It is also a 2D time-frequency representation that provide log-scale centered frequencies. It perfectly matches the frequency distribution of pitches</p>
+  </li>
+  <li>
+    <p>(+) Perfectly matches the pitch frequency distribution so it should be used where fundamental frequencies of notes should be identified</p>
+
+    <ul>
+      <li>Example: Chord recognition and transcription</li>
+    </ul>
+  </li>
+  <li>
+    <p>(-) Computation is heavier than the other two</p>
+  </li>
+</ul>
+
+<p><strong>Chromagram</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: Pitch class profile, provides the energy distribution on a set of pitch class (from C to B)</p>
+  </li>
+  <li>
+    <p>It is more processed than other representations and can be used as a feature by itself, just like MFCC</p>
+  </li>
+</ul>
+
+:ET

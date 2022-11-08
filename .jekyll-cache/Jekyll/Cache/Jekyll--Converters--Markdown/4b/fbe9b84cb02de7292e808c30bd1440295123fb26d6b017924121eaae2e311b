@@ -1,0 +1,149 @@
+I"#<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="convolution">Convolution</h2>
+
+<p>I struggled for a long time to understand what convolution means. Turns out it can be explained from different perspectives. Chris Olah has this amazing <a href="https://colah.github.io/posts/2014-07-Understanding-Convolutions/">explanation</a> of convolution from probability’s perspective.</p>
+
+<p><img src="/assets/img/dl4mir/image13.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /> <br />
+Mathematical definition: t here can be treat as a constant that changes. So in the context of signal processing, it can be thought of filter g is reversed, and then slides along the horizontal axis. For every position, we calculate the area of the intersection between f and g. This area is the convolution value at the specific position. See the gif from convolution Wikipedia page. <br /><br />
+<img src="/assets/img/dl4mir/moving.gif" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p><img src="/assets/img/dl4mir/image14.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /><br />
+In convolutional neural networks, the filters are not reversed. It is technically called cross-correlation.</p>
+
+<p><img src="/assets/img/dl4mir/image15.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p><br /><br /></p>
+
+<h3 id="how-2d-convolutional-network-works-with-multiple-channels">How 2D Convolutional Network works with multiple channels</h3>
+
+<p><img src="/assets/img/dl4mir/image16.png" alt="formula" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<ul>
+  <li>
+    <p>Input: multiple channels of 2D arrays. in total K channels</p>
+  </li>
+  <li>
+    <p>Kernel: small 2D array of weights</p>
+
+    <ul>
+      <li>4D array for all the kernels in one layer, which means for all k and j: (h,l, K, J)</li>
+    </ul>
+  </li>
+  <li>
+    <p>Filter: a collection of kernels</p>
+
+    <ul>
+      <li>
+        <p>the number of kernels in a filter = the number of input channels = K</p>
+      </li>
+      <li>
+        <p>each channel will have one unique kernel to slide through</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Output channels: equivalent to the neurons in that layer. in total J channels</p>
+
+    <ul>
+      <li>1 filter only yields 1 output channel</li>
+    </ul>
+  </li>
+  <li>
+    <p>There’s only 1 bias term for each filter</p>
+  </li>
+</ul>
+
+<p>Example input has 3 channels (K = 3), each channel is 5x5. Kernel is 3x3.</p>
+
+<p>Step 1: Each unique kernel in a filter will go through each input channel and yield a processed version of that input channel. So we will get K unique kernels.</p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/cnn1.gif" alt="CNN 1" width="100%" style="padding-bottom:0.5em;" />
+Reference image is from Irhum Shafkat's Medium article.</div>
+
+<p>Step 2: Sum over all the processed versions to get one output channel</p>
+
+<p><img src="/assets/img/dl4mir/cnn2.gif" alt="CNN 2" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<p>Step 3: Add in the bias term for this filter to get the final output channel. Note this will be y<sub>j</sub></p>
+
+<p><img src="/assets/img/dl4mir/cnn3.gif" alt="CNN 3" width="50%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p><strong>Subsampling:</strong></p>
+
+<p>Usually convolutional layers are used with pooling layers. For example, a maxpool.</p>
+
+<ul>
+  <li>
+    <p>Pooling layer reduces the size of feature maps by downsampling them with an operation.</p>
+
+    <ul>
+      <li>
+        <p>Max function tests if there exists an activation in a local region, but discards the precise location of the activation</p>
+      </li>
+      <li>
+        <p>Average operation usually not used, but it is applied globally after the last convolutional layer to summarize the feature map activation on the whole area of input, when input size varies</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/dl4mir/image17.png" alt="formula" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h3 id="cnn--music">CNN &amp; Music</h3>
+
+<ul>
+  <li>
+    <p>Example use cases where CNN could be used in music:</p>
+
+    <ul>
+      <li>
+        <p>1D convolutional kernel that learns fundamental frequencies from raw audio samples</p>
+      </li>
+      <li>
+        <p>Apply 2D convolutional layers to 2D time-frequency representations</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Kernel size: determines maximum size of a component that the kernel can precisely capture in the layer</p>
+
+    <ul>
+      <li>
+        <p>Not too small: should at least be big enough to capture the difference between the two patterns you are trying to capture</p>
+      </li>
+      <li>
+        <p>When the kernel is big, best to use it with a stacked convolution layers with subsamplings so that small distortions can be allowed. This is because kernel does not allow invariance in it.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>CNN is shift invariant, which means the output will shift with the input but it stays otherwise unchanged. To put it plainly, a cat can be moved to another location of the image, but CNN will still be able to detect the cat.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+<p><br /></p>
+
+<h3 id="resources">Resources:</h3>
+
+<p>Kunlun Bai’s Medium article about different types of convolutions in CNNs <a href="https://towardsdatascience.com/a-comprehensive-introduction-to-different-types-of-convolutions-in-deep-learning-669281e58215">here</a></p>
+
+<p>Irhum Shafkat’s Medium article with awesome visualizations <a href="https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1">here</a></p>
+
+<p>Chris Olah’s blog about CNNs <a href="http://colah.github.io/posts/2014-07-Conv-Nets-Modular/">here</a></p>
+
+<p>GA Tech’s Polo Club of Data Science’s Interactive CNN learner in browser <a href="https://poloclub.github.io/cnn-explainer/#article-convolution">here</a></p>
+:ET

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <!-- Head -->
+  <head>    <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Deep Learning for Music Information Retrieval – Pt. 4 (RNN) | Aleksandra T. Ma</title>
+    <meta name="author" content="Aleksandra T. Ma" />
+    <meta name="description" content="Part 4 introduces RNN and LSTM. It also includes some practical advice on handling MIR problems." />
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous" />
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="none" id="highlight_theme_light" />
+
+    <!-- Styles -->
+    
+    <link rel="shortcut icon" href="/assets/img/favicon.jpeg"/>
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="http://localhost:4000/blog/2022/dl4mir-4/">
+    
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark" />
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+  </head>
+
+  <!-- Body -->
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+    <header>
+
+      <!-- Nav Bar -->
+      <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+        <div class="container">
+          <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Aleksandra </span>T. Ma</a>
+          <!-- Navbar Toggle -->
+          <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse text-right" id="navbarNav">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+
+              <!-- About -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/">about</a>
+              </li>
+              
+              <!-- Blog -->
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
+              </li>
+
+              <!-- Other pages -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">projects</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="/repositories/">repositories</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="/cv/">cv</a>
+              </li>
+
+              <!-- Toogle theme mode -->
+              <li class="toggle-container">
+                <button id="light-toggle" title="Change theme">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Content -->
+    <div class="container mt-5">
+      <!-- _layouts/post.html -->
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Deep Learning for Music Information Retrieval – Pt. 4 (RNN)</h1>
+    <p class="post-meta">October 23, 2022</p>
+    <p class="post-tags">
+      <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+        ·  
+        <a href="/blog/tag/tech">
+          <i class="fas fa-hashtag fa-sm"></i> tech</a>  
+          <a href="/blog/tag/music">
+          <i class="fas fa-hashtag fa-sm"></i> music</a>  
+          <a href="/blog/tag/tutorial">
+          <i class="fas fa-hashtag fa-sm"></i> tutorial</a>  
+          
+        ·  
+        <a href="/blog/category/Deep-Learning">
+          <i class="fas fa-tag fa-sm"></i> Deep-Learning</a>  
+          <a href="/blog/category/MIR">
+          <i class="fas fa-tag fa-sm"></i> MIR</a>  
+          
+
+    </p>
+  </header>
+
+  <article class="post-content">
+    <p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I" target="_blank" rel="noopener noreferrer">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396" target="_blank" rel="noopener noreferrer">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>. I’d like to give a shoutout to Chris Olah’s wonderful explanation on LSTM as well.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br></p>
+
+<hr>
+
+<p><br></p>
+
+<h2 id="recurrent-neural-network">Recurrent Neural Network</h2>
+<p><img src="/assets/img/dl4mir/image18.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;"><br></p>
+
+<p>RNNs are usually used for data that are in sequence and lists. For example, speech recognition, translation, image captioning, etc.</p>
+
+<p>A more detailed look at the recurrent layer and an unfolded RNN with 3 time stamps:</p>
+
+<p><img src="/assets/img/dl4mir/image20.png" alt="rnn" width="50%" style="padding-bottom:0.5em;"><br></p>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;">
+<img src="/assets/img/dl4mir/image19.png" alt="rnn" width="100%" style="padding-bottom:0.5em;">
+Choi et al., 2018, p. 8</div>
+
+<ul>
+  <li>
+    <p>f<sub>out</sub> is usually soft-max/sigmoid, etc.</p>
+  </li>
+  <li>
+    <p>f<sub>h</sub> is usually tanh or ReLU</p>
+  </li>
+  <li>
+    <p>h<sub>t</sub> is hidden vector of the network that stores info at time t</p>
+  </li>
+  <li>
+    <p>U, V, W are matrices with trainable weights of the recurrent layer</p>
+  </li>
+</ul>
+
+<p><br></p>
+
+<h2 id="lstm-long-short-term-memory">LSTM (Long Short Term Memory)</h2>
+
+<p>LSTM is a special kind of RNN. The additive connections between time-steps help gradient flow, remedying the vanishing gradient problem (see below for where the additive connections come from in LSTM)</p>
+
+<p>Standard RNNs handle short term dependencies pretty well, but not long term dependencies. LSTM handles this long term dependency.</p>
+
+<ul>
+  <li>
+    <p>Short Term Dependency Example: clouds in the [] &lt;- it’s easy for RNN to predict sky</p>
+  </li>
+  <li>
+    <p>Long Term Dependency Example: I grew up in France.(…) I speak [] &lt;- hard for RNN to predict French</p>
+  </li>
+</ul>
+
+<p>Inside the LSTM unit (a “cell”), there are gates (forget gate, input gate, and output gate). There are also states: hidden state and cell state. We’ll look at the LSTM unit step by step.</p>
+
+<p><img src="/assets/img/dl4mir/image21.png" alt="rnn1" width="80%" style="padding-bottom:0.5em;"><br></p>
+
+<h4 id="terminology-alert">Terminology Alert!**</h4>
+
+<p><strong>Hidden state: (in both standard RNN and LSTM)</strong></p>
+
+<ul>
+  <li>Working memory capability that carries information from immediately previous events and overwrites at every step uncontrollably</li>
+</ul>
+
+<p><strong>Cell state: (only in LSTM)</strong></p>
+
+<ul>
+  <li>
+    <p>Long term memory capability that stores and loads information of not necessarily immediately previous events</p>
+  </li>
+  <li>
+    <p>Can be considered at a conveyor belt that carries the memory of previous events</p>
+  </li>
+</ul>
+
+<p><strong>Gates:</strong></p>
+
+<p>“A gate is a vector-multiplication node where the input is multiplied by a same-sized vector to attenuate the amount of input.”</p>
+
+<p>The three gates mentioned above usually contains a sigmoid layer coupled with tanh layer. The sigmoid layer returns a value between (0,1) that determines what part of data needs to be forgotten, updated, and outputted. Remember they have different weights (see formula below.)</p>
+
+<h5 id="step-1-forget-gate-layer---determine-what-information-to-forget">Step 1: Forget Gate Layer - Determine what information to forget</h5>
+
+<p>It is worth noting that we are not actually doing the forgetting here. We are only running the previous hidden state and the current input date through a sigmoid layer and decide what information to forget.</p>
+
+<p>Example: The store owner saw the little girl. We might want to forget the gender pronoun of the store owner here to update it with the little girl’s. Step 1 is to decide we are forgetting store owner’s gender.</p>
+
+<p><img src="/assets/img/dl4mir/image22.png" alt="rnn2" width="80%" style="padding-bottom:0.5em;"><br></p>
+
+<h5 id="step-2-input-gate-layer---determine-what-information-to-update-and-store-in-our-cell-state">Step 2: Input Gate Layer - Determine what information to update and store in our cell state</h5>
+
+<p>The sigmoid layer determines which values we update. Tanh layer transforms the input layer into the range between (-1,1). We still have not combined these two layers to create an update to the cell state yet.</p>
+
+<p>Example: The store owner (he) saw the little girl. <em>She</em> was looking at candy bars. We need to determine that we need to add in the gender pronoun of the little girl.
+<img src="/assets/img/dl4mir/image23.png" alt="rnn3" width="80%" style="padding-bottom:0.5em;"><br></p>
+
+<h5 id="step-3-cell-state-update---element-wise-operation-to-make-updates">Step 3: Cell State Update - element-wise operation to make updates</h5>
+
+<p>Now we take the information that we’ve determined to forget during the forget gate layer and apply it to the cell state. Then we multiply the input gate sigmoid layer with the newly transformed values from tanh layer and add it to our cell state.
+<img src="/assets/img/dl4mir/image24.png" alt="rnn4" width="80%" style="padding-bottom:0.5em;"><br></p>
+
+<h5 id="step-4-output-gate-layer---determine-what-we-are-outputting">Step 4: Output Gate Layer - Determine what we are outputting</h5>
+
+<p>Similar to the structure of the input gate layer, the output gate layer also consists of two parts: sigmoid layer to determine what information to output, and tanh layer to transform the cell state data to have a range of (-1,1). Then we multiply them and output the transformed value of the data that we want the model to output.
+<img src="/assets/img/dl4mir/image25.png" alt="rnn5" width="80%" style="padding-bottom:0.5em;"><br></p>
+
+<p><br></p>
+
+<h3 id="recurrent-layers-and-music">Recurrent Layers and Music</h3>
+
+<p>Shift invariance cannot be incorporated in the computation inside recurrent layers, so recurrent layers may be suitable for <strong>the sequence of features.</strong></p>
+
+<p>The number of hidden nodes in a layer is one of the hyperparametes and can be chosen through trial and error.</p>
+
+<p><strong>Length of the recurrent layer can be controlled</strong> to optimize the computational cost. Onset detection can use a short time frame, whereas chord recognition may benefit from longer inputs.</p>
+
+<p>For many MIR problems, inputs from the future can help the prediction, so <strong>bi-directional RNN</strong> can be worth trying. We can think of it as having another recurrent layer in parallel that works in the reversed time order.</p>
+
+<p><br></p>
+
+<hr>
+
+<p><br></p>
+
+<h2 id="solving-mir-problems-practical-advice">Solving MIR Problems: Practical Advice</h2>
+
+<h5 id="data-preprocessing">Data Preprocessing</h5>
+
+<ul>
+  <li>
+    <p>It’s crucial to preprocess the data because it affects the training speed.</p>
+  </li>
+  <li>
+    <p>Usually logarithmic mapping of magnitudes is used to condition the data distributions and result in better performance</p>
+  </li>
+  <li>
+    <p>Some preprocessing methods did <strong>not</strong> improve model performance:</p>
+
+    <ul>
+      <li>
+        <p>spectral whitening</p>
+      </li>
+      <li>
+        <p>normalize local contrasts (did not work well in CV)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Optimize the signal processing parameters such as the number of FFTs, mel bins, window and hop sizes, and the sampling rate.</p>
+
+    <ul>
+      <li>Audio signals are often downmixed and downsampled to 8-16Hz</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="aggregating-information">Aggregating information</h5>
+
+<ul>
+  <li>
+    <p>Time varying problems, which are problems with a short decision time scale (chord recognition, onset detection) require a prediction per unit time</p>
+  </li>
+  <li>
+    <p>Time invariant problems, which are problems with a long decision time scale (key detection, music tagging), require a method to aggregate features over time. Methods are listed as below:</p>
+
+    <ul>
+      <li>
+        <p>Pooling: common example would be using max pooling layers over time or frequency axis</p>
+      </li>
+      <li>
+        <p>Strided convolutions: convolutional layers that have strides bigger than 1. The effects are similar to max pooling, but we should not set strides to be smaller than kernel size. Otherwise not all of the input will be convolved.</p>
+      </li>
+      <li>
+        <p>Recurrent layers: can learn to summarize features in any axis, but it takes more computation and data than the previous two methods. So it is usually used in the last layer.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="depth-of-networks">Depth of networks</h5>
+
+<ul>
+  <li>
+    <p>Bottom line is that the neural network should be deep enough to approximate the relationship between the input and the output</p>
+  </li>
+  <li>
+    <p>CNNs have been increasing in both MIR and other domains, which is also allowed by recent advancement in computational savings.</p>
+  </li>
+  <li>
+    <p>RNNs have increased slowly because 1) stacking recurrent layers does not incorporate feature hiearchy and 2) recurrent layers are already deep along the time axis, so depth matters less</p>
+  </li>
+</ul>
+
+<p><br></p>
+
+<hr>
+
+<p><br></p>
+
+<h3 id="resources">Resources:</h3>
+
+<p>Chris Olah’s blog about RNN and LSTM <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="noopener noreferrer">here</a></p>
+
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->    
+    <footer class="fixed-bottom">
+      <div class="container mt-0">
+        © Copyright 2022 Aleksandra T. Ma. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="noopener noreferrer">Jekyll</a>. Hosted by <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">GitHub Pages</a>. All photos &amp; opinions my own.
+Last updated: November 08, 2022.
+      </div>
+    </footer>
+
+    <!-- JavaScripts -->
+    <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- Bootsrap & MDB scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+    <!-- Masonry & imagesLoaded -->
+  <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script defer src="/assets/js/masonry.js" type="text/javascript"></script>
+    
+  <!-- Medium Zoom JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script defer src="/assets/js/zoom.js"></script><!-- Load Common JS -->
+  <script defer src="/assets/js/common.js"></script>
+
+    <!-- MathJax -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        tags: 'ams'
+      }
+    };
+  </script>
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    
+  </body>
+</html>
