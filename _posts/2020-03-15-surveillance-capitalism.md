@@ -2,7 +2,7 @@
 layout: post
 title:  "What Surveillance Captalism Means to Democracy in Today's Digital Age"
 date:   2020-03-15
-tags: tech
+tags: tech opinion
 categories: opinion data-ethics
 description: '"Absolute power corrupts absolutely." - Lord Acton'
 ---

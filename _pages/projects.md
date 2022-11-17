@@ -5,7 +5,7 @@ permalink: /projects/
 description: Fun projects I've done in technical work, music, and photography
 nav: true
 nav_order: 2
-display_categories: [work, photography, music]
+display_categories: [work, music, photography]
 horizontal: false
 ---
 
