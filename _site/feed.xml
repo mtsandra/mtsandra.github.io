@@ -1,5 +1,407 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-11-17T00:17:44-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">Intro to Music Recommender System</title><link href="http://localhost:4000/blog/2022/mrs/" rel="alternate" type="text/html" title="Intro to Music Recommender System" /><published>2022-11-01T00:00:00-04:00</published><updated>2022-11-01T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/mrs</id><content type="html" xml:base="http://localhost:4000/blog/2022/mrs/"><![CDATA[<h3 id="1-characteristics-of-the-music-recommender-domain">1 Characteristics of the Music Recommender Domain</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-11-28T02:14:16-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Contrastive Learning &amp;amp; Generative Adversarial Network (GANs)</title><link href="http://localhost:4000/blog/2022/cont-gan/" rel="alternate" type="text/html" title="Contrastive Learning &amp;amp; Generative Adversarial Network (GANs)" /><published>2022-11-28T00:00:00-05:00</published><updated>2022-11-28T00:00:00-05:00</updated><id>http://localhost:4000/blog/2022/cont-gan</id><content type="html" xml:base="http://localhost:4000/blog/2022/cont-gan/"><![CDATA[<h3 id="latent-space">Latent Space</h3>
+
+<ul>
+  <li>
+    <p>Definition: Representation of compressed data</p>
+  </li>
+  <li>
+    <p>Data compression: process of encoding information using fewer bits than the original representation</p>
+  </li>
+</ul>
+
+<p><img src="/assets/img/deep-learning/image1.png" alt="latent-space" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<p>Ekin Tiu has a Medium article about why it is called latent “space” <a href="https://towardsdatascience.com/understanding-latent-space-in-machine-learning-de5a7c687d8d">here</a></p>
+
+<ul>
+  <li>
+    <p>Tasks where latent space is necessary</p>
+
+    <ul>
+      <li>
+        <p>Representation learning:</p>
+
+        <ul>
+          <li>
+            <p>Definition: set of techniques that allow a system to discover the representations needed for feature detection or classification from raw data</p>
+          </li>
+          <li>
+            <p>Latent space representation of our data <strong>must</strong> contain all the important info (<strong>features</strong>) to represent our original data input</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Manifold learning (subfield of representation learning):</p>
+
+        <ul>
+          <li>
+            <p>Definition: groups or subsets of data that are “similar” in some way in the latent space, that does not quite show in the higher dimensional space.</p>
+          </li>
+          <li>
+            <p>Manifolds just mean groups of similar data</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Autoencoders and Generative Models</p>
+
+        <ul>
+          <li>
+            <p>Autoencoders: a neural network that acts an identify function, that has both an encoder and a decoder</p>
+          </li>
+          <li>
+            <p>We need the model to compress the representation (<strong>encode</strong>) in a way that we can accurately reconstruct it (<strong>decode</strong>).</p>
+
+            <ul>
+              <li>i.e. image in image out, audio in audio out
+  <img src="/assets/img/deep-learning/image2.png" alt="auto-encoders" width="100%" style="padding-bottom:0.5em;" /></li>
+            </ul>
+          </li>
+          <li>
+            <p>Generative models: interpolate on latent space to generate “new” image</p>
+
+            <ul>
+              <li>
+                <p>Interpolate: make estimations of independent variables if the independent variable takes on a value in between the range</p>
+              </li>
+              <li>
+                <p>Example: if chair images have 2D latent space vectors as [0.4, 0.5] and [0.45, 0.45], whereas the table has [0.6, 0.75]. Then to generate a picture that is a morph between a chair and a desk, we would <em>sample points in latent space between</em> the chair cluster and the desk cluster.</p>
+              </li>
+              <li>
+                <p>Diff between discriminative and generative:</p>
+
+                <ul>
+                  <li>
+                    <p>Generative can generate new data instances, capture the joint probability of p(X,Y) or p(X) if Y does not exist</p>
+                  </li>
+                  <li>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td>Discriminative models classifies instances into different labels. It captures p(Y</td>
+                          <td>X) -&gt; given the image, how likely is it a cat?</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="contrastive-learning-with-simclrv2">Contrastive Learning with SimCLRv2</h3>
+
+<ul>
+  <li>
+    <p>Definition: a technique that learns general features of a dataset <strong>without labels</strong> by teaching the model which data points are similar or different.</p>
+
+    <ul>
+      <li>
+        <p>Happens <strong>before</strong> classification or segmentation.</p>
+      </li>
+      <li>
+        <p>A type of self-supervised learning. The other is non-contrastive learning.</p>
+      </li>
+      <li>
+        <p>Can significantly improve model performance even when only a fraction of the dataset is labeled.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Process:
+  <img src="/assets/img/deep-learning/image3.png" alt="contrastive" width="100%" style="padding-bottom:0.5em;" /></p>
+
+    <ol>
+      <li>
+        <p><strong>Data Augmentation</strong> through 2 augmentation combos (i.e. crop + resize + recolor, etc.)</p>
+      </li>
+      <li>
+        <p><strong>Encoding:</strong> Feed the two augmented images into deep learning model to create <strong>vector representations</strong>.</p>
+
+        <ul>
+          <li><strong>Goal</strong> is to train the model to output similar representations for similar images</li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Minimize loss:</strong> Maximize the similarity of the two vector representations by minimizing a contrastive loss function</p>
+
+        <ul>
+          <li>
+            <p>Goal is to <strong>quantify the similarity</strong> of the two vector representations, then <strong>maximize the probability</strong> that two vector representations are similar.</p>
+          </li>
+          <li>We use <em>cosine similarity</em> as an example to quantify similarities: the angle between the two vectors in space. The closer they are, the bigger the similarity score
+ <img src="/assets/img/deep-learning/image4.png" alt="cosine-sim" width="100%" style="padding-bottom:0.5em;" /></li>
+          <li>Next compute the <em>probability</em> with softmax:
+  <img src="/assets/img/deep-learning/image5.png" alt="softmax" width="100%" style="padding-bottom:0.5em;" /></li>
+          <li>Last we use -log() to make it a loss function so that we are minimizing this value, which corresponds to maximizing the probability that two pairs are similar
+  <img src="/assets/img/deep-learning/image6.png" alt="cross-entropy" width="100%" style="padding-bottom:0.5em;" /></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="generative-adversarial-network-2014">Generative Adversarial Network, 2014</h3>
+
+<p>Machine Learning Course by Google Developers <a href="https://developers.google.com/machine-learning/gan/loss">here</a></p>
+
+<ul>
+  <li>
+    <p>Definition (high level): create new data instances that resemble your training data</p>
+  </li>
+  <li>
+    <p>High level working mechanism: GANs achieve this level of realism by pairing a <strong>generator</strong>, which learns to produce the target output, with a <strong>discriminator</strong>, which learns to distinguish true data from the output of the generator. The generator tries to fool the discriminator, and the discriminator tries to keep from being fooled.</p>
+
+    <ul>
+      <li>See the diagram below
+  <img src="/assets/img/deep-learning/image7.png" alt="gan" width="100%" style="padding-bottom:0.5em;" /></li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="step-1-discriminator-trains-for-one-or-more-epochs">Step 1. Discriminator trains for one or more epochs.</h5>
+
+<p>The discriminator takes input from real images and the fake images the generator outputs, update its weights through backpropagation to distinguish between real and fake data.</p>
+
+<p>Generator does not update its weight during this period, and discriminator ignores generator loss in this round.
+<img src="/assets/img/deep-learning/image8.png" alt="gan-discriminator" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<h5 id="step-2-generator-trains-for-one-or-more-epochs">Step 2. Generator trains for one or more epochs.</h5>
+
+<p><img src="/assets/img/deep-learning/image9.png" alt="gan-generator" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<ul>
+  <li>
+    <p>Goal is to generate data that the discriminator will classify as real, so the generator loss penalizes the generator for failing to fool the discriminator.</p>
+
+    <ul>
+      <li>This requires the generator training to incorporate discriminator. How it involves discriminator is using it to feed it the generator output and derive the generator loss.</li>
+    </ul>
+  </li>
+  <li>
+    <p>When generator trains, discriminator stays put and does not update weights.</p>
+  </li>
+  <li>
+    <p>Procedure:</p>
+
+    <ul>
+      <li>
+        <p>Sample random noise that we feed into the generator. The generator will transform this into meaningful output</p>
+
+        <ul>
+          <li>the distribution of the noise doesn’t matter much; could also be non-random input</li>
+        </ul>
+      </li>
+      <li>
+        <p>Produce generator output from sampled random noise</p>
+      </li>
+      <li>
+        <p>Get discriminator’s Real or Fake classification for generator output</p>
+      </li>
+      <li>
+        <p>Calculate loss from discriminator classification (generator loss)</p>
+      </li>
+      <li>
+        <p>Backpropagate through both the discriminator and generator to obtain gradients</p>
+      </li>
+      <li>
+        <p>Use gradients to change <strong>only</strong> the generator weights.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="step-3-repeat-step-1-and-2-to-alternate-training">Step 3. Repeat step 1 and 2 to alternate training</h5>
+
+<ul>
+  <li>
+    <p>Convergence: when discriminator classification has a 50% accuracy (it can’t tell between a true and a fake)</p>
+
+    <ul>
+      <li>
+        <p>This poses a problem: if discriminator feedback becomes 50% (near random), then the generator is training on useless feedback, which in turn affects its own quality</p>
+      </li>
+      <li>
+        <p>GAN convergence is a fleeting, instead of stable, state</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="loss-functions">Loss Functions</h5>
+
+<ul>
+  <li>
+    <p>Goal: capture the difference between the distributions of “real” data and “fake” data generated by the generator</p>
+
+    <ul>
+      <li>
+        <p>Still ongoing research</p>
+      </li>
+      <li>
+        <p>Example: minimax loss (used in og GAN paper), Wasserstein loss (used for TF-GAN estimator)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Minimax Loss:</strong></p>
+
+    <ul>
+      <li>
+        <p>It’s the same formula that the discriminator and generator are optimizing over. <strong>Discriminator maximize, generator minimize</strong></p>
+
+        <p>Ex[log(D(x))]+Ez[log(1−D(G(z)))]</p>
+
+        <p>In this function:</p>
+
+        <ul>
+          <li>
+            <p><code class="language-plaintext highlighter-rouge">D(x)</code> is the discriminator’s estimate of the probability that real data instance x is real.</p>
+          </li>
+          <li>
+            <p>Ex is the expected value over all real data instances.</p>
+          </li>
+          <li>
+            <p><code class="language-plaintext highlighter-rouge">G(z)</code> is the generator’s output when given noise z.</p>
+          </li>
+          <li>
+            <p><code class="language-plaintext highlighter-rouge">D(G(z))</code> is the discriminator’s estimate of the probability that a fake instance is real.</p>
+          </li>
+          <li>
+            <p>Ez is the expected value over all random inputs to the generator (in effect, the expected value over all generated fake instances G(z)).</p>
+          </li>
+          <li>
+            <p>The formula derives from the <a href="https://developers.google.com/machine-learning/glossary#cross-entropy">cross-entropy</a> between the real and generated distributions.</p>
+          </li>
+        </ul>
+
+        <p>The generator can’t directly affect the <code class="language-plaintext highlighter-rouge">log(D(x))</code> term in the function, so, for the generator, minimizing the loss is equivalent to minimizing <code class="language-plaintext highlighter-rouge">log(1 - D(G(z)))</code>.</p>
+      </li>
+      <li>
+        <p><strong>Caveat-&gt; Vanishing Gradients</strong></p>
+
+        <ul>
+          <li>
+            <p>The generator can fail due to vanishing gradients and the GAN might get stuck in the early stages if the discriminator is too good. Two remedies:</p>
+
+            <ul>
+              <li>
+                <p>Modified minimax loss: the original paper suggests to modify the generator loss so that the generator tries to maximize log D(G(z))</p>
+              </li>
+              <li>
+                <p>Wasserstein loss introduced below is designed to prevent vanishing gradients</p>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Wasserstein Loss</strong></p>
+
+    <ul>
+      <li>
+        <p><strong>! Modification of GAN Scheme:</strong> discriminator does not classify instances or produce probabilities, but instead it produces a number. We call it critic instead of discriminator</p>
+
+        <ul>
+          <li>
+            <p>For real instances: outputs a really big number</p>
+          </li>
+          <li>
+            <p>For fake instances: outputs a really small number</p>
+          </li>
+          <li>
+            <p>Requires the weights throughout GAN to be clipped so that they remain within a constrained range</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Critic Loss: D(x) - D(G(z))</p>
+
+        <ul>
+          <li>The discriminator maximizes this function, they want the difference between the real and the fake to be as big as possible</li>
+        </ul>
+      </li>
+      <li>
+        <p>Generator Loss: D(G(z))</p>
+
+        <ul>
+          <li>The generator maximizes this function because they want the discriminator to think what they generated is a real instance</li>
+        </ul>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">D(x)</code> is the critic’s output for a real instance.</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">G(z)</code> is the generator’s output when given noise z.</p>
+      </li>
+      <li>
+        <p><code class="language-plaintext highlighter-rouge">D(G(z))</code> is the critic’s output for a fake instance.</p>
+      </li>
+      <li>
+        <p>The output of critic D does <em>not</em> have to be between 1 and 0.</p>
+      </li>
+      <li>
+        <p>The formulas derive from the <a href="https://wikipedia.org/wiki/Earth_mover%27s_distance">earth mover distance</a> between the real and generated distributions.</p>
+      </li>
+      <li>
+        <p>WassersteinGANs is less vulnerable to getting stuck than minimaxGANs, and avoid problems with vanishing gradients</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="common-problems">Common Problems</h5>
+
+<ul>
+  <li>
+    <p>Vanishing Gradients:</p>
+
+    <ul>
+      <li>If discriminator is too good, the generator training can fail due to vanishing gradients. Remedy is through 1) Wasserstein loss 2) modified minimax loss</li>
+    </ul>
+  </li>
+  <li>
+    <p>Mode collapse: usually happens when the discriminator gets stuck in local minima.</p>
+
+    <ul>
+      <li>
+        <p>Mode collapse describes the scenario where each iteration of generator over-optimizes for a particular discriminator, so the generators rotate through a small set of output types. This is against what we want: for generator to produce a wide variety of outputs.</p>
+      </li>
+      <li>
+        <p>Remedy:</p>
+
+        <ul>
+          <li>
+            <p>Wasserstein loss: designed to avoid vanishing gradient/discriminator being stuck in a local minima</p>
+          </li>
+          <li>
+            <p>Unrolled GANs: uses a generator loss function that not only incorporates the current discriminator’s classification, but also the outputs of future discriminator versions.</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Failure to convergence: discriminator can’t tell the diff between real and fake, so generator trains on junk feedback. Two remedies:</p>
+
+    <ul>
+      <li>
+        <p>Adding noise to discriminator inputs</p>
+      </li>
+      <li>
+        <p>Penalizing discriminator weights</p>
+      </li>
+    </ul>
+  </li>
+</ul>]]></content><author><name></name></author><category term="beginners-guide" /><category term="tech" /><summary type="html"><![CDATA[Latent Space, Contrastive Learning & GANs]]></summary></entry><entry><title type="html">Intro to Music Recommender System</title><link href="http://localhost:4000/blog/2022/mrs/" rel="alternate" type="text/html" title="Intro to Music Recommender System" /><published>2022-11-01T00:00:00-04:00</published><updated>2022-11-01T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/mrs</id><content type="html" xml:base="http://localhost:4000/blog/2022/mrs/"><![CDATA[<h3 id="1-characteristics-of-the-music-recommender-domain">1 Characteristics of the Music Recommender Domain</h3>
 
 <ul>
   <li>
@@ -1666,39 +2068,4 @@ Choi et al., 2018, p. 6
 
 <hr />
 
-<p>As we entered the digital era, the Internet has become the basic infrastructure of today’s economy. However, if our infrastructure is full of cameras and strings that can be pulled to manipulate the majority, the power will naturally fall into the hands of the minority who has all the information. As Lord Acton once said, “Absolute power corrupts absolutely.” Democracy will be threatened, and there will be bigger social inequality issues. The good news is, surveillance capitalism is still a relatively new phenomenon that has lasted for about 20 years, and legislative institutions have started to take measures to regulate the operation and ownership of the Internet. European Union has recently come up with General Data Protection Regulation, which aims to protect the users’ privacy; every state in the United States has its own breach disclosure law; pioneer tech companies such as Facebook have also shown interest in cooperating with the legislative institutions after Mark Zuckerberg was called in front of Congress. This is still a long fight, but I do have hope in everyone in the ecosystem figuring out a solution, not at the sacrifice of users’ privacy.</p>]]></content><author><name></name></author><category term="opinion" /><category term="data-ethics" /><category term="tech" /><category term="opinion" /><summary type="html"><![CDATA["Absolute power corrupts absolutely." - Lord Acton]]></summary></entry><entry><title type="html">The Absurdity in Existentialism: A Closer Look at Camus’ The Stranger</title><link href="http://localhost:4000/blog/2019/camus-stranger/" rel="alternate" type="text/html" title="The Absurdity in Existentialism: A Closer Look at Camus’ The Stranger" /><published>2019-07-13T00:00:00-04:00</published><updated>2019-07-13T00:00:00-04:00</updated><id>http://localhost:4000/blog/2019/camus-stranger</id><content type="html" xml:base="http://localhost:4000/blog/2019/camus-stranger/"><![CDATA[<p>One of the most famous philosophical questions posed by Albert Camus is whether one should commit suicide, a question whose answer can solve the most fundamental philosophical problems such as the meaning of life. In this French Nobel Literature Prize winner’s eyes, the world is absurd, consisting of a series of random events. Thus, human’s existence in this chaos is also meaningless. The stance he took on the dynamics between the world and human beings comes into play fairly strongly in his novel <em>The Stranger</em>. By following the life of Meursault, the main character in <em>The Stranger</em>, we will take a closer look at how he delicately uses the power of language and narrative to portray the absurdity of the world and proposes his philosophy of human’s revolt against such absurdity.</p>
-
-<p>Language and narrative have an enormous effect on the way readers think and feel when it comes to writing. Camus, fully aware of this magical power, manipulates readers’ mind by smartly avoiding to describe the feelings of Meursault so that readers assume that Meursault is lacking some humane quality. Camus starts the novel by describing the death of Meursault’s mother from Meursault’s perspective, “Mother died today; Or maybe yesterday; I can’t be sure.” This opening is so simple and flat that it sounds more like an obituary in the newspaper than a son talking about his own mother passing away. In the following passages, the story unfolds as Meursault asks for a two days’ leave at work and takes the bus to the Home for his mother’s funeral. The narrative goes into extreme detail regarding his journey and his surroundings, from the transportation he chooses, to the sun glazing in the sky and gasoline reeking. However, there is not one sentence dedicated to describing the internal feelings of Meursault. He is drowsy and tired because the sun is setting and the street lamps come on, not because his mother has passed away and he feels empty inside like most readers would expect. According to Camus’ narrative of Meursault, he feels uncomfortable and sleepy, but the emotions of happiness, sadness, or suffering never cross his mind. This lack of emotion occurs again when his neighbor Raymond beats his mistress. After the policeman comes, Marie, his significant other, loses her appetite, but Meursault eats nearly all the food and does not feel influenced by the earlier event at all. Early on in the novel, these abnormal behaviors set a foundation in readers’ minds that Meursault is amoral.</p>
-
-<p>To make Meursault appear more amoral, Camus shows that he does not feel love internally and only feels lust that fulfills his physical needs. He never talks about his feelings towards Marie, except that he always wants her. The way he describes his interaction with Marie shows that his attitude towards Marie is purely sexual: “I kissed her. We didn’t say anything more from that point on. I held her to me and we hurried to catch a bus, get back, go to my place, and throw ourselves onto my bed.” It is not that Meursault is incapable of comprehending emotions: after he told Marie that questions like if he loved her have no meaning, and that he probably doesn’t love her, he could tell that Marie looks sad. In contrast, Marie, who enjoys physical contact as much as Meursault, seems to extend this physical affection to more sentimental and emotional attachment. After learning that Meursault doesn’t love her, she still decides to marry this man because this peculiarity is what she loves about him. This contrast between Meursault and his wife puts the amorality of Meursault under the spotlight for the readers to examine.</p>
-
-<p>Throughout the novel, the narrative puts a significant amount of emphasis on Meursault’s feelings towards external objects and his actions. Even though the novel is from a first person point of view, Meursault’s unresponsive and unexpressive description of his own life makes the narration sound like a third person point of view. However, the intimacy created by this first-person narrative misleads people to assume that they are making objective judgements, even if the unbalanced proportion of descriptions regarding Meursault’s feelings restrains the scope of Meursault’s personalities that the readers can comprehend. Camus puts the readers inside a glass box where they can see what the hero says, does, and even thinks, but they cannot feel what the hero feels. As Camus himself said, “At certain moments of lucidity, the mechanical aspect of their gestures, their meaningless pantomime makes silly everything that surrounds them. A man is talking on the telephone behind a glass partition; you cannot hear him, but you see his incomprehensible dumb show: you wonder why he is alive.” Readers cannot understand the reasoning behind Meursault’s abnormal behavior, and all that they have is the impression that Meursault doesn’t cry at his own mother’s funeral, brings a girl home the day after his mother has passed away, and kills a strange Arab because the sun is too hot that day. Therefore, Meursault is nothing but a soul-less, functioning body that fulfills its own physical needs.</p>
-
-<p>The trial that leads Meursault to his death penalty further proves Camus’ opinion that people’s judgement towards other people is absurd and based off social norms that are irrelevant to the actual crime. Meursault kills an unnamed Arab man on the beach: “Then everything began to reel before my eyes, a fiery gust came from the sea, while the sky cracked in two, from end to end, and a great sheet of flame poured down through the rift. Every nerve in my body was a steel spring, and my grip closed on the revolver. The trigger gave, and the smooth underbelly of the butt jogged my palm.”  There is no obvious reason why Meursault kills the Arab in the book other than the irritating sun that flashes in his eyes off the knife blade, which is exactly what Meursault tells the jury. However, the jury will not take that for an answer and goes on to investigate  his personal life. When his lawyer asks him why he did not cry at his own mother’s funeral, he answers, “of recent years, I’d rather lost the habit of noticing my feelings.” The lawyer, quite shocked at this answer, is fairly concerned what conclusion the jury can get from the fact that Meursault doesn’t “feel”. Later on at the trial, when the magistrate asks him if he believes in God, he answers “no” without thinking about the consequences. After all the preaching the magistrate does, Meursault still refuses to believe in God, which takes away the last straw that the jury can clutch at. The jury has never seen any hearts as case-hardened as his, and believes that he has no soul. Unsurprisingly, Meursault is sentenced to death.</p>
-
-<p>Meursault is always brutally honest, and pursues truth before anything else. He does not feel a lot emotionally, and does not find meaning in a lot of ideas, especially in love. When Marie asked him if he loved her, he said, “that sort of question had no meaning, really; but I supposed I didn’t.” He enjoys being with her, and tries to make her happy so that she will stay with him. Furthermore, he agrees to marry her, but refuses to conform to the social norms and just say that he loves Marie. His feelings towards his mother are similar. He told his lawyer that “he had been quite fond with his mother, but really that didn’t mean much.” Love seems to be an irrelevant concept to his life, and so does religion, death, and definition of good and bad. The common beliefs such as God is a savior to all the human and that one should have profound love for his or her parents do not put Meursault inside the circle like everyone else. He does not hurt people like a psychopath does, and he is able to think logically like a functioning human being. However, he simply doesn’t connect to the inner status that he should have, the part that makes human human and sets a norm for the society.</p>
-
-<p>Such a person, like Meursault, gets completely alienated by the world that he is living in and eventually gets sentenced to death by his lack of a “soul”. As Camus himself wrote in the afterword of the book, “In our society, any man who doesn’t cry at his mother’s funeral is liable to be condemned to death. I simply meant that the hero of the book is condemned because he doesn’t play the game … He refuses to lie. Lying is not only saying what isn’t true. It is also, in fact especially, saying more than is true and, in the case of the human heart, saying more than one feels.” The game, also known as social norms, kills Meursault in the end because he is always on the outside and never part of the game.</p>
-
-<p>If a world that promotes love and religion alienates a human being that does not click with them, then what’s that outsider’s place in the world? Why does he still choose to live and drift through all the traps lying in front of him? Meursault gets silenced, interrupted, and nobody listens to what he says, but he rises above all the unfair treatment towards him at the end of his life. He screamed at the priest about all the thoughts he had on his mind, about how in the end nothing matter, whether he kills the Arab or not, whether he cries at his mother’s funeral or not, since everyone is condemned to death. He finally tells the readers that the most important thing in his life is that everyone gets the freedom to choose how they live their life, and not have all the different ideas forced on them. He starts building a connection with his mother and this world when death is coming so near. He embraces the indifference of the world, just as he embraces his own indifference towards his mother’s death, Marie’s love for him, and really anything that happens around him. Because for him, the biggest difference between him and other people is that he is sure of the reason why he does everything, and he knows that it’s him that chooses to live his life that way. His very existence is the rebellion against the absurdity of the society, the absurdity that restrains people inside a box and tells people to act in a certain way despite the fact that in the end everyone is going to end up dead, and the absurdity that deprives people of the freedom.</p>
-
-<p>Camus cleverly creates the story of Meursault to express his own revolt against the absurdity, which is through living inside this absurdity and creating a free self that makes his own choices, and experiences this world just the way it is. The best way to put Camus’ idea of this resistance is through Lermontov’s poem:</p>
-
-<blockquote>
-  <p>A lonely sail is flashing white<br />
-Amdist the blue mist of the sea!…<br />
-What does it seek in foreign lands?<br />
-What did it leave behind at home?..<br /></p>
-
-  <p>Waves heave, wind whistles,<br />
-The mast, it bends and creaks…<br />
-Alas, it seeks not happiness<br />
-Nor happiness does it escape!<br /></p>
-
-  <p>Below, a current azure bright,<br />
-Above, a golden ray of sun…<br />
-Rebellious, it seeks out a storm<br />
-As if in storms it could find peace!<br /></p>
-</blockquote>
-
-<p>Living on, through the storm that is brought on by the social norms that are forced on people, is the best way of finding certainty towards one’s identity.</p>]]></content><author><name></name></author><category term="philosophy" /><category term="opinion" /><summary type="html"><![CDATA["Would you take wing, yet be free of dizziness?" - Faust]]></summary></entry></feed>
+<p>As we entered the digital era, the Internet has become the basic infrastructure of today’s economy. However, if our infrastructure is full of cameras and strings that can be pulled to manipulate the majority, the power will naturally fall into the hands of the minority who has all the information. As Lord Acton once said, “Absolute power corrupts absolutely.” Democracy will be threatened, and there will be bigger social inequality issues. The good news is, surveillance capitalism is still a relatively new phenomenon that has lasted for about 20 years, and legislative institutions have started to take measures to regulate the operation and ownership of the Internet. European Union has recently come up with General Data Protection Regulation, which aims to protect the users’ privacy; every state in the United States has its own breach disclosure law; pioneer tech companies such as Facebook have also shown interest in cooperating with the legislative institutions after Mark Zuckerberg was called in front of Congress. This is still a long fight, but I do have hope in everyone in the ecosystem figuring out a solution, not at the sacrifice of users’ privacy.</p>]]></content><author><name></name></author><category term="opinion" /><category term="data-ethics" /><category term="tech" /><category term="opinion" /><summary type="html"><![CDATA["Absolute power corrupts absolutely." - Lord Acton]]></summary></entry></feed>
