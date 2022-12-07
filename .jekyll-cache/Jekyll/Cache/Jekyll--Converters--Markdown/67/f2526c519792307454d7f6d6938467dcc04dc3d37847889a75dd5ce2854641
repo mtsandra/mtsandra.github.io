@@ -1,4 +1,4 @@
-I"7(<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>. I’d like to give a shoutout to Chris Olah’s wonderful explanation on LSTM as well.</p>
+I"7)<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>. I’d like to give a shoutout to Chris Olah’s wonderful explanation on LSTM as well.</p>
 
 <p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
 
@@ -108,6 +108,13 @@ Choi et al., 2018, p. 8</div>
 <img src="/assets/img/dl4mir/image25.png" alt="rnn5" width="80%" style="padding-bottom:0.5em;" /><br /></p>
 
 <p><br /></p>
+
+<h3 id="sequence-to-sequence-encoder-decoder-rnns">Sequence-to-Sequence Encoder-Decoder RNNs</h3>
+<p>Here let’s use the example of machine translation.</p>
+
+<video width="100%" autoplay="">
+    <source src="/assets/img/dl4mir/seq2seq_6.mp4" />
+</video>
 
 <h3 id="recurrent-layers-and-music">Recurrent Layers and Music</h3>
 

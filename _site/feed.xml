@@ -1,153 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-11-28T02:14:16-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">Contrastive Learning &amp;amp; Generative Adversarial Network (GANs)</title><link href="http://localhost:4000/blog/2022/cont-gan/" rel="alternate" type="text/html" title="Contrastive Learning &amp;amp; Generative Adversarial Network (GANs)" /><published>2022-11-28T00:00:00-05:00</published><updated>2022-11-28T00:00:00-05:00</updated><id>http://localhost:4000/blog/2022/cont-gan</id><content type="html" xml:base="http://localhost:4000/blog/2022/cont-gan/"><![CDATA[<h3 id="latent-space">Latent Space</h3>
-
-<ul>
-  <li>
-    <p>Definition: Representation of compressed data</p>
-  </li>
-  <li>
-    <p>Data compression: process of encoding information using fewer bits than the original representation</p>
-  </li>
-</ul>
-
-<p><img src="/assets/img/deep-learning/image1.png" alt="latent-space" width="100%" style="padding-bottom:0.5em;" /></p>
-
-<p>Ekin Tiu has a Medium article about why it is called latent “space” <a href="https://towardsdatascience.com/understanding-latent-space-in-machine-learning-de5a7c687d8d">here</a></p>
-
-<ul>
-  <li>
-    <p>Tasks where latent space is necessary</p>
-
-    <ul>
-      <li>
-        <p>Representation learning:</p>
-
-        <ul>
-          <li>
-            <p>Definition: set of techniques that allow a system to discover the representations needed for feature detection or classification from raw data</p>
-          </li>
-          <li>
-            <p>Latent space representation of our data <strong>must</strong> contain all the important info (<strong>features</strong>) to represent our original data input</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>Manifold learning (subfield of representation learning):</p>
-
-        <ul>
-          <li>
-            <p>Definition: groups or subsets of data that are “similar” in some way in the latent space, that does not quite show in the higher dimensional space.</p>
-          </li>
-          <li>
-            <p>Manifolds just mean groups of similar data</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>Autoencoders and Generative Models</p>
-
-        <ul>
-          <li>
-            <p>Autoencoders: a neural network that acts an identify function, that has both an encoder and a decoder</p>
-          </li>
-          <li>
-            <p>We need the model to compress the representation (<strong>encode</strong>) in a way that we can accurately reconstruct it (<strong>decode</strong>).</p>
-
-            <ul>
-              <li>i.e. image in image out, audio in audio out
-  <img src="/assets/img/deep-learning/image2.png" alt="auto-encoders" width="100%" style="padding-bottom:0.5em;" /></li>
-            </ul>
-          </li>
-          <li>
-            <p>Generative models: interpolate on latent space to generate “new” image</p>
-
-            <ul>
-              <li>
-                <p>Interpolate: make estimations of independent variables if the independent variable takes on a value in between the range</p>
-              </li>
-              <li>
-                <p>Example: if chair images have 2D latent space vectors as [0.4, 0.5] and [0.45, 0.45], whereas the table has [0.6, 0.75]. Then to generate a picture that is a morph between a chair and a desk, we would <em>sample points in latent space between</em> the chair cluster and the desk cluster.</p>
-              </li>
-              <li>
-                <p>Diff between discriminative and generative:</p>
-
-                <ul>
-                  <li>
-                    <p>Generative can generate new data instances, capture the joint probability of p(X,Y) or p(X) if Y does not exist</p>
-                  </li>
-                  <li>
-                    <table>
-                      <tbody>
-                        <tr>
-                          <td>Discriminative models classifies instances into different labels. It captures p(Y</td>
-                          <td>X) -&gt; given the image, how likely is it a cat?</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="contrastive-learning-with-simclrv2">Contrastive Learning with SimCLRv2</h3>
-
-<ul>
-  <li>
-    <p>Definition: a technique that learns general features of a dataset <strong>without labels</strong> by teaching the model which data points are similar or different.</p>
-
-    <ul>
-      <li>
-        <p>Happens <strong>before</strong> classification or segmentation.</p>
-      </li>
-      <li>
-        <p>A type of self-supervised learning. The other is non-contrastive learning.</p>
-      </li>
-      <li>
-        <p>Can significantly improve model performance even when only a fraction of the dataset is labeled.</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>Process:
-  <img src="/assets/img/deep-learning/image3.png" alt="contrastive" width="100%" style="padding-bottom:0.5em;" /></p>
-
-    <ol>
-      <li>
-        <p><strong>Data Augmentation</strong> through 2 augmentation combos (i.e. crop + resize + recolor, etc.)</p>
-      </li>
-      <li>
-        <p><strong>Encoding:</strong> Feed the two augmented images into deep learning model to create <strong>vector representations</strong>.</p>
-
-        <ul>
-          <li><strong>Goal</strong> is to train the model to output similar representations for similar images</li>
-        </ul>
-      </li>
-      <li>
-        <p><strong>Minimize loss:</strong> Maximize the similarity of the two vector representations by minimizing a contrastive loss function</p>
-
-        <ul>
-          <li>
-            <p>Goal is to <strong>quantify the similarity</strong> of the two vector representations, then <strong>maximize the probability</strong> that two vector representations are similar.</p>
-          </li>
-          <li>We use <em>cosine similarity</em> as an example to quantify similarities: the angle between the two vectors in space. The closer they are, the bigger the similarity score
- <img src="/assets/img/deep-learning/image4.png" alt="cosine-sim" width="100%" style="padding-bottom:0.5em;" /></li>
-          <li>Next compute the <em>probability</em> with softmax:
-  <img src="/assets/img/deep-learning/image5.png" alt="softmax" width="100%" style="padding-bottom:0.5em;" /></li>
-          <li>Last we use -log() to make it a loss function so that we are minimizing this value, which corresponds to maximizing the probability that two pairs are similar
-  <img src="/assets/img/deep-learning/image6.png" alt="cross-entropy" width="100%" style="padding-bottom:0.5em;" /></li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-</ul>
-
-<h3 id="generative-adversarial-network-2014">Generative Adversarial Network, 2014</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-12-07T00:40:10-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Generative Adversarial Network (GANs) with Speech Enhancement Example (Hi-Fi GAN)</title><link href="http://localhost:4000/blog/2022/gan-with-examples/" rel="alternate" type="text/html" title="Generative Adversarial Network (GANs) with Speech Enhancement Example (Hi-Fi GAN)" /><published>2022-11-28T00:00:00-05:00</published><updated>2022-11-28T00:00:00-05:00</updated><id>http://localhost:4000/blog/2022/gan-with-examples</id><content type="html" xml:base="http://localhost:4000/blog/2022/gan-with-examples/"><![CDATA[<h3 id="generative-adversarial-network-2014">Generative Adversarial Network, 2014</h3>
 
 <p>Machine Learning Course by Google Developers <a href="https://developers.google.com/machine-learning/gan/loss">here</a></p>
 
@@ -401,7 +253,375 @@
       </li>
     </ul>
   </li>
-</ul>]]></content><author><name></name></author><category term="beginners-guide" /><category term="tech" /><summary type="html"><![CDATA[Latent Space, Contrastive Learning & GANs]]></summary></entry><entry><title type="html">Intro to Music Recommender System</title><link href="http://localhost:4000/blog/2022/mrs/" rel="alternate" type="text/html" title="Intro to Music Recommender System" /><published>2022-11-01T00:00:00-04:00</published><updated>2022-11-01T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/mrs</id><content type="html" xml:base="http://localhost:4000/blog/2022/mrs/"><![CDATA[<h3 id="1-characteristics-of-the-music-recommender-domain">1 Characteristics of the Music Recommender Domain</h3>
+</ul>
+
+<h2 id="hifi-gan-paper-example">HiFi GAN Paper Example</h2>
+
+<p>Here the examples are based on the series of high fidelity speech denoising and dereverberation work done by <a href="https://www.cs.princeton.edu/~af/">Prof. Adam Finkelstein</a>’s lab.</p>
+<ul>
+  <li>HiFi-GAN: High-Fidelity Denoising and Dereverberation Based on Speech Deep Features in Adversarial Networks. Project page <a href="https://pixl.cs.princeton.edu/pubs/Su_2020_HiFi/index.php">link</a>
+    <ul>
+      <li>Based on deep features</li>
+    </ul>
+  </li>
+  <li>HiFi-GAN2: Studio-quality Speech Enhancement via Generative Adversarial Networks Conditioned on Acoustic Features. Project page <a href="https://pixl.cs.princeton.edu/pubs/Su_2021_HSS/index.php">link</a>
+    <ul>
+      <li>Based on deep features but also includes a prediction network for acoustic features before training the GAN</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="high-level-takeaway">High-level Takeaway:</h3>
+
+<ul>
+  <li>
+    <p>WaveNet Architecture, trained in both time domain and time-frequency domain.</p>
+  </li>
+  <li>
+    <p>Relies on deep feature matching losses of the discriminators to improve perceptual quality</p>
+  </li>
+</ul>
+
+<h3 id="paper-notes">Paper Notes:</h3>
+
+<h4 id="introduction">Introduction</h4>
+
+<p>Existing research done</p>
+
+<ul>
+  <li>
+    <p>Traditional signal processing methods (Wiener filtering, etc.):</p>
+
+    <ul>
+      <li>
+        <p>time-frequency domain</p>
+      </li>
+      <li>
+        <p>generalize well but result not good</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Modern machine learning approaches:</p>
+
+    <ul>
+      <li>
+        <p>transform the spectrogram of a distorted input signal to match that of a target clean signal</p>
+
+        <ul>
+          <li>
+            <p>1) estimate a direct non-linear mapping from input to target</p>
+          </li>
+          <li>
+            <p>2) mask over the input</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Use ISTFT to obtain waveform, but can hear audible artifacts</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Recent advances in time domain</p>
+
+<ul>
+  <li>
+    <p>WaveNet (time domain): leverages dilated convolution to generate audio samples. Due to dilated convolution, it is able to zoom out to a broader receptive field while retaianing a small number of parameters.
+  <img src="/assets/img/deep-learning/hifigan1.png" alt="wavenet" width="100%" style="padding-bottom:0.5em;" /></p>
+  </li>
+  <li>
+    <p>Wave-U-Net: leverages U-Net structure to the time domain to combine features at different</p>
+
+    <ul>
+      <li>
+        <p>U-Net is a CNN that has encoder-decoder structure that separates an image into different sources / masks</p>
+      </li>
+      <li>
+        <p>Have their own distortions, sensitive to training data and difficult to generalize to unfamiliar noises and reverberation
+  <img src="/assets/img/deep-learning/unet.png" alt="unet" width="100%" style="padding-bottom:0.5em;" /></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>From the perspective of metrics that correlate with human auditory perception:</p>
+
+    <ul>
+      <li>
+        <p>Optimizing over differentiable approximations of objective metrics (closely related to human auditory perception) like PESQ and STOI: reduce artifacts but not significantly -&gt; Metrics correlate poorly with human perception at short distances</p>
+      </li>
+      <li>
+        <p>Deep feature loss that utilize feature maps learned for recognition tasks (ex. denoising):</p>
+
+        <ul>
+          <li>
+            <p>underperform with different sound statistics (paper proposal is to address this with adversarial training)</p>
+          </li>
+          <li>
+            <p>What is deep feature loss? (using image an example) The deep feature loss between two images is computed by applying a pretrained general-purpose image classification network to both. Each image induces a pattern of internal activations in the network to be compared, and the loss is defined in terms of their dissimilarity.</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Paper Proposal:</p>
+
+<ul>
+  <li>
+    <p>WaveNet architecture</p>
+  </li>
+  <li>
+    <p>Deep feature matching in adversarial training</p>
+  </li>
+  <li>
+    <p>On both time and time-frequency domain</p>
+  </li>
+  <li>
+    <p>Discriminators used on waveform sampled at different rates and on mel-spectrogram. They jointly evaluate the generated audio -&gt; this way the model generalizes well to new speakers and speech content</p>
+  </li>
+</ul>
+
+<h4 id="method">Method</h4>
+
+<p><img src="/assets/img/deep-learning/hifigan2.png" alt="hifigan-architecture" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<ul>
+  <li>
+    <p>Builds on previous work: perceptually-motivated environment-specific speech enhancement.</p>
+
+    <ul>
+      <li>
+        <p>Previous work aims at joint denoising and dereverberation on single recording environment</p>
+      </li>
+      <li>
+        <p>Goal now is to generalize across environment</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Uses WaveNet for speech enhancement (work by Xavier)</p>
+
+    <ul>
+      <li>Non-causal dilated convolutions with exponentially increasing dilation rates, suitable for additive noise and long tail reverberation.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Uses log spectrogram loss and L1 sample loss</p>
+
+    <ul>
+      <li>there are 2 spectrogram losses at 16kHz: 1 with large FFT window and hop size (more frequency resolution), 1 with small FFT window and hop size (more temporal resolution)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Postnet</p>
+
+<ul>
+  <li>
+    <p>attach 12 1D convolutional layers, using Tanh as an activation function.</p>
+
+    <ul>
+      <li>Attaches the L1 and spectrogram loss to both output of main network before postnet and after postnet. Postnet cleans up the coarse version of the clean speech generated by main network</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Adversarial Training</p>
+
+<ul>
+  <li>
+    <p>The generator is penalized with the adversarial losses as well as deep feature matching losses computed on feature maps of the discriminators</p>
+  </li>
+  <li>
+    <p>Multi-scale multi-domain discriminators</p>
+
+    <ul>
+      <li>
+        <p>Waveform discriminator operating at 16khz, 8khz, and 4khz for discrimination at different frequency ranges.</p>
+
+        <ul>
+          <li>They share the same network architecture but not the weights</li>
+        </ul>
+      </li>
+      <li>
+        <p>Composed of strided convolution blocks (see actual diagram)</p>
+
+        <ul>
+          <li>Strided convolution: the stride is 2 in the picture below. It means you skip a certain length when you are sliding the filter.
+  <img src="/assets/img/deep-learning/scnn.png" alt="strided cnn" width="100%" style="padding-bottom:0.5em;" /></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="other-relevant-work-wrt-hifigan">Other Relevant Work wrt HiFiGAN:</h3>
+<ul>
+  <li>Perceptually-motivated Environment-specific Speech Enhancement: <a href="https://pixl.cs.princeton.edu/pubs/Su_2019_PM/index.php">link</a>
+    <ul>
+      <li>Joint denoising and dereverberation on single recording environment</li>
+    </ul>
+  </li>
+  <li>Bandwidth Extension is All You Need: <a href="https://pixl.cs.princeton.edu/pubs/Su_2021_BEI/index.php">link</a>
+    <ul>
+      <li>Extending 8-16kHz sampling rate to 48kHz</li>
+    </ul>
+  </li>
+  <li>MUSIC ENHANCEMENT VIA IMAGE TRANSLATION AND VOCODING <a href="https://arxiv.org/pdf/2204.13289.pdf">link</a>
+    <ul>
+      <li>High fidelity instrument enhancement also with a GAN</li>
+    </ul>
+  </li>
+</ul>]]></content><author><name></name></author><category term="beginners-guide" /><category term="tech" /><summary type="html"><![CDATA[Example papers are on high fidelity speech enhancement with GANs. Currently WIP.]]></summary></entry><entry><title type="html">Latent Space and Contrastive Learning</title><link href="http://localhost:4000/blog/2022/cont-latent/" rel="alternate" type="text/html" title="Latent Space and Contrastive Learning" /><published>2022-11-16T00:00:00-05:00</published><updated>2022-11-16T00:00:00-05:00</updated><id>http://localhost:4000/blog/2022/cont-latent</id><content type="html" xml:base="http://localhost:4000/blog/2022/cont-latent/"><![CDATA[<h3 id="latent-space">Latent Space</h3>
+
+<ul>
+  <li>
+    <p>Definition: Representation of compressed data</p>
+  </li>
+  <li>
+    <p>Data compression: process of encoding information using fewer bits than the original representation</p>
+  </li>
+</ul>
+
+<p><img src="/assets/img/deep-learning/image1.png" alt="latent-space" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<p>Ekin Tiu has a Medium article about why it is called latent “space” <a href="https://towardsdatascience.com/understanding-latent-space-in-machine-learning-de5a7c687d8d">here</a></p>
+
+<ul>
+  <li>
+    <p>Tasks where latent space is necessary</p>
+
+    <ul>
+      <li>
+        <p>Representation learning:</p>
+
+        <ul>
+          <li>
+            <p>Definition: set of techniques that allow a system to discover the representations needed for feature detection or classification from raw data</p>
+          </li>
+          <li>
+            <p>Latent space representation of our data <strong>must</strong> contain all the important info (<strong>features</strong>) to represent our original data input</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Manifold learning (subfield of representation learning):</p>
+
+        <ul>
+          <li>
+            <p>Definition: groups or subsets of data that are “similar” in some way in the latent space, that does not quite show in the higher dimensional space.</p>
+          </li>
+          <li>
+            <p>Manifolds just mean groups of similar data</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Autoencoders and Generative Models</p>
+
+        <ul>
+          <li>
+            <p>Autoencoders: a neural network that acts an identify function, that has both an encoder and a decoder</p>
+          </li>
+          <li>
+            <p>We need the model to compress the representation (<strong>encode</strong>) in a way that we can accurately reconstruct it (<strong>decode</strong>).</p>
+
+            <ul>
+              <li>i.e. image in image out, audio in audio out
+  <img src="/assets/img/deep-learning/image2.png" alt="auto-encoders" width="100%" style="padding-bottom:0.5em;" /></li>
+            </ul>
+          </li>
+          <li>
+            <p>Generative models: interpolate on latent space to generate “new” image</p>
+
+            <ul>
+              <li>
+                <p>Interpolate: make estimations of independent variables if the independent variable takes on a value in between the range</p>
+              </li>
+              <li>
+                <p>Example: if chair images have 2D latent space vectors as [0.4, 0.5] and [0.45, 0.45], whereas the table has [0.6, 0.75]. Then to generate a picture that is a morph between a chair and a desk, we would <em>sample points in latent space between</em> the chair cluster and the desk cluster.</p>
+              </li>
+              <li>
+                <p>Diff between discriminative and generative:</p>
+
+                <ul>
+                  <li>
+                    <p>Generative can generate new data instances, capture the joint probability of p(X,Y) or p(X) if Y does not exist</p>
+                  </li>
+                  <li>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td>Discriminative models classifies instances into different labels. It captures p(Y</td>
+                          <td>X) -&gt; given the image, how likely is it a cat?</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="contrastive-learning-with-simclrv2">Contrastive Learning with SimCLRv2</h3>
+
+<ul>
+  <li>
+    <p>Definition: a technique that learns general features of a dataset <strong>without labels</strong> by teaching the model which data points are similar or different.</p>
+
+    <ul>
+      <li>
+        <p>Happens <strong>before</strong> classification or segmentation.</p>
+      </li>
+      <li>
+        <p>A type of self-supervised learning. The other is non-contrastive learning.</p>
+      </li>
+      <li>
+        <p>Can significantly improve model performance even when only a fraction of the dataset is labeled.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Process:
+  <img src="/assets/img/deep-learning/image3.png" alt="contrastive" width="100%" style="padding-bottom:0.5em;" /></p>
+
+    <ol>
+      <li>
+        <p><strong>Data Augmentation</strong> through 2 augmentation combos (i.e. crop + resize + recolor, etc.)</p>
+      </li>
+      <li>
+        <p><strong>Encoding:</strong> Feed the two augmented images into deep learning model to create <strong>vector representations</strong>.</p>
+
+        <ul>
+          <li><strong>Goal</strong> is to train the model to output similar representations for similar images</li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Minimize loss:</strong> Maximize the similarity of the two vector representations by minimizing a contrastive loss function</p>
+
+        <ul>
+          <li>
+            <p>Goal is to <strong>quantify the similarity</strong> of the two vector representations, then <strong>maximize the probability</strong> that two vector representations are similar.</p>
+          </li>
+          <li>We use <em>cosine similarity</em> as an example to quantify similarities: the angle between the two vectors in space. The closer they are, the bigger the similarity score
+ <img src="/assets/img/deep-learning/image4.png" alt="cosine-sim" width="100%" style="padding-bottom:0.5em;" /></li>
+          <li>Next compute the <em>probability</em> with softmax:
+  <img src="/assets/img/deep-learning/image5.png" alt="softmax" width="100%" style="padding-bottom:0.5em;" /></li>
+          <li>Last we use -log() to make it a loss function so that we are minimizing this value, which corresponds to maximizing the probability that two pairs are similar
+  <img src="/assets/img/deep-learning/image6.png" alt="cross-entropy" width="100%" style="padding-bottom:0.5em;" /></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>]]></content><author><name></name></author><category term="beginners-guide" /><category term="tech" /><summary type="html"><![CDATA[Latent Space and Contrastive Learning]]></summary></entry><entry><title type="html">Intro to Music Recommender System</title><link href="http://localhost:4000/blog/2022/mrs/" rel="alternate" type="text/html" title="Intro to Music Recommender System" /><published>2022-11-01T00:00:00-04:00</published><updated>2022-11-01T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/mrs</id><content type="html" xml:base="http://localhost:4000/blog/2022/mrs/"><![CDATA[<h3 id="1-characteristics-of-the-music-recommender-domain">1 Characteristics of the Music Recommender Domain</h3>
 
 <ul>
   <li>
@@ -1002,7 +1222,7 @@
   </li>
 </ul>
 
-<p>:bulb: This post is my notes to reading the MRS chapter of the <a href="https://link.springer.com/book/10.1007/978-1-0716-2197-4">Recommender System Handbook</a></p>]]></content><author><name></name></author><category term="beginners-guide" /><category term="music" /><category term="tech" /><summary type="html"><![CDATA[Characteristics, Use Cases, Types, and Challenges]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 4 (RNN)</title><link href="http://localhost:4000/blog/2022/dl4mir-4/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 4 (RNN)" /><published>2022-10-23T00:00:00-04:00</published><updated>2022-10-23T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-4</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-4/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>. I’d like to give a shoutout to Chris Olah’s wonderful explanation on LSTM as well.</p>
+<p>:bulb: This post is my notes to reading the MRS chapter of the <a href="https://link.springer.com/book/10.1007/978-1-0716-2197-4">Recommender System Handbook</a></p>]]></content><author><name></name></author><category term="beginners-guide" /><category term="music" /><category term="tech" /><summary type="html"><![CDATA[Characteristics, Use Cases, Types, and Challenges]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 4 (RNN, Seq2Seq, Attention)</title><link href="http://localhost:4000/blog/2022/dl4mir-4/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 4 (RNN, Seq2Seq, Attention)" /><published>2022-10-23T00:00:00-04:00</published><updated>2022-10-23T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-4</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-4/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>. I’d like to give a shoutout to Chris Olah’s wonderful explanation on LSTM as well.</p>
 
 <p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
 
@@ -1040,8 +1260,78 @@ Choi et al., 2018, p. 8</div>
   </li>
 </ul>
 
+<h3 id="sequence-to-sequence-encoder-decoder-rnns">Sequence-to-Sequence Encoder-Decoder RNNs</h3>
+<p>Here let’s use the example of machine translation.</p>
+<ul>
+  <li>We first use a tokenizer to break the sentences into tokens</li>
+  <li>Tokens are turned into word embeddings.
+    <ul>
+      <li>We could either train our own word embeddings or use a pre-trained embedding
+  <img src="/assets/img/dl4mir/embedding.png" alt="embedding" width="100%" style="padding-bottom:0.5em;" /></li>
+    </ul>
+  </li>
+  <li>Pass the word embeddings into the encoder RNN, one word at a time. For the next word, we pass in the hidden state of the last word and the next word embedding.</li>
+  <li>Pass the <strong>last hidden state</strong> into the decoder RNN. The last hidden state is called <strong>context</strong>.
+    <ul>
+      <li>The decoder also has a hidden state that is not shown in the visualization below.</li>
+      <li>The context is what made RNN bad at dealing  with long sequences, because it only contains the last hidden state</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Video below shows an unrolled RNN neural translator.</p>
+
+<video width="100%" autoplay="" loop="" controls="">
+    <source src="/assets/img/dl4mir/seq2seq_6.mp4" />
+</video>
+
+<h3 id="use-attention-to-enhance-sequence-to-sequence-encoder-decoder-rnns">Use ATTENTION to enhance sequence-to-sequence encoder-decoder RNNs</h3>
+
+<p>Instead of looking at only the last hidden state, we look at <strong>all encoder hidden states</strong>. At each time stamp, we incorporate an <strong>attention</strong> step before output. Attention tells the model a specific component to pay attention to.</p>
+
+<h4 id="attention">Attention</h4>
+<ul>
+  <li>Look at all encoder hidden states (usually an encoder hidden state is most associated with a certain word)</li>
+  <li>Give all hidden states a score (not explained)</li>
+  <li>Transform the scores with softmax</li>
+  <li>Multiply the original hidden states with the softmaxed score</li>
+  <li>Sum up the weighted hidden states to obtain context vector for the current decoder</li>
+</ul>
+
+<video width="100%" autoplay="" loop="" controls="">
+    <source src="/assets/img/dl4mir/attention_process.mp4" />
+</video>
 <p><br /></p>
 
+<h4 id="incorporating-attention-in-the-encoder-decoder-model">Incorporating Attention in the Encoder-Decoder Model</h4>
+
+<hr />
+<p>Steps only applicable to the first decoder cycle</p>
+
+<ul>
+  <li>The attention decoder takes in the embedding of the <END> token and initial decoder hidden state</END></li>
+  <li>Produces a new decoder hidden state at the current timestamp (in the illustration below it is timestamp 4) and discards its output.</li>
+</ul>
+
+<hr />
+
+<p>Below steps can be repeated at each timestamp</p>
+
+<hr />
+<ul>
+  <li>The RNN processes the inputs (previous decoder hidden state + ouput from previous step) to get the current decoder hidden state</li>
+  <li>Attention step from above: uses all encoder hidden states and the current decoder hidden state (h4) to calculate a context vector (C4)</li>
+  <li>Concatenate context vector (C4) with the current hidden state (h4) into one vector</li>
+  <li>Feed this one vector into a feedforward neural network (it is trained jointly with the model)</li>
+  <li>Output of the feedforward neural network indicaates the output word of this time step.</li>
+  <li>Repeat for the next time steps</li>
+</ul>
+
+<hr />
+<video width="100%" autoplay="" loop="" controls="">
+    <source src="/assets/img/dl4mir/attention_tensor_dance.mp4" />
+</video>
+<p><br /></p>
 <h2 id="lstm-long-short-term-memory">LSTM (Long Short Term Memory)</h2>
 
 <p>LSTM is a special kind of RNN. The additive connections between time-steps help gradient flow, remedying the vanishing gradient problem (see below for where the additive connections come from in LSTM)</p>
@@ -1206,7 +1496,10 @@ Choi et al., 2018, p. 8</div>
 
 <h3 id="resources">Resources:</h3>
 
-<p>Chris Olah’s blog about RNN and LSTM <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">here</a></p>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 4 introduces RNN and LSTM. It also includes some practical advice on handling MIR problems.]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 3 (CNN)</title><link href="http://localhost:4000/blog/2022/dl4mir-3/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 3 (CNN)" /><published>2022-10-22T00:00:00-04:00</published><updated>2022-10-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-3</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-3/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
+<ul>
+  <li>Chris Olah’s blog about RNN and LSTM <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">here</a></li>
+  <li>Jay Alammar’s blog about RNN and Attention <a href="https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/">here</a></li>
+</ul>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 4 introduces RNN, LSTM, and Attention. It also includes some practical advice on handling MIR problems.]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 3 (CNN)</title><link href="http://localhost:4000/blog/2022/dl4mir-3/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 3 (CNN)" /><published>2022-10-22T00:00:00-04:00</published><updated>2022-10-22T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-3</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-3/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
 
 <p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
 
@@ -2045,27 +2338,4 @@ Choi et al., 2018, p. 6
 
 <p>**</p>
 
-<p>不讨喜，又可悲</p>]]></content><author><name></name></author><category term="poem" /><category term="chinese" /><summary type="html"><![CDATA[poem written during a rather dark period of my life]]></summary></entry><entry><title type="html">What Surveillance Captalism Means to Democracy in Today’s Digital Age</title><link href="http://localhost:4000/blog/2020/surveillance-capitalism/" rel="alternate" type="text/html" title="What Surveillance Captalism Means to Democracy in Today’s Digital Age" /><published>2020-03-15T00:00:00-04:00</published><updated>2020-03-15T00:00:00-04:00</updated><id>http://localhost:4000/blog/2020/surveillance-capitalism</id><content type="html" xml:base="http://localhost:4000/blog/2020/surveillance-capitalism/"><![CDATA[<p>Read a nicely formatted version on Medium <a href="https://medium.com/swlh/what-surveillance-capitalism-means-to-democracy-in-todays-digital-age-498e659a1d4">here</a>.
-<br /></p>
-
-<hr />
-
-<p>Ever since the dot com boom in the early 2000s, our lives have been saturated by technology in every aspect and have been made much more convenient by the services tech corporations provide. After two decades flew by, the Internet has become the extension of the real world and one of the most significant infrastructures of today’s society. We engage in daily activities, make important life decisions, and expose sensitive information on this platform, which allows the tech corporations to collect this user information and use it to train their algorithms. We as users, on the other hand, are unaware of which part of the traces we leave online is collected as data, and most importantly, how these tech corporations handle our data. This huge asymmetry of knowledge and transparency has exposed us to surveillance capitalism and puts democracy at stake.</p>
-
-<p><strong><em>Introduction to Surveillance Capitalism</em></strong></p>
-
-<p>Shoshana Zuboff, a Harvard Business School professor emerita with decades of experience studying issues of labor and power in the digital economy, defines surveillance capitalism as a “radically disembedded and extractive variant of information capitalism” based on the commodification of “reality” and its transformation into behavioral data for analysis and sales. One important characteristic of traditional capitalists is that they claim things outside the market such as rivers and mountains and take them into the market dynamics as commodities. Similarly, surveillance capitalists like Google were also looking for their free target outside the conventional market in the early 2000s, and they saw the vast potential in commodifying people’s private experience. The surveillance capitalists build platforms such as social media to collect data, they use the data to train predictive models, and their final products are the predictions of what their users will do. In this case, it is not their users that are the business customers, but the companies that need these prediction results to make decisions like when to send the targeted ads, how much to charge for insurance for different people, etc.</p>
-
-<p><strong><em>Indications of Surveillance Capitalism</em></strong></p>
-
-<p>In Zuboff’s article “Big Other: Surveillance Capitalism and the Prospects of an Information Civilization”, she argues that surveillance capitalism “ aims to predict and modify human behavior as a means to produce revenue and market control.” Surveillance capitalists know that the monetization potentials linked to accurate data capture and analysis are enormous. In order to get the most accurate models, tech corporations need to get not only a massive amount of data but also a variety of data. Because technology is still a largely unrestricted and lawless land, tech firms have developed lots of ways to convert the real world into data points as well. Virtual assistants such as Amazon Alexa are brought into people’s homes and said to be listening to people’s conversations; insurance tracking devices are promoted by auto insurance companies to decide on how much an individual should pay for insurance; CCTV surveillance cameras are installed in different neighborhoods, which leaves people’s facial expressions that are highly indicative of their future behaviors free for the companies to grab.</p>
-
-<p>Unfortunately, these new opportunities and incentives to capture data can sometimes challenge people’s privacy and even violate rights and laws. This prompts the big tech corporations such as Google and Facebook to obscure their operations and algorithms in order to take advantage of the uninformed data subjects. They expect to get opposition along the way but as previously mentioned, they will already have accumulated a substantial amount of resources to defend themselves at low cost.</p>
-
-<p>The technology that backs up this surveillance capitalism develops at an unprecedented speed, which puts people in a brand new position where very few people understand the logic and consequences of the work of these corporations. As a result, there is a law gap between technological development and defensive barriers. The opacity that the tech corporations choose to hide behind did not help with connecting the gap, especially knowing that their ultimate goal is to modify and swing behavior. Zuboff argues that under the framework of surveillance capitalism, the global architecture of computer mediation turns the electronic text of the bounded organization into an intelligent world-spanning organism that she defines as the Big Other. Those with the material, knowledge, and financial resources participate in the Big Other economics, and the markets in behavioral control get to decide who can gain access to the Big Other. Markets and democracies are no longer reciprocal to each other; rather, populations depend on the markets so much that the data they are supposed to own is just free data capture targets. As Zuboff said, “Under surveillance capitalism, democracy no longer functions as a means to prosperity; democracy threatens surveillance revenues.”</p>
-
-<p>The opacity that big tech corporations choose to take on catalyzes the formation of a black box society where we know only the output, but not the process leading to the output. As James Arvanitakis states, “In a democracy, we assume that we understand where the information comes from, but this is no longer the case.” The asymmetry of knowledge crashes democracy from both above and below. From above, it increases the social inequality in this digital era. Internet was built to spread and democratize knowledge, but surveillance capitalists see their users’ rights of knowing as an obstacle on their way to higher efficiency. From below, it is nearly impossible for users to combat surveillance capitalism. Since the product is the certainty of behavior predictions, the surveillance capitalists aim to interfere with our own decision making without the users knowing through subliminal cues and micro-targeting.</p>
-
-<hr />
-
-<p>As we entered the digital era, the Internet has become the basic infrastructure of today’s economy. However, if our infrastructure is full of cameras and strings that can be pulled to manipulate the majority, the power will naturally fall into the hands of the minority who has all the information. As Lord Acton once said, “Absolute power corrupts absolutely.” Democracy will be threatened, and there will be bigger social inequality issues. The good news is, surveillance capitalism is still a relatively new phenomenon that has lasted for about 20 years, and legislative institutions have started to take measures to regulate the operation and ownership of the Internet. European Union has recently come up with General Data Protection Regulation, which aims to protect the users’ privacy; every state in the United States has its own breach disclosure law; pioneer tech companies such as Facebook have also shown interest in cooperating with the legislative institutions after Mark Zuckerberg was called in front of Congress. This is still a long fight, but I do have hope in everyone in the ecosystem figuring out a solution, not at the sacrifice of users’ privacy.</p>]]></content><author><name></name></author><category term="opinion" /><category term="data-ethics" /><category term="tech" /><category term="opinion" /><summary type="html"><![CDATA["Absolute power corrupts absolutely." - Lord Acton]]></summary></entry></feed>
+<p>不讨喜，又可悲</p>]]></content><author><name></name></author><category term="poem" /><category term="chinese" /><summary type="html"><![CDATA[poem written during a rather dark period of my life]]></summary></entry></feed>

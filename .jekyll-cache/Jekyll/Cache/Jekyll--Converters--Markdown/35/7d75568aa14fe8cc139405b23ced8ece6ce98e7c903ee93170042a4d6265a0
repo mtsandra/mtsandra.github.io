@@ -1,0 +1,265 @@
+I"�3<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>. I’d like to give a shoutout to Chris Olah’s wonderful explanation on LSTM as well.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="recurrent-neural-network">Recurrent Neural Network</h2>
+<p><img src="/assets/img/dl4mir/image18.png" alt="convolutions" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p>RNNs are usually used for data that are in sequence and lists. For example, speech recognition, translation, image captioning, etc.</p>
+
+<p>A more detailed look at the recurrent layer and an unfolded RNN with 3 time stamps:</p>
+
+<p><img src="/assets/img/dl4mir/image20.png" alt="rnn" width="50%" style="padding-bottom:0.5em;" /><br /></p>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image19.png" alt="rnn" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p. 8</div>
+
+<ul>
+  <li>
+    <p>f<sub>out</sub> is usually soft-max/sigmoid, etc.</p>
+  </li>
+  <li>
+    <p>f<sub>h</sub> is usually tanh or ReLU</p>
+  </li>
+  <li>
+    <p>h<sub>t</sub> is hidden vector of the network that stores info at time t</p>
+  </li>
+  <li>
+    <p>U, V, W are matrices with trainable weights of the recurrent layer</p>
+  </li>
+</ul>
+
+<h3 id="sequence-to-sequence-encoder-decoder-rnns">Sequence-to-Sequence Encoder-Decoder RNNs</h3>
+<p>Here let’s use the example of machine translation.</p>
+<ul>
+  <li>We first use a tokenizer to break the sentences into tokens</li>
+  <li>Tokens are turned into word embeddings.
+    <ul>
+      <li>We could either train our own word embeddings or use a pre-trained embedding
+  <img src="/assets/img/dl4mir/embedding.png" alt="embedding" width="100%" style="padding-bottom:0.5em;" /></li>
+    </ul>
+  </li>
+  <li>Pass the word embeddings into the encoder RNN, one word at a time. For the next word, we pass in the hidden state of the last word and the next word embedding.</li>
+  <li>Pass the <strong>last hidden state</strong> into the decoder RNN. The last hidden state is called <strong>context</strong>.
+    <ul>
+      <li>The decoder also has a hidden state that is not shown in the visualization below.</li>
+      <li>The context is what made RNN bad at dealing  with long sequences, because it only contains the last hidden state</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Video below shows an unrolled RNN neural translator.</p>
+
+<video width="100%" autoplay="" loop="" controls="">
+    <source src="/assets/img/dl4mir/seq2seq_6.mp4" />
+</video>
+
+<h3 id="use-attention-to-enhance-sequence-to-sequence-encoder-decoder-rnns">Use ATTENTION to enhance sequence-to-sequence encoder-decoder RNNs</h3>
+
+<p>Instead of looking at only the last hidden state, we look at <strong>all encoder hidden states</strong>. At each time stamp, we incorporate an <strong>attention</strong> step before output.</p>
+
+<h4 id="attention">Attention</h4>
+<ul>
+  <li>Look at all encoder hidden states (usually an encoder hidden state is most associated with a certain word)</li>
+  <li>Give all hidden states a score (not explained)</li>
+  <li>Transform the scores with softmax</li>
+  <li>Multiply the original hidden states with the softmaxed score</li>
+  <li>Sum up the weighted hidden states to obtain context vector for the current decoder</li>
+</ul>
+
+<video width="100%" autoplay="" loop="" controls="">
+    <source src="/assets/img/dl4mir/attention_process.mp4" />
+</video>
+<p><br /></p>
+
+<h4 id="incorporating-attention-in-the-encoder-decoder-model">Incorporating Attention in the Encoder-Decoder Model</h4>
+<p>Steps only applicable to the first decoder cycle</p>
+
+<hr />
+<ul>
+  <li>The attention decoder takes in the embedding of the <END> token and initial decoder hidden state</END></li>
+  <li>Produces a new decoder hidden state at the current timestamp (in the illustration below it is timestamp 4) and discards its output.</li>
+</ul>
+
+<hr />
+
+<video width="100%" autoplay="" loop="" controls="">
+    <source src="/assets/img/dl4mir/attention_tensor_dance.mp4" />
+</video>
+<p><br /></p>
+<h2 id="lstm-long-short-term-memory">LSTM (Long Short Term Memory)</h2>
+
+<p>LSTM is a special kind of RNN. The additive connections between time-steps help gradient flow, remedying the vanishing gradient problem (see below for where the additive connections come from in LSTM)</p>
+
+<p>Standard RNNs handle short term dependencies pretty well, but not long term dependencies. LSTM handles this long term dependency.</p>
+
+<ul>
+  <li>
+    <p>Short Term Dependency Example: clouds in the [] &lt;- it’s easy for RNN to predict sky</p>
+  </li>
+  <li>
+    <p>Long Term Dependency Example: I grew up in France.(…) I speak [] &lt;- hard for RNN to predict French</p>
+  </li>
+</ul>
+
+<p>Inside the LSTM unit (a “cell”), there are gates (forget gate, input gate, and output gate). There are also states: hidden state and cell state. We’ll look at the LSTM unit step by step.</p>
+
+<p><img src="/assets/img/dl4mir/image21.png" alt="rnn1" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h4 id="terminology-alert">Terminology Alert!**</h4>
+
+<p><strong>Hidden state: (in both standard RNN and LSTM)</strong></p>
+
+<ul>
+  <li>Working memory capability that carries information from immediately previous events and overwrites at every step uncontrollably</li>
+</ul>
+
+<p><strong>Cell state: (only in LSTM)</strong></p>
+
+<ul>
+  <li>
+    <p>Long term memory capability that stores and loads information of not necessarily immediately previous events</p>
+  </li>
+  <li>
+    <p>Can be considered at a conveyor belt that carries the memory of previous events</p>
+  </li>
+</ul>
+
+<p><strong>Gates:</strong></p>
+
+<p>“A gate is a vector-multiplication node where the input is multiplied by a same-sized vector to attenuate the amount of input.”</p>
+
+<p>The three gates mentioned above usually contains a sigmoid layer coupled with tanh layer. The sigmoid layer returns a value between (0,1) that determines what part of data needs to be forgotten, updated, and outputted. Remember they have different weights (see formula below.)</p>
+
+<h5 id="step-1-forget-gate-layer---determine-what-information-to-forget">Step 1: Forget Gate Layer - Determine what information to forget</h5>
+
+<p>It is worth noting that we are not actually doing the forgetting here. We are only running the previous hidden state and the current input date through a sigmoid layer and decide what information to forget.</p>
+
+<p>Example: The store owner saw the little girl. We might want to forget the gender pronoun of the store owner here to update it with the little girl’s. Step 1 is to decide we are forgetting store owner’s gender.</p>
+
+<p><img src="/assets/img/dl4mir/image22.png" alt="rnn2" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h5 id="step-2-input-gate-layer---determine-what-information-to-update-and-store-in-our-cell-state">Step 2: Input Gate Layer - Determine what information to update and store in our cell state</h5>
+
+<p>The sigmoid layer determines which values we update. Tanh layer transforms the input layer into the range between (-1,1). We still have not combined these two layers to create an update to the cell state yet.</p>
+
+<p>Example: The store owner (he) saw the little girl. <em>She</em> was looking at candy bars. We need to determine that we need to add in the gender pronoun of the little girl.
+<img src="/assets/img/dl4mir/image23.png" alt="rnn3" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h5 id="step-3-cell-state-update---element-wise-operation-to-make-updates">Step 3: Cell State Update - element-wise operation to make updates</h5>
+
+<p>Now we take the information that we’ve determined to forget during the forget gate layer and apply it to the cell state. Then we multiply the input gate sigmoid layer with the newly transformed values from tanh layer and add it to our cell state.
+<img src="/assets/img/dl4mir/image24.png" alt="rnn4" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<h5 id="step-4-output-gate-layer---determine-what-we-are-outputting">Step 4: Output Gate Layer - Determine what we are outputting</h5>
+
+<p>Similar to the structure of the input gate layer, the output gate layer also consists of two parts: sigmoid layer to determine what information to output, and tanh layer to transform the cell state data to have a range of (-1,1). Then we multiply them and output the transformed value of the data that we want the model to output.
+<img src="/assets/img/dl4mir/image25.png" alt="rnn5" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p><br /></p>
+
+<h3 id="recurrent-layers-and-music">Recurrent Layers and Music</h3>
+
+<p>Shift invariance cannot be incorporated in the computation inside recurrent layers, so recurrent layers may be suitable for <strong>the sequence of features.</strong></p>
+
+<p>The number of hidden nodes in a layer is one of the hyperparametes and can be chosen through trial and error.</p>
+
+<p><strong>Length of the recurrent layer can be controlled</strong> to optimize the computational cost. Onset detection can use a short time frame, whereas chord recognition may benefit from longer inputs.</p>
+
+<p>For many MIR problems, inputs from the future can help the prediction, so <strong>bi-directional RNN</strong> can be worth trying. We can think of it as having another recurrent layer in parallel that works in the reversed time order.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="solving-mir-problems-practical-advice">Solving MIR Problems: Practical Advice</h2>
+
+<h5 id="data-preprocessing">Data Preprocessing</h5>
+
+<ul>
+  <li>
+    <p>It’s crucial to preprocess the data because it affects the training speed.</p>
+  </li>
+  <li>
+    <p>Usually logarithmic mapping of magnitudes is used to condition the data distributions and result in better performance</p>
+  </li>
+  <li>
+    <p>Some preprocessing methods did <strong>not</strong> improve model performance:</p>
+
+    <ul>
+      <li>
+        <p>spectral whitening</p>
+      </li>
+      <li>
+        <p>normalize local contrasts (did not work well in CV)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Optimize the signal processing parameters such as the number of FFTs, mel bins, window and hop sizes, and the sampling rate.</p>
+
+    <ul>
+      <li>Audio signals are often downmixed and downsampled to 8-16Hz</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="aggregating-information">Aggregating information</h5>
+
+<ul>
+  <li>
+    <p>Time varying problems, which are problems with a short decision time scale (chord recognition, onset detection) require a prediction per unit time</p>
+  </li>
+  <li>
+    <p>Time invariant problems, which are problems with a long decision time scale (key detection, music tagging), require a method to aggregate features over time. Methods are listed as below:</p>
+
+    <ul>
+      <li>
+        <p>Pooling: common example would be using max pooling layers over time or frequency axis</p>
+      </li>
+      <li>
+        <p>Strided convolutions: convolutional layers that have strides bigger than 1. The effects are similar to max pooling, but we should not set strides to be smaller than kernel size. Otherwise not all of the input will be convolved.</p>
+      </li>
+      <li>
+        <p>Recurrent layers: can learn to summarize features in any axis, but it takes more computation and data than the previous two methods. So it is usually used in the last layer.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="depth-of-networks">Depth of networks</h5>
+
+<ul>
+  <li>
+    <p>Bottom line is that the neural network should be deep enough to approximate the relationship between the input and the output</p>
+  </li>
+  <li>
+    <p>CNNs have been increasing in both MIR and other domains, which is also allowed by recent advancement in computational savings.</p>
+  </li>
+  <li>
+    <p>RNNs have increased slowly because 1) stacking recurrent layers does not incorporate feature hiearchy and 2) recurrent layers are already deep along the time axis, so depth matters less</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h3 id="resources">Resources:</h3>
+
+<ul>
+  <li>Chris Olah’s blog about RNN and LSTM <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">here</a></li>
+  <li>Jay Alammar’s blog about RNN and Attention <a href="https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/">here</a></li>
+</ul>
+:ET

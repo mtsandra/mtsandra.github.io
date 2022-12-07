@@ -1,152 +1,4 @@
-I">?<h3 id="latent-space">Latent Space</h3>
-
-<ul>
-  <li>
-    <p>Definition: Representation of compressed data</p>
-  </li>
-  <li>
-    <p>Data compression: process of encoding information using fewer bits than the original representation</p>
-  </li>
-</ul>
-
-<p><img src="/assets/img/deep-learning/image1.png" alt="latent-space" width="100%" style="padding-bottom:0.5em;" /></p>
-
-<p>Ekin Tiu has a Medium article about why it is called latent “space” <a href="https://towardsdatascience.com/understanding-latent-space-in-machine-learning-de5a7c687d8d">here</a></p>
-
-<ul>
-  <li>
-    <p>Tasks where latent space is necessary</p>
-
-    <ul>
-      <li>
-        <p>Representation learning:</p>
-
-        <ul>
-          <li>
-            <p>Definition: set of techniques that allow a system to discover the representations needed for feature detection or classification from raw data</p>
-          </li>
-          <li>
-            <p>Latent space representation of our data <strong>must</strong> contain all the important info (<strong>features</strong>) to represent our original data input</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>Manifold learning (subfield of representation learning):</p>
-
-        <ul>
-          <li>
-            <p>Definition: groups or subsets of data that are “similar” in some way in the latent space, that does not quite show in the higher dimensional space.</p>
-          </li>
-          <li>
-            <p>Manifolds just mean groups of similar data</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>Autoencoders and Generative Models</p>
-
-        <ul>
-          <li>
-            <p>Autoencoders: a neural network that acts an identify function, that has both an encoder and a decoder</p>
-          </li>
-          <li>
-            <p>We need the model to compress the representation (<strong>encode</strong>) in a way that we can accurately reconstruct it (<strong>decode</strong>).</p>
-
-            <ul>
-              <li>i.e. image in image out, audio in audio out
-  <img src="/assets/img/deep-learning/image2.png" alt="auto-encoders" width="100%" style="padding-bottom:0.5em;" /></li>
-            </ul>
-          </li>
-          <li>
-            <p>Generative models: interpolate on latent space to generate “new” image</p>
-
-            <ul>
-              <li>
-                <p>Interpolate: make estimations of independent variables if the independent variable takes on a value in between the range</p>
-              </li>
-              <li>
-                <p>Example: if chair images have 2D latent space vectors as [0.4, 0.5] and [0.45, 0.45], whereas the table has [0.6, 0.75]. Then to generate a picture that is a morph between a chair and a desk, we would <em>sample points in latent space between</em> the chair cluster and the desk cluster.</p>
-              </li>
-              <li>
-                <p>Diff between discriminative and generative:</p>
-
-                <ul>
-                  <li>
-                    <p>Generative can generate new data instances, capture the joint probability of p(X,Y) or p(X) if Y does not exist</p>
-                  </li>
-                  <li>
-                    <table>
-                      <tbody>
-                        <tr>
-                          <td>Discriminative models classifies instances into different labels. It captures p(Y</td>
-                          <td>X) -&gt; given the image, how likely is it a cat?</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="contrastive-learning-with-simclrv2">Contrastive Learning with SimCLRv2</h2>
-
-<ul>
-  <li>
-    <p>Definition: a technique that learns general features of a dataset <strong>without labels</strong> by teaching the model which data points are similar or different.</p>
-
-    <ul>
-      <li>
-        <p>Happens <strong>before</strong> classification or segmentation.</p>
-      </li>
-      <li>
-        <p>A type of self-supervised learning. The other is non-contrastive learning.</p>
-      </li>
-      <li>
-        <p>Can significantly improve model performance even when only a fraction of the dataset is labeled.</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>Process:
-  <img src="/assets/img/deep-learning/image3.png" alt="contrastive" width="100%" style="padding-bottom:0.5em;" /></p>
-
-    <ol>
-      <li>
-        <p><strong>Data Augmentation</strong> through 2 augmentation combos (i.e. crop + resize + recolor, etc.)</p>
-      </li>
-      <li>
-        <p><strong>Encoding:</strong> Feed the two augmented images into deep learning model to create <strong>vector representations</strong>.</p>
-
-        <ul>
-          <li><strong>Goal</strong> is to train the model to output similar representations for similar images</li>
-        </ul>
-      </li>
-      <li>
-        <p><strong>Minimize loss:</strong> Maximize the similarity of the two vector representations by minimizing a contrastive loss function</p>
-
-        <ul>
-          <li>
-            <p>Goal is to <strong>quantify the similarity</strong> of the two vector representations, then <strong>maximize the probability</strong> that two vector representations are similar.</p>
-          </li>
-          <li>We use <em>cosine similarity</em> as an example to quantify similarities: the angle between the two vectors in space. The closer they are, the bigger the similarity score
- <img src="/assets/img/deep-learning/image4.png" alt="cosine-sim" width="100%" style="padding-bottom:0.5em;" /></li>
-          <li>Next compute the <em>probability</em> with softmax:
-  <img src="/assets/img/deep-learning/image5.png" alt="softmax" width="100%" style="padding-bottom:0.5em;" /></li>
-          <li>Last we use -log() to make it a loss function so that we are minimizing this value, which corresponds to maximizing the probability that two pairs are similar
-  <img src="/assets/img/deep-learning/image6.png" alt="cross-entropy" width="100%" style="padding-bottom:0.5em;" /></li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-</ul>
-
-<h2 id="generative-adversarial-network-2014">Generative Adversarial Network, 2014</h2>
+I"B<h3 id="generative-adversarial-network-2014">Generative Adversarial Network, 2014</h3>
 
 <p>Machine Learning Course by Google Developers <a href="https://developers.google.com/machine-learning/gan/loss">here</a></p>
 
@@ -164,14 +16,14 @@
   </li>
 </ul>
 
-<h3 id="step-1-discriminator-trains-for-one-or-more-epochs">Step 1. Discriminator trains for one or more epochs.</h3>
+<h5 id="step-1-discriminator-trains-for-one-or-more-epochs">Step 1. Discriminator trains for one or more epochs.</h5>
 
 <p>The discriminator takes input from real images and the fake images the generator outputs, update its weights through backpropagation to distinguish between real and fake data.</p>
 
 <p>Generator does not update its weight during this period, and discriminator ignores generator loss in this round.
 <img src="/assets/img/deep-learning/image8.png" alt="gan-discriminator" width="100%" style="padding-bottom:0.5em;" /></p>
 
-<h3 id="step-2-generator-trains-for-one-or-more-epochs">Step 2. Generator trains for one or more epochs.</h3>
+<h5 id="step-2-generator-trains-for-one-or-more-epochs">Step 2. Generator trains for one or more epochs.</h5>
 
 <p><img src="/assets/img/deep-learning/image9.png" alt="gan-generator" width="100%" style="padding-bottom:0.5em;" /></p>
 
@@ -216,7 +68,7 @@
   </li>
 </ul>
 
-<h3 id="step-3-repeat-step-1-and-2-to-alternate-training">Step 3. Repeat step 1 and 2 to alternate training</h3>
+<h5 id="step-3-repeat-step-1-and-2-to-alternate-training">Step 3. Repeat step 1 and 2 to alternate training</h5>
 
 <ul>
   <li>
@@ -233,7 +85,7 @@
   </li>
 </ul>
 
-<h3 id="loss-functions">Loss Functions</h3>
+<h5 id="loss-functions">Loss Functions</h5>
 
 <ul>
   <li>
@@ -357,7 +209,7 @@
   </li>
 </ul>
 
-<h3 id="common-problems">Common Problems</h3>
+<h5 id="common-problems">Common Problems</h5>
 
 <ul>
   <li>
@@ -397,6 +249,209 @@
       </li>
       <li>
         <p>Penalizing discriminator weights</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="hifi-gan-paper-example">HiFi GAN Paper Example</h2>
+
+<p>Here the examples are based on the series of high fidelity speech denoising and dereverberation work done by <a href="https://www.cs.princeton.edu/~af/">Prof. Adam Finkelstein</a>’s lab.</p>
+<ul>
+  <li>HiFi-GAN: High-Fidelity Denoising and Dereverberation Based on Speech Deep Features in Adversarial Networks. Project page <a href="https://pixl.cs.princeton.edu/pubs/Su_2020_HiFi/index.php">link</a>
+    <ul>
+      <li>Based on deep features</li>
+    </ul>
+  </li>
+  <li>HiFi-GAN2: Studio-quality Speech Enhancement via Generative Adversarial Networks Conditioned on Acoustic Features. Project page <a href="https://pixl.cs.princeton.edu/pubs/Su_2021_HSS/index.php">link</a>
+    <ul>
+      <li>Based on deep features but also includes a prediction network for acoustic features before training the GAN</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="high-level-takeaway">High-level Takeaway:</h2>
+
+<ul>
+  <li>
+    <p>WaveNet Architecture, trained in both time domain and time-frequency domain.</p>
+  </li>
+  <li>
+    <p>Relies on deep feature matching losses of the discriminators to improve perceptual quality</p>
+  </li>
+</ul>
+
+<h2 id="paper-notes">Paper Notes:</h2>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Existing research done</p>
+
+<ul>
+  <li>
+    <p>Traditional signal processing methods (Wiener filtering, etc.):</p>
+
+    <ul>
+      <li>
+        <p>time-frequency domain</p>
+      </li>
+      <li>
+        <p>generalize well but result not good</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Modern machine learning approaches:</p>
+
+    <ul>
+      <li>
+        <p>transform the spectrogram of a distorted input signal to match that of a target clean signal</p>
+
+        <ul>
+          <li>
+            <p>1) estimate a direct non-linear mapping from input to target</p>
+          </li>
+          <li>
+            <p>2) mask over the input</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Use ISTFT to obtain waveform, but can hear audible artifacts</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Recent advances in time domain</p>
+
+<ul>
+  <li>
+    <p>WaveNet (time domain): leverages dilated convolution to generate audio samples. Due to dilated convolution, it is able to zoom out to a broader receptive field while retaianing a small number of parameters.
+  <img src="/assets/img/deep-learning/hifigan1.png" alt="wavenet" width="100%" style="padding-bottom:0.5em;" /></p>
+  </li>
+  <li>
+    <p>Wave-U-Net: leverages U-Net structure to the time domain to combine features at different</p>
+
+    <ul>
+      <li>
+        <p>U-Net is a CNN that has encoder-decoder structure that separates an image into different sources / masks</p>
+      </li>
+      <li>
+        <p>Have their own distortions, sensitive to training data and difficult to generalize to unfamiliar noises and reverberation
+  <img src="/assets/img/deep-learning/unet.png" alt="unet" width="100%" style="padding-bottom:0.5em;" /></p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>From the perspective of metrics that correlate with human auditory perception:</p>
+
+    <ul>
+      <li>
+        <p>Optimizing over differentiable approximations of objective metrics (closely related to human auditory perception) like PESQ and STOI: reduce artifacts but not significantly -&gt; Metrics correlate poorly with human perception at short distances</p>
+      </li>
+      <li>
+        <p>Deep feature loss that utilize feature maps learned for recognition tasks (ex. denoising):</p>
+
+        <ul>
+          <li>
+            <p>underperform with different sound statistics (paper proposal is to address this with adversarial training)</p>
+          </li>
+          <li>
+            <p>What is deep feature loss? (using image an example) The deep feature loss between two images is computed by applying a pretrained general-purpose image classification network to both. Each image induces a pattern of internal activations in the network to be compared, and the loss is defined in terms of their dissimilarity.</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Paper Proposal:</p>
+
+<ul>
+  <li>
+    <p>WaveNet architecture</p>
+  </li>
+  <li>
+    <p>Deep feature matching in adversarial training</p>
+  </li>
+  <li>
+    <p>On both time and time-frequency domain</p>
+  </li>
+  <li>
+    <p>Discriminators used on waveform sampled at different rates and on mel-spectrogram. They jointly evaluate the generated audio -&gt; this way the model generalizes well to new speakers and speech content</p>
+  </li>
+</ul>
+
+<h2 id="method">Method</h2>
+
+<p><img src="/assets/img/deep-learning/hifigan2.png" alt="hifigan-architecture" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<ul>
+  <li>
+    <p>Builds on previous work: perceptually-motivated environment-specific speech enhancement.</p>
+
+    <ul>
+      <li>
+        <p>Previous work aims at joint denoising and dereverberation on single recording environment</p>
+      </li>
+      <li>
+        <p>Goal now is to generalize across environment</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Uses WaveNet for speech enhancement (work by Xavier)</p>
+
+    <ul>
+      <li>Non-causal dilated convolutions with exponentially increasing dilation rates, suitable for additive noise and long tail reverberation.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Uses log spectrogram loss and L1 sample loss</p>
+
+    <ul>
+      <li>there are 2 spectrogram losses at 16kHz: 1 with large FFT window and hop size (more frequency resolution), 1 with small FFT window and hop size (more temporal resolution)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Postnet</p>
+
+<ul>
+  <li>
+    <p>attach 12 1D convolutional layers, using Tanh as an activation function.</p>
+
+    <ul>
+      <li>Attaches the L1 and spectrogram loss to both output of main network before postnet and after postnet. Postnet cleans up the coarse version of the clean speech generated by main network</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Adversarial Training</p>
+
+<ul>
+  <li>
+    <p>The generator is penalized with the adversarial losses as well as deep feature matching losses computed on feature maps of the discriminators</p>
+  </li>
+  <li>
+    <p>Multi-scale multi-domain discriminators</p>
+
+    <ul>
+      <li>
+        <p>Waveform discriminator operating at 16khz, 8khz, and 4khz for discrimination at different frequency ranges.</p>
+
+        <ul>
+          <li>They share the same network architecture but not the weights</li>
+        </ul>
+      </li>
+      <li>
+        <p>Composed of strided convolution blocks (see actual diagram)</p>
+
+        <ul>
+          <li>Strided convolution: the stride is 2 in the picture below. It means you skip a certain length when you are sliding the filter.
+  <img src="/assets/img/deep-learning/scnn.png" alt="strided cnn" width="100%" style="padding-bottom:0.5em;" /></li>
+        </ul>
       </li>
     </ul>
   </li>

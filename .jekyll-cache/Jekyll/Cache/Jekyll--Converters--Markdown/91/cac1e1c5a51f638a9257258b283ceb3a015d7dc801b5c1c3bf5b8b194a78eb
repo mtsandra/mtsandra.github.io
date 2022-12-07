@@ -1,0 +1,149 @@
+I"$<h3 id="latent-space">Latent Space</h3>
+
+<ul>
+  <li>
+    <p>Definition: Representation of compressed data</p>
+  </li>
+  <li>
+    <p>Data compression: process of encoding information using fewer bits than the original representation</p>
+  </li>
+</ul>
+
+<p><img src="/assets/img/deep-learning/image1.png" alt="latent-space" width="100%" style="padding-bottom:0.5em;" /></p>
+
+<p>Ekin Tiu has a Medium article about why it is called latent “space” <a href="https://towardsdatascience.com/understanding-latent-space-in-machine-learning-de5a7c687d8d">here</a></p>
+
+<ul>
+  <li>
+    <p>Tasks where latent space is necessary</p>
+
+    <ul>
+      <li>
+        <p>Representation learning:</p>
+
+        <ul>
+          <li>
+            <p>Definition: set of techniques that allow a system to discover the representations needed for feature detection or classification from raw data</p>
+          </li>
+          <li>
+            <p>Latent space representation of our data <strong>must</strong> contain all the important info (<strong>features</strong>) to represent our original data input</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Manifold learning (subfield of representation learning):</p>
+
+        <ul>
+          <li>
+            <p>Definition: groups or subsets of data that are “similar” in some way in the latent space, that does not quite show in the higher dimensional space.</p>
+          </li>
+          <li>
+            <p>Manifolds just mean groups of similar data</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Autoencoders and Generative Models</p>
+
+        <ul>
+          <li>
+            <p>Autoencoders: a neural network that acts an identify function, that has both an encoder and a decoder</p>
+          </li>
+          <li>
+            <p>We need the model to compress the representation (<strong>encode</strong>) in a way that we can accurately reconstruct it (<strong>decode</strong>).</p>
+
+            <ul>
+              <li>i.e. image in image out, audio in audio out
+  <img src="/assets/img/deep-learning/image2.png" alt="auto-encoders" width="100%" style="padding-bottom:0.5em;" /></li>
+            </ul>
+          </li>
+          <li>
+            <p>Generative models: interpolate on latent space to generate “new” image</p>
+
+            <ul>
+              <li>
+                <p>Interpolate: make estimations of independent variables if the independent variable takes on a value in between the range</p>
+              </li>
+              <li>
+                <p>Example: if chair images have 2D latent space vectors as [0.4, 0.5] and [0.45, 0.45], whereas the table has [0.6, 0.75]. Then to generate a picture that is a morph between a chair and a desk, we would <em>sample points in latent space between</em> the chair cluster and the desk cluster.</p>
+              </li>
+              <li>
+                <p>Diff between discriminative and generative:</p>
+
+                <ul>
+                  <li>
+                    <p>Generative can generate new data instances, capture the joint probability of p(X,Y) or p(X) if Y does not exist</p>
+                  </li>
+                  <li>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td>Discriminative models classifies instances into different labels. It captures p(Y</td>
+                          <td>X) -&gt; given the image, how likely is it a cat?</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="contrastive-learning-with-simclrv2">Contrastive Learning with SimCLRv2</h3>
+
+<ul>
+  <li>
+    <p>Definition: a technique that learns general features of a dataset <strong>without labels</strong> by teaching the model which data points are similar or different.</p>
+
+    <ul>
+      <li>
+        <p>Happens <strong>before</strong> classification or segmentation.</p>
+      </li>
+      <li>
+        <p>A type of self-supervised learning. The other is non-contrastive learning.</p>
+      </li>
+      <li>
+        <p>Can significantly improve model performance even when only a fraction of the dataset is labeled.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Process:
+  <img src="/assets/img/deep-learning/image3.png" alt="contrastive" width="100%" style="padding-bottom:0.5em;" /></p>
+
+    <ol>
+      <li>
+        <p><strong>Data Augmentation</strong> through 2 augmentation combos (i.e. crop + resize + recolor, etc.)</p>
+      </li>
+      <li>
+        <p><strong>Encoding:</strong> Feed the two augmented images into deep learning model to create <strong>vector representations</strong>.</p>
+
+        <ul>
+          <li><strong>Goal</strong> is to train the model to output similar representations for similar images</li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Minimize loss:</strong> Maximize the similarity of the two vector representations by minimizing a contrastive loss function</p>
+
+        <ul>
+          <li>
+            <p>Goal is to <strong>quantify the similarity</strong> of the two vector representations, then <strong>maximize the probability</strong> that two vector representations are similar.</p>
+          </li>
+          <li>We use <em>cosine similarity</em> as an example to quantify similarities: the angle between the two vectors in space. The closer they are, the bigger the similarity score
+ <img src="/assets/img/deep-learning/image4.png" alt="cosine-sim" width="100%" style="padding-bottom:0.5em;" /></li>
+          <li>Next compute the <em>probability</em> with softmax:
+  <img src="/assets/img/deep-learning/image5.png" alt="softmax" width="100%" style="padding-bottom:0.5em;" /></li>
+          <li>Last we use -log() to make it a loss function so that we are minimizing this value, which corresponds to maximizing the probability that two pairs are similar
+  <img src="/assets/img/deep-learning/image6.png" alt="cross-entropy" width="100%" style="padding-bottom:0.5em;" /></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+:ET
