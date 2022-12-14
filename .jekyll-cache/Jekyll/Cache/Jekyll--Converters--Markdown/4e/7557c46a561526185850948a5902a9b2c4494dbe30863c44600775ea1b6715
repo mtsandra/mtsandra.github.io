@@ -1,0 +1,16 @@
+I"œ<p>Transformers is a sequence to sequence model proposed by Google Researchers (Paper <a href="https://arxiv.org/pdf/1706.03762.pdf">here</a>). It does not use recurrence and convolutions and leverages attention mechanism heavily. For a refresher on attention, please refer to the post <a href="/blog/2022/dl4mir-4/">here</a>, which talks about attention in the context of RNN.</p>
+
+<p>This post will show the model architecture first and break it down from there. The model might look intimating at first, but we will break it into the sections below:</p>
+<ul>
+  <li>Attention Mechanism Used Here (bullet points not mutually exclusive):
+    <ul>
+      <li>Self Attention</li>
+      <li>Encoder-Decoder Attention</li>
+      <li>Multi-Head Attention</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/img/deep-learning/transformers/transformer-model.png" alt="gan-generator" width="80%" style="padding-bottom:0.5em;" /></p>
+
+:ET

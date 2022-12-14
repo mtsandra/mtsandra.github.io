@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Generative Adversarial Network (GANs) with Speech Enhancement Example (Hi-Fi GAN)"
+title:  "Intro to Generative Adversarial Network with Speech Enhancement Paper Example"
 date:   2022-11-28
 tags: tech
-categories: beginners-guide
-description: 'Example papers are on high fidelity speech enhancement with GANs. Currently WIP. '
+categories: beginners-guide paper
+description: 'Example papers (HiFi-GAN and HiFi-GAN2) are on high fidelity speech enhancement with GANs. '
 ---
 
 
@@ -154,7 +154,7 @@ Generator does not update its weight during this period, and discriminator ignor
         
     - Penalizing discriminator weights
 
-## HiFi GAN Paper Example
+## GAN Application in Speech Enhancement 
 
 Here the examples are based on the series of high fidelity speech denoising and dereverberation work done by [Prof. Adam Finkelstein](https://www.cs.princeton.edu/~af/)'s lab. 
 - HiFi-GAN: High-Fidelity Denoising and Dereverberation Based on Speech Deep Features in Adversarial Networks. Project page [link](https://pixl.cs.princeton.edu/pubs/Su_2020_HiFi/index.php) 
@@ -164,14 +164,48 @@ Here the examples are based on the series of high fidelity speech denoising and 
 
 ### High-level Takeaway:
 
-- WaveNet Architecture, trained in both time domain and time-frequency domain.
-    
-- Relies on deep feature matching losses of the discriminators to improve perceptual quality
+##### HiFi GAN
+
+<img src="/assets/img/deep-learning/hifigan2.png" alt="hifigan-architecture" width = "100%" style="padding-bottom:0.5em;" />
+
+ 
+HiFi GAN builds on top of the lab's previous work of joint denoising and dereverberation on a **single** recording environment, and is able to **generalize** to new speakers, speech content, and environments. The model architecture at a glance:
+- Generator: 
+    - Uses a **WaveNet** architecture (dilutated CNN), which enables a large receptive field for additive noise and long tail reverberation. 
+    - Uses log spectrogram loss, L1 sample loss. 
+    - Combined with postnet for cleanup
+- 4 Discriminators:
+    - Wave discriminator (time domain):
+        - 3 waveform discriminators operating at 16kHz, 8kHz, and 4kHz resepctively. 
+        - They use the same network architecture but do not share weights
+
+    - Spectrogram discriminator (time frequency domain):
+        - Sharpens the spectrogram of predicted speech
+
+    - Having two discriminators stablize the training and make sure that no single type of noise or artifact gets overaddressed
+    - The generator is penalized by adversarial losses, and deep feature matching losses computed on the feature maps of the discriminators.
+        - Deep feature loss prevents the model from mode collapse (where the model only produces monotonous examples)
+
+
+##### HiFi-GAN2
+<img src="/assets/img/deep-learning/hifigan2-model.png" alt="hifigan-architecture" width = "100%" style="padding-bottom:0.5em;" />
+
+HiFiGAN2 is conditioned on acoustic features of the speech to achieve studio quality dereverberation and denoising.
+- Improvement Areas of HiFi-GAN:
+    - Inconsistency in speaker identity when noise and reverb are strong. 
+        - Ambiguity in disentangling speech content and speaker identity from environment effects
+        - WaveNet still has a limited receptive field and lack of global context.
+
+- HiFi GAN2 Proposal:
+    - Condition the WaveNet on acoustic features that contain clean speaker identity and speech content information
+    - Incorporate a recurrent neural network to predict clean acoustic features from the input noisy reverberant audio, which is then used as time-aligned **local conditioning** for HiFi GAN.
+        - RNN trained using **MFCC** (more robust to noise than Mel spectrogram) of simulated noisy reverberant audio as input and MFCC of clean audio as target
+
     
 
-### Paper Notes:
+### HiFi GAN Paper Notes
 
-#### Introduction
+##### Introduction
 
 Existing research done
 
@@ -226,7 +260,7 @@ Paper Proposal:
 - Discriminators used on waveform sampled at different rates and on mel-spectrogram. They jointly evaluate the generated audio -> this way the model generalizes well to new speakers and speech content
     
 
-#### Method
+##### Method
 
 <img src="/assets/img/deep-learning/hifigan2.png" alt="hifigan-architecture" width = "100%" style="padding-bottom:0.5em;" />
 

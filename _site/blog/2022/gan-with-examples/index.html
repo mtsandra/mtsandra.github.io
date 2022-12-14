@@ -9,9 +9,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Generative Adversarial Network (GANs) with Speech Enhancement Example (Hi-Fi GAN) | Aleksandra T. Ma</title>
+    <title>Intro to Generative Adversarial Network with Speech Enhancement Paper Example | Aleksandra T. Ma</title>
     <meta name="author" content="Aleksandra T. Ma" />
-    <meta name="description" content="Example papers are on high fidelity speech enhancement with GANs. Currently WIP. " />
+    <meta name="description" content="Example papers (HiFi-GAN and HiFi-GAN2) are on high fidelity speech enhancement with GANs. " />
 
 
     <!-- Bootstrap & MDB -->
@@ -105,7 +105,7 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Generative Adversarial Network (GANs) with Speech Enhancement Example (Hi-Fi GAN)</h1>
+    <h1 class="post-title">Intro to Generative Adversarial Network with Speech Enhancement Paper Example</h1>
     <p class="post-meta">November 28, 2022</p>
     <p class="post-tags">
       <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
@@ -116,6 +116,8 @@
         ·  
         <a href="/blog/category/beginners-guide">
           <i class="fas fa-tag fa-sm"></i> beginners-guide</a>  
+          <a href="/blog/category/paper">
+          <i class="fas fa-tag fa-sm"></i> paper</a>  
           
 
     </p>
@@ -379,7 +381,7 @@
   </li>
 </ul>
 
-<h2 id="hifi-gan-paper-example">HiFi GAN Paper Example</h2>
+<h2 id="gan-application-in-speech-enhancement">GAN Application in Speech Enhancement</h2>
 
 <p>Here the examples are based on the series of high fidelity speech denoising and dereverberation work done by <a href="https://www.cs.princeton.edu/~af/" target="_blank" rel="noopener noreferrer">Prof. Adam Finkelstein</a>’s lab.</p>
 <ul>
@@ -397,18 +399,72 @@
 
 <h3 id="high-level-takeaway">High-level Takeaway:</h3>
 
+<h5 id="hifi-gan">HiFi GAN</h5>
+
+<p><img src="/assets/img/deep-learning/hifigan2.png" alt="hifigan-architecture" width="100%" style="padding-bottom:0.5em;"></p>
+
+<p>HiFi GAN builds on top of the lab’s previous work of joint denoising and dereverberation on a <strong>single</strong> recording environment, and is able to <strong>generalize</strong> to new speakers, speech content, and environments. The model architecture at a glance:</p>
 <ul>
-  <li>
-    <p>WaveNet Architecture, trained in both time domain and time-frequency domain.</p>
+  <li>Generator:
+    <ul>
+      <li>Uses a <strong>WaveNet</strong> architecture (dilutated CNN), which enables a large receptive field for additive noise and long tail reverberation.</li>
+      <li>Uses log spectrogram loss, L1 sample loss.</li>
+      <li>Combined with postnet for cleanup</li>
+    </ul>
   </li>
-  <li>
-    <p>Relies on deep feature matching losses of the discriminators to improve perceptual quality</p>
+  <li>4 Discriminators:
+    <ul>
+      <li>Wave discriminator (time domain):
+        <ul>
+          <li>3 waveform discriminators operating at 16kHz, 8kHz, and 4kHz resepctively.</li>
+          <li>They use the same network architecture but do not share weights</li>
+        </ul>
+      </li>
+      <li>Spectrogram discriminator (time frequency domain):
+        <ul>
+          <li>Sharpens the spectrogram of predicted speech</li>
+        </ul>
+      </li>
+      <li>Having two discriminators stablize the training and make sure that no single type of noise or artifact gets overaddressed</li>
+      <li>The generator is penalized by adversarial losses, and deep feature matching losses computed on the feature maps of the discriminators.
+        <ul>
+          <li>Deep feature loss prevents the model from mode collapse (where the model only produces monotonous examples)</li>
+        </ul>
+      </li>
+    </ul>
   </li>
 </ul>
 
-<h3 id="paper-notes">Paper Notes:</h3>
+<h5 id="hifi-gan2">HiFi-GAN2</h5>
+<p><img src="/assets/img/deep-learning/hifigan2-model.png" alt="hifigan-architecture" width="100%" style="padding-bottom:0.5em;"></p>
 
-<h4 id="introduction">Introduction</h4>
+<p>HiFiGAN2 is conditioned on acoustic features of the speech to achieve studio quality dereverberation and denoising.</p>
+<ul>
+  <li>Improvement Areas of HiFi-GAN:
+    <ul>
+      <li>Inconsistency in speaker identity when noise and reverb are strong.
+        <ul>
+          <li>Ambiguity in disentangling speech content and speaker identity from environment effects</li>
+          <li>WaveNet still has a limited receptive field and lack of global context.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>HiFi GAN2 Proposal:
+    <ul>
+      <li>Condition the WaveNet on acoustic features that contain clean speaker identity and speech content information</li>
+      <li>Incorporate a recurrent neural network to predict clean acoustic features from the input noisy reverberant audio, which is then used as time-aligned <strong>local conditioning</strong> for HiFi GAN.
+        <ul>
+          <li>RNN trained using <strong>MFCC</strong> (more robust to noise than Mel spectrogram) of simulated noisy reverberant audio as input and MFCC of clean audio as target</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="hifi-gan-paper-notes">HiFi GAN Paper Notes</h3>
+
+<h5 id="introduction">Introduction</h5>
 
 <p>Existing research done</p>
 
@@ -508,7 +564,7 @@
   </li>
 </ul>
 
-<h4 id="method">Method</h4>
+<h5 id="method">Method</h5>
 
 <p><img src="/assets/img/deep-learning/hifigan2.png" alt="hifigan-architecture" width="100%" style="padding-bottom:0.5em;"></p>
 
@@ -612,7 +668,7 @@
     <footer class="fixed-bottom">
       <div class="container mt-0">
         © Copyright 2022 Aleksandra T. Ma. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="noopener noreferrer">Jekyll</a>. Hosted by <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">GitHub Pages</a>. All photos &amp; opinions my own.
-Last updated: December 07, 2022.
+Last updated: December 14, 2022.
       </div>
     </footer>
 

@@ -21,7 +21,7 @@ I graduated from UC Berkeley Statistics & Data Science in 2020. Now I'm a consul
 
 I'm applying for grad school this year, and I'm hoping to focus on AI + audio. I'm especially interested in Music Information Retrieval. You can find some of my relevant projects and writings under the tab *projects* and *blog*.
 
-I often contemplate on what it means to be human, so most of what I do outside of work is centered around it. I enjoy exploring new technology that enhances the human experience. I love music :notes: (I know, who doesn't?) I was classically trained in piano and have been teaching myself how to [mix music](https://soundcloud.com/aleksandra-ma-20897898). I take [pictures](/projects) of people, from my friends to strangers.
+I often contemplate on what it means to be human, so most of what I do outside of work is centered around it. I enjoy exploring new technology that enhances the human experience. I love music :notes: (I know, who doesn't?) I was classically trained in piano and have been teaching myself how to [mix music](https://soundcloud.com/aleksandra-ma-20897898). I take [pictures](/projects/alice-alice-photography/) of people, from my friends to strangers.
 
 I have a tuxedo kitty named [Poncho](https://www.instagram.com/lil_poncho119/).
 
