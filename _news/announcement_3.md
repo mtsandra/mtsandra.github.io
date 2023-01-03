@@ -1,7 +1,7 @@
 ---
 layout: post
-date: 2022-06-07
+date: 2022-08-18
 inline: true
 ---
 
-<a href="https://soundcloud.com/aleksandra-ma-20897898/faded-zhu-x-when-i-was-older-billie-eilish">Listen to my first published remix on Soundcloud! :bell: :sparkles: </a>
+I attended the Deep Learning for MIR workshop at Stanford CCRMA. Check out the projects tab!

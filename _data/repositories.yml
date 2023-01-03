@@ -3,7 +3,9 @@ github_users:
   - AleksandraMaa
 
 github_repos:
+  - mtsandra/lofi-station
+  - mtsandra/user-centered-google-scholar-scraper
   - BITSS-OPA/opa-deworming
   - BITSS-OPA/Tutorials
   - TSOx2AIC/data-visualisation-web
-  - FortAwesome/Font-Awesome
+

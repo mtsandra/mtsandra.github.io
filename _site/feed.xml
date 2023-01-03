@@ -1,5 +1,338 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2022-12-14T00:00:50-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">Intro to Generative Adversarial Network with Speech Enhancement Paper Example</title><link href="http://localhost:4000/blog/2022/gan-with-examples/" rel="alternate" type="text/html" title="Intro to Generative Adversarial Network with Speech Enhancement Paper Example" /><published>2022-11-28T00:00:00-05:00</published><updated>2022-11-28T00:00:00-05:00</updated><id>http://localhost:4000/blog/2022/gan-with-examples</id><content type="html" xml:base="http://localhost:4000/blog/2022/gan-with-examples/"><![CDATA[<h3 id="generative-adversarial-network-2014">Generative Adversarial Network, 2014</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-01-02T19:35:20-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">How I Built a Lofi Music Player with AI-Generated Tracks</title><link href="http://localhost:4000/blog/2023/lofi-generator/" rel="alternate" type="text/html" title="How I Built a Lofi Music Player with AI-Generated Tracks" /><published>2023-01-02T00:00:00-05:00</published><updated>2023-01-02T00:00:00-05:00</updated><id>http://localhost:4000/blog/2023/lofi-generator</id><content type="html" xml:base="http://localhost:4000/blog/2023/lofi-generator/"><![CDATA[<div style="font-family: &quot;Lucida Console&quot;, &quot;Courier New&quot;, monospace; font-size:  100%;">
+
+Try out the web player <a href="https://mtsandra.github.io/lofi-station">here</a>! <br />
+<!-- demo gif -->
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
+<img src="/assets/img/blog2023/lofi/lofi-station.gif" alt="lofi demo" width="100%" style="padding-bottom:0.5em;" /><br />
+Lofi Station Demo
+</div>
+
+
+<h3> Introduction </h3>
+
+Lofi hip hop music has been my go-to study buddy ever since college. It creates a cozy and calming vibe with a relatively simple musical structure. Some jazzy chord progressions, groovy drum patterns, ambience sounds, and nostalgic movie quotes can give us a pretty decent sounding lofi hip hop track. On top of the musical side, animated visuals is also a crucial part of the lofi aesthetics, setting the ambience along with the nature sounds of water, wind, and fire. <br /><br />
+
+The idea to create my own lofi web player occurred to me on one Sunday afternoon when I was learning about deep generative models. I did some research and finished the project during the holiday times. The webplayer provides two options: users can either choose a lofi track based on a real song encoded with Tone.js, or they could choose an AI generated solo track. Both options will be layered on top of the drum loop, ambience sounds, and quotes that users selected in the previous step. This post will mainly talk about how to use LSTM models to generate a midi track, and I will briefly discuss how to make a song with Tone.js at the end. <br /><br />
+
+<h3>LSTM Model Architecture &amp; Midi Generation</h3>
+In a previous <a href="/blog/2022/dl4mir-4">post</a>, I explained what an LSTM network is. For a quick refresher, it is a special type of RNN that handles long term dependencies better. It also has a recurrent structure that takes output from the previous timestep at the current timestep. To better understand it, we can unroll the network and think of an LSTM cell as multiple copies of the same network, each passing a message to the next timestep, as shown below.
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
+<img src="/assets/img/dl4mir/lstm-unrolled.png" alt="lofi demo" width="100%" style="padding-bottom:0.5em;" /><br />
+Unrolled LSTM Model Architecture
+</div>
+<br />
+
+Each cell contains four main components that allow them to handle long term dependencies better:
+
+<li> forget gate: determines what information to forget </li>
+<li> input gate: determines what information to update and store in our cell state</li>
+<li> cell state update: make element-wise operations to update the cell state</li>
+<li> output gate: determines what information to output </li>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
+<img src="/assets/img/dl4mir/lstm-components.jpeg" alt="lofi demo" width="100%" style="padding-bottom:0.5em;" /><br />
+Inside an LSTM cell
+</div>
+
+<h4>Training Data Preparation</h4>
+
+We have a couple of options when it comes to the music data format we are training the model on: raw audio, audio features (e.g. time frequency representations like Mel spectrogram), or symbolic music representation (e.g. midi files). Our goal is to generate a solo track (i.e. a sequence of notes, chords, and rests) to layer on other components like drum loops, so <a style="font-weight: 600;">midi files</a> are the easiest and most effective format to achieve our goal. Raw audio is very computationally expensive to train on. To put it in perspective, music clips sampled at 48000kHz mean there are 48000 data points in one second of audio. Even if we downsample it to 8kHz, that are still 8000 data points for every second. In addition, clean audio of only the melody or chord progression is extremely rare. However, we could still find some midi files containing only the chord progression / melody if we try hard enough. <br /><br />
+
+For this project, I found some free lofi midi samples on YouTube and sample download websites. I also leveraged some midi files in this Kaggle <a href="https://www.kaggle.com/code/zakarii/lo-fi-hip-hop-generation">dataset</a>. In order to make sure that I am training my model on quality data (plausible chord progression and meter for lofi hip hop), I listened to a subset of tracks from each source and filtered out my training dataset. The model architecture is inspired by the classical piano composer repository <a href="https://github.com/Skuldur/Classical-Piano-Composer">here</a>.<br /><br />
+
+<h5>Load and encode the midi files</h5>
+
+A Python package <a href="http://web.mit.edu/music21/doc/index.html">music21</a> can be used to load the midi files. Music21 parses a midi file and stores each musical component into a specific Python object. In other words, a note will be saved as a Note object, a chord will be saved as a Chord object, and a rest will be saved as a Rest object. Their name, duration, pitch class and other attributes can be accessed through the dot notation. Music21 stores the the music clip in a hiearchy shown as below, and we can extract the necessary information accordingly. If you are interested in how to use the package, the package website has a beginner-friendly user guide and Valerio Velardo from The Sound of AI has a <a href="https://www.youtube.com/watch?v=coEgwnMBuo0&amp;ab_channel=ValerioVelardo-TheSoundofAI">tutorial</a> on how to use music21  as well. 
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
+<img src="/assets/img/blog2023/lofi/music21_hierarchy.jpeg" alt="music21 hierarchy" width="100%" style="padding-bottom:0.5em;" /><br />
+Music21 Hiearchy
+</div>
+
+As mentioned previously, music21 stores each note, rest, and chords as a Python object, so the next step is to encode them and map them to integers that the model can train on. The model output should contain not just notes, but also chords and rests, so we will encode each type separately and map the encoded value to an integer. We do this for all the midi files and concatenate them into one sequence to train the model on.
+
+<li>Chords: get the pitch names of the notes in a chord, convert them to its normal order and connect them with a dot in the string format, "#.#.#"</li>
+<li>Notes: use the pitch name as the encoding</li>
+<li>Rests: encoded as the string "r"</li>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
+<img src="/assets/img/blog2023/lofi/encoding.PNG" alt="encoding" width="100%" style="padding-bottom:0.5em;" /><br />
+Midi Encoding and Mapping
+</div>
+
+<h5>Create the Input and Target Pairs</h5>
+
+Now we have a model-friendly encoding of our midi data. The next step would be to prepare the input and target pairs to feed into the model. In a simple supervised classification machine learning problem, there are input and target pairs. For example, a model that classifies a dog breed will have the fur color, height, weight, and eye color of the dog as input and the label / target will be the specific dog breed the dog belongs to. In our case, the input will be a sequence of length k starting from timestep i, and the corresponding target will be the datapoint at timestep i+k. So we will loop through our encoded note sequence and create the input and target pairs for the model. As a last step, we change the dimension of the input to the keras-friendly format and one-hot encode the output. <br /><br />
+
+<h4>Model Structure</h4>
+As previously mentioned, we will use LSTM layers as our core structure. In addition, this network also uses the below components:
+
+<li>Dropout layers: to regularize the network and prevent overfitting by randomly setting input units to 0 with a frequency of rate at each step during training time (in our case, the rate is 0.3)</li>
+<li>Dense layers: fully connects the preceding layer and performs matrix-vector multiplication in each node. The last dense layer needs to have the same amount of nodes as the total number of unique notes/chords/rest in our network. </li>
+<li>Activation layers: adds non-linearity to our network if used in a hidden layer and helps the network classify to a class if used in an output layer. </li>
+<code><pre>
+model = Sequential()
+model.add(LSTM(
+    256,
+    input_shape=(network_input.shape[1], network_input.shape[2]),
+    return_sequences=True
+))
+model.add(Dropout(0.3))
+model.add(LSTM(512, return_sequences=True))
+model.add(Dropout(0.3))
+model.add(LSTM(256))
+model.add(Dense(256))
+model.add(Dropout(0.3))
+model.add(Dense(n_vocab))
+model.add(Activation('softmax'))
+model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
+model.fit(network_input, network_output, epochs=200, batch_size=128)
+</pre>
+</code>
+For this example network, 3 LSTM layers are used with 2 dropout layers each following the first two LSTM layers. Then there are 2 fully connected dense layers, followed by one softmax activation function. Since the outputs are categorical, we will use categorical cross entropy as the loss function. The RMSprop optimizer is used, which is pretty common for RNNs. Checkpoints are also added so that weights are regularly saved at different epochs and could be used before the model finishes training. Please feel free to tweak the model structure, and try with different optimizers, epochs and batch sizes. <br /><br />
+
+<h4>Output Generation &amp; Decoding Back to Midi Notes</h4>
+
+The output generation process is similar to the training process – we give the model a sequence of length m (we'll also call it sequence m for notation simplification) and ask it to predict the next datapoint. This sequence m has a start index randomly selected from the input sequence, but we can also specify a specific start index if we wish. The model output is a list of probabilities from softmax that tell us how much each class is suited as the next datapoint. We will pick the class with the highest probability.  In order to generate a sequence of length j, we will repeat this process by removing the first element of the sequence m and add the recently generated datapoint to this sequence m, until the model generates j new datapoints. <br /><br />
+
+The data generated from the last paragraph is still an integer, so we decode it back to a note/chord/rest using the same mappings during encoding. If it is a chord string format, we will read the integer notation from the string "#.#.#.#" and create a music21.chord object. If it is a note or rest, we will create a corresponding note and rest object accordingly. At the same time, we append the new datapoint generated to the prediction output sequence at each timestep. For an illustration of this process, please see the example flow below where we are generating a sequence of 4 data points with an input sequence of 3 data points.
+
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
+<img src="/assets/img/blog2023/lofi/midi-generation.PNG" alt="decoding" width="100%" style="padding-bottom:0.5em;" /><br />
+Output Generation and Midi Decoding
+</div>
+
+Now we have a sequence of notes, chords, and rests. We could put them in a music21 stream and write out the midi file, in which case all the notes will be quarter notes. To keep the output a little bit more interesting, I added a code snippet that randomly samples a duration to specify for each note or chord (The default probability distribution is 0.65 for eighth notes, 0.25 for 16th ntoes, 0.05 for both quarter and half notes). Rests are defaulted to 16th rests so that we don't have too long of a silence between notes.  
+<code><pre>
+NOTE_TYPE = {
+            "eighth": 0.5,
+            "quarter": 1,
+            "half": 2,
+            "16th": 0.25
+        }
+offset = 0
+output_notes = []
+
+for pattern in prediction_output:
+    curr_type = numpy.random.choice(list(NOTE_TYPE.keys()), p=[0.65,0.05,0.05, 0.25])
+    
+    # pattern is a chord
+    if ('.' in pattern) or pattern.isdigit():
+        notes_in_chord = pattern.split('.')
+        notes = []
+        for current_note in notes_in_chord:
+            new_note = note.Note(int(current_note))
+            new_note.storedInstrument = instrument.Piano()
+            notes.append(new_note)
+        new_chord = chord.Chord(notes, type=curr_type)
+        new_chord.offset = offset
+        output_notes.append(new_chord)
+    elif str(pattern).upper() == "R":
+        curr_type = '16th'
+        new_rest = note.Rest(type=curr_type)
+        new_rest.offset = offset
+        output_notes.append(new_rest)
+    # pattern is a note
+    else:
+        new_note = note.Note(pattern, type=curr_type)
+        new_note.offset = offset
+        new_note.storedInstrument = instrument.Piano()
+        output_notes.append(new_note)
+
+    # increase offset each iteration so that notes do not stack
+    offset += NOTE_TYPE[curr_type]
+
+midi_stream = stream.Stream(output_notes)
+
+midi_stream.write('midi', fp='test_output.mid')
+</pre></code>
+
+Once we run the model for a few times with different parameters and pick out the tracks that we like, we will choose a lofi-esque instrument effect in any DAW so that our generated tracks sound more like real music. Then we head over to JavaScript to build our webplayer. 
+<br /><br />
+
+<h3>Building the WebPlayer with <a href="https://tonejs.github.io/">Tone.js</a></h3>
+
+Tone.js is a web audio framework for creating interactive music in the browser. You can use it to build a lot of fun interactive websites (see <a href="https://tonejs.github.io/demos">demos</a> here). But in our case, it provides a global transport to make sure our drum patterns, ambience sounds, quotes, and melody play at the same time. It also allows us to write in music score, sample an instrument, adds sound effects (reverberation, gain, etc.), and create loops right in JavaScript. Credit goes to <a href="https://github.com/lawreka/loaf-ai">Kathryn</a> for the code skeleton. If you want a quick and effective crash course on Tone.js, I highly recommend the use case examples on their <a href="https://tonejs.github.io">website</a>. The most important takeaway is that for each sound event we create, we need to connect them to the AudioDestinationNode (aka our speakers) through <code>toDestination()</code> or through <code>samplePlayer.chain(effect1, Tone.Destination)</code> if we want to add sound effects to it. Then through <code>Tone.Transport</code>, we will be able to start, pause, schedule event on the master output. <br /><br />
+
+<h5>Looping the Audio Clips</h5>
+Drum patterns, ambience sounds, quotes, and the pre-generated AI tracks are all audio files (.mp3 or .wav) loaded into our webplayer through a Player class. After loading the user input events from the website, they are then fed into a Tone.js Part class to create loops. 
+<br /><br />
+Drum patterns are looped every 8 measures, ambience sounds every 12 measures, and AI solo tracks every 30 measures. Quotes are not looped and start at the beginning of the 5th measure. <br /><br />
+
+<h5>Creating Melody and Chord Progression with Instrument Samples</h5>
+Tone.js does not provide software instrument options that we see in DAW, only samplers that allow us to sample our own instruments by loading in a couple of notes. The sampler will then repitch the samples automatically to create the pitches which were not explicitly included. 
+<br /><br />
+Then we can write in the melody and chord progression by specifying the notes and the time that the note should take place. I recommend using TransportTime to encode the beat exactly as we want. TransportTime is in the form of "BARS:QUARTERS:SIXTEENTHS" and uses zero-based numbering. For example, "0:0:2" means the note will take place after two sixteenth notes passed in the first bar. "2:1:0" means the note will take place in the third bar, after one quarter note passed. I wrote in the melody and chord progressions for 3 existing songs: Ylang Ylang by FKJ, La Festin by Camille, and See You Again by Tyler, the Creator this way. 
+
+<br /><br />
+
+<h5>WebPlayer Design</h5>
+I added in functions to change the webplayer background with different inputs for ambience sounds so that a more context appropriate gif will be displayed for each context. There is also a visualizer connected with the song notes to add visual appeal, made with p5.js. <br /><br />
+
+<h3>Future Work</h3>
+
+<h5>The LSTM Model</h5>
+<li>Add start of sequence and end of sequence tokens so that the model can learn the music pattern as the song comes to an end.</li>
+<li>Incorporate encoding for note duration so that beat tracking can be enabled.</li>
+<br />
+<h5>The WebPlayer </h5>
+<li>It would be cool to connect the backend AI model to the webplayer so that the output can be generated live. Currently the roadblock is that the model takes a few minutes to generate the output, but likely we could leverage a pre-trained model API. </li>
+<li>User interactivity could be greatly improved if the webplayer allows the users to 1) put in chord progression of their own choice 2) write down some text that the webplayer will do sentiment analysis on and output a chord progression matching the sentiment.    </li>
+<br /><br />
+
+<h3>Conclusion</h3>
+
+For code and training datasets, please see the GitHub repo <a href="https://github.com/mtsandra/lofi-station">here</a>. While this is just a simple lofi webplayer, I have had a lot of fun with both the LSTM model and Tone.js. It amazes me every time seeing how we can incorporate technology into our experience with music. 
+
+</div>]]></content><author><name></name></author><category term="music-tech-project" /><category term="tech-tutorial" /><category term="tech" /><category term="music" /><summary type="html"><![CDATA[AI solo tracks are generated with LSTM model and song tracks are made with Tone.js.]]></summary></entry><entry><title type="html">Transformers Explained with NLP Example</title><link href="http://localhost:4000/blog/2022/transformers/" rel="alternate" type="text/html" title="Transformers Explained with NLP Example" /><published>2022-12-05T00:00:00-05:00</published><updated>2022-12-05T00:00:00-05:00</updated><id>http://localhost:4000/blog/2022/transformers</id><content type="html" xml:base="http://localhost:4000/blog/2022/transformers/"><![CDATA[<p>Transformers is a sequence-to-sequence model that relies heavily on attention mechanism without recurrence or convolutions. It is proposed by Google Researchers’ in their <a href="https://arxiv.org/pdf/1706.03762.pdf">paper</a> Attention is All You Need.</p>
+
+<p>In this post, we will look at the model architecture and break down the main concepts of Transformers below:</p>
+<ul>
+  <li>Positional Encoding</li>
+  <li>Attention mechanism used in transformers (sub-bullets not mutually exclusive):
+    <ul>
+      <li>Scaled Dot-Product Attention
+        <ul>
+          <li>Self Attention</li>
+          <li>Encoder-Decoder Attention</li>
+        </ul>
+      </li>
+      <li>Multi-Head Attention</li>
+      <li>Masked Attention</li>
+    </ul>
+  </li>
+  <li>Residual connections</li>
+  <li>Layer Normalization</li>
+</ul>
+
+<h3 id="high-level-model-architecture">High-Level Model Architecture</h3>
+
+<p>We will go through the high-level model architecture and treat each concept as a black box first. The later sections will go over each concept one by one.</p>
+
+<p>The transformers are composed of N=6 <strong>encoder blocks</strong> and N=6 <strong>decoder blocks</strong>. We’ll call the left half of the architecture below input &amp; encoding, the right half output &amp; decoding.<br /></p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;">
+<img src="/assets/img/deep-learning/transformers/transformer-model.png" alt="transformer-model" width="80%" style="padding-bottom:0.5em;" /><br />
+Model Architecture. Source: <a href="https://arxiv.org/pdf/1706.03762.pdf">Attention Is All You Need</a>
+</div>
+<h5 id="input--encoding-left-side">Input &amp; Encoding (left side)</h5>
+<p>The text input gets <strong>tokenized</strong> and the tokens get converted into vectors of a certain length (in the paper, \(d_{model}\) = 512) through <strong>learned embedding</strong> (i.e. the transformer learn this embedding  from scratch).
+These input vectors will have <strong>positional encoding</strong> added to them to keep track of their position in the input sentence before they enter the encoder blocks. <br /></p>
+
+<p>There are two main parts in an encoder block: <strong>self-attention</strong> and <strong>feedforward neural network</strong>.</p>
+<ul>
+  <li><strong>Self attention</strong> looks at the dependencies against all other words in the input sentence as it encodes the current word. For example, for the sentence “The animal didn’t cross the street because it was tired”, the model will associate “The” and “Animal” with “it” when it is encoding the word “it”.</li>
+  <li>The <strong>feed-forward neural network</strong> will take the self-attention output and add element-wise non-linearity transformation to the encoder. For more explanation, please refer to this stackexchange <a href="https://stats.stackexchange.com/questions/485910/what-is-the-role-of-feed-forward-layer-in-transformer-neural-network-architectur/486218#comment898121_486218">thread</a> I found useful. My recommendation is to read it once you understood what self attention and multi-head attention means.</li>
+</ul>
+
+<p>The residuals connections and layer normalization (the <strong>Add &amp; Norm</strong> box in the model architecture diagram) is not specific to the encoders and on a high level it is added there for <strong>better model performance</strong> to achieve the same accuracy faster and to avoid the exploding or vanishing gradient problem. We will go through those later in details.</p>
+
+<p>As mentioned previously, there are 6 encoder blocks of the same structure that have different weights. The input vectors go through all 6 encoder blocks before they are connected with the decoding side.</p>
+
+<h5 id="encoder-decoder-attention">Encoder-Decoder Attention</h5>
+<p>The output vectors from the 6 encoder blocks will be connected with each decoder block through <strong>encoder-decoder attention (cross-attention)</strong>. Attention mechanisms have query, key, and vectors (to be explained later). The keys and values come from the output of the encoder blocks, while the queries come from the target sequence. The encoder-decoder attention gives the ongoing output context of the input sentence.</p>
+
+<h5 id="output--decoding-right-side">Output &amp; Decoding (right side)</h5>
+<p>The output &amp; decoding side outputs one word at each time step and each output word will be sent back for processing in order to output the word for the next time step.</p>
+
+<p>For each time step, the translated output will go through 6 decoder blocks first.</p>
+
+<p>Each decoder block is composed of three parts：self attention, encoder-decoder attention, feed-forward neural network.</p>
+<ul>
+  <li><strong>Self attention</strong> here uses <strong>masking</strong>, meaning that it will temporarily hide the words after the current time step.
+    <ul>
+      <li>For example, if we are translating “The animal didn’t cross the street because it was tired (动物没有穿过街道因为它很累)” and we only processed up to “动物没有”, then we will only check the dependencies between the first four translated characters.</li>
+    </ul>
+  </li>
+  <li><strong>Encoder-decoder attention</strong> is mentioned in the section right above. It is worth noting that the encoder ouputs are leveraged in each of the decoder block.</li>
+  <li><strong>Feed-forward network</strong> to add nonlinearity</li>
+</ul>
+
+<p>After the 6 decoder blocks, the output goes through a <strong>linear and softmax layer</strong> to output the final word. Then the final word is fed back to the right side to generate the next word, until we reach the end of the sentence.</p>
+
+<hr />
+
+<h3 id="positional-encoding">Positional Encoding</h3>
+
+<p>Since the transformers don’t have recurrence or convolutions, they chose positional encoding as a mechanism to <strong>keep track of the position of each word in the sequence</strong>.</p>
+
+<p>On a high level, positional encodings are <strong>fixed numbers</strong> added to each element of the word embedding vectors. They are vectors of the same size as word embeddings (\(d_{model}\) = 512).</p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/deep-learning/transformers/pe-color.png" alt="positional encoding" width="100%" style="padding-bottom:0.5em;" />Source: <a href="https://jalammar.github.io/illustrated-transformer/"> The Illustrated Transformer </a>
+
+</div>
+
+<p>These encodings depend on both the position of the word and the index of the vector, and are defined with sine for even index and cosine for odd index.</p>
+
+\[PE_{pos, 2i} = sin(pos/10000^{2i/d_{model}})\]
+
+\[PE_{pos, 2i+1} = cos(pos/10000^{2i/d_{model}})\]
+
+<p>Let’s visualize the positional encodings for each word position and each encoding dimension.</p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/deep-learning/transformers/zoom-out-pe.png" alt="positional encoding" width="100%" style="padding-bottom:0.5em;" />Visualization of positional encodings for 128 words. Each encoding vector has 512 dimensions. Source: <a href="https://kikaben.com/transformers-positional-encoding/#chapter-4"> kikaben </a>
+</div>
+<p><br />
+Let’s zoom in and take a closer look at the value for each dimension. We will see as index nears the end, the cosine values will go closer to 1 and the sine values will go closer to 0, which is why there is an alternating pattern on the right side of the graph that is hard to see on the zoomed out version.</p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/deep-learning/transformers/zoom-in-pe.png" alt="positional encoding" width="100%" style="padding-bottom:0.5em;" />A Zoomed In Version. Source: <a href="https://kikaben.com/transformers-positional-encoding/#chapter-4"> kikaben </a>
+</div>
+
+<p>Here is the encodings with the numbers plugged into the formula definition：</p>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/deep-learning/transformers/pe-matrix.png" alt="positional encoding" width="100%" style="padding-bottom:0.5em;" /> Example Encoding Values. Source: author
+</div>
+
+<p>In the zoomed out graph, we can clearly see that the positional encoding vector for each position is unique. Each dimension of the positional encoding corresponds to a sinusoid. For example, dimension 0 is a sinusoid of \(sin(pos)\).</p>
+
+<p>The model is able to keep the encoding throughout the entire architecture because of the residual connections. (Feel free to skip to the residual connections section to understand what it is.) If you are curious to learn morer about the positional encoding, I refer you to this <a href="https://kikaben.com/transformers-positional-encoding/#post-title">post</a> by kikaben.</p>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/deep-learning/transformers/pe-residual.png" alt="positional encoding" width="100%" style="padding-bottom:0.5em;" /> Source: <a href="https://kikaben.com/transformers-positional-encoding/#chapter-7"> kikaben </a>
+</div>
+
+<h3 id="attention-mechanism">Attention Mechanism</h3>
+
+<p>Now that we have a high-level idea of what the model architecture looks like, let’s dive into the core concept behind transformers – attention. Attention is designed to mimic cognitive attention and learns which part of the data is more important than the other depending on context.</p>
+
+<h4 id="scaled-dot-product-attention">Scaled Dot-Product Attention</h4>
+
+<p>Dot product attention consists of <strong>queries</strong> and <strong>keys</strong> (both of dimension \(d_k\)) and <strong>values</strong> of dimension \(d_v\).</p>
+
+<p>You can think of query as the word that we are trying to assess the similarity of against words in a sequence and keys are the words in that sequence. Values and keys share the same index/position, but is a different extraction of the word. Queries, keys, and values are all calculated/learned from the the initial embedding (x) by the model.</p>
+
+<p>Self attention and encoder-decoder attention both use scaled dot-product attnetion, and are very similar in nature. In self attention, <em>queries, keys, and values all come from the input sequence</em>. However, in encoder-decoder attention, <em>queries come from the target sequence and keys and values come from the input sequence</em>.</p>
+
+<p>Below we use self attention as an example. For simplicity, the input sequence we are looking at is “Thinking Machines”.</p>
+
+<h5 id="self-attention">Self Attention</h5>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/deep-learning/transformers/self-attention-output.jpg" alt="attention step breakdown" width="100%" style="padding-bottom:0.5em;" />Scaled Dot-Product Self Attention. Source: <a href="https://jalammar.github.io/illustrated-transformer/"> The Illustrated Transformer</a>, modified by author 
+</div>
+
+<p><strong>Step 1. Learn the query, key, value vectors from the input embedding</strong></p>
+
+<p>There is no strict rule on the exact dimension of query, key, value vectors. In the original paper, the authors went with \(d_k = 64\). The model extracts the vectors through three weight matrices \(W^Q, W^K, W^V.\)</p>
+
+<p>Then we get ready to calculate the attention. For reference, the attention is defined as below. In the</p>
+
+\[Attention(Q,K,V) = softmax(\frac{QK^T}{\sqrt{d_k}})V\]
+
+<p><strong>Step 2. Score each word through dot product</strong>
+We take the dot product of the query (\(q_1\), current word) and all the words in the sequence (\(k_1\) and \(k_2\)) to get a score that tells us how much focus the model should place on any word in the sequence when it is processing the current word.</p>
+
+<p><strong>Step 3. Scale the dot product by \(\sqrt{d_k}\)</strong></p>
+
+<p>The paper itself explained the reason quite clearly,</p>
+<blockquote>
+  <p>We suspect that for large values of \(d_k\), the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients. To counteract this effect, we scale the dot products by \(\frac{1}{\sqrt{d_k}}\).<br />
+To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and variance 1. Then their dot product, \(q·k = \sum^{d_k}_{i=1}q_ik_i\), has mean 0 and variance \(d_k\).</p>
+</blockquote>
+
+<p><strong>Step 4. Take softmax of the scaled dot products.</strong>
+This step converts the dot products into normalized scores that add up to 1.</p>
+
+<p><strong>Step 5. Multiply the softmaxed score with value.</strong>
+This step gives us a weighted value vector that tells the model how much information the current word should have from other words, and for the last step, we add up all the weighted value vectors.</p>]]></content><author><name></name></author><category term="beginners-guide" /><category term="tech" /><summary type="html"><![CDATA[Currently WIP.]]></summary></entry><entry><title type="html">Intro to Generative Adversarial Network with Speech Enhancement Paper Example</title><link href="http://localhost:4000/blog/2022/gan-with-examples/" rel="alternate" type="text/html" title="Intro to Generative Adversarial Network with Speech Enhancement Paper Example" /><published>2022-11-28T00:00:00-05:00</published><updated>2022-11-28T00:00:00-05:00</updated><id>http://localhost:4000/blog/2022/gan-with-examples</id><content type="html" xml:base="http://localhost:4000/blog/2022/gan-with-examples/"><![CDATA[<h3 id="generative-adversarial-network-2014">Generative Adversarial Network, 2014</h3>
 
 <p>Machine Learning Course by Google Developers <a href="https://developers.google.com/machine-learning/gan/loss">here</a></p>
 
@@ -2175,221 +2508,4 @@ Choi et al., 2018, p. 6
 
 <p>See you next time! :laughing:</p>
 
-<p>-ATM</p>]]></content><author><name></name></author><category term="tech-tutorial" /><category term="tech" /><category term="tutorial" /><summary type="html"><![CDATA[My website setup process with bug fix for the al-polio template]]></summary></entry><entry><title type="html">托福满分备考经验 | My Advice for High TOEFL Score</title><link href="http://localhost:4000/blog/2022/toefl-writing/" rel="alternate" type="text/html" title="托福满分备考经验 | My Advice for High TOEFL Score" /><published>2022-10-08T00:00:00-04:00</published><updated>2022-10-08T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/toefl-writing</id><content type="html" xml:base="http://localhost:4000/blog/2022/toefl-writing/"><![CDATA[<p>我最近申请美国研究生卡耐基梅伦的计算机专业不接受五年以外的托福成绩, 所以不得不考了一次托福, 准备了大概一天做了一套模拟题熟悉了一下, 考了满分, 想在这里跟大家分享一下经验.</p>
-
-<h3 id="背景-woman_technologist">背景 :woman_technologist:</h3>
-
-<p><img src="/assets/img/toefl/toefl-score.JPG" width="100%" /></p>
-
-<p>先说一下, 我是美国本科背景, 但在申请本科的时候以中国普高的背景托福也考了115, 所以这里说的大部分备考经验都是相通的, 大家按照思路练就可以哈. 我很久以前也教过一段时间托福, 大部分学生写作提升是最快的, 尤其是综合写作. 这一篇主要写<code class="language-plaintext highlighter-rouge">写作</code>, 略带提一下其他的科目技巧, 希望对大家有帮助! 只看写作的话, 可以直接跳到最后, 附模版+范文.</p>
-
-<hr />
-
-<h3 id="基本功-notebook">基本功 :notebook:</h3>
-
-<h5 id="单词-bookmark">单词 :bookmark:</h5>
-<p>对于托福来说, 最重要的就是单词啦! 毕竟做饭还是需要有大米的. 一般刷高频词就可以, 关键词记住了其他小词可以按照语境来猜. 我高中和考GRE的时候背单词方法如下, 虽然很传统, 但还是蛮有效的. 
-单词背不住真的很正常! 所以以下方法通过<code class="language-plaintext highlighter-rouge">循环过筛</code>来巩固排查旧词+背诵新词:</p>
-<ul>
-  <li>思路: 每天背30-50新词, 第二天背诵新词+排查前一周的旧词, 记不住的旧词算作新词, 直到记住为止</li>
-  <li>方法: 用横格笔记本抄录, 左边写英文单词, 右边写汉语意思, 背诵的时候靠抄写来记, 自查的时候挡住中文意思看英文
-    <ul>
-      <li>抄写的时候当然不是无脑抄, 通过每个单词的拼写以及读音来记住这个词以及其他形近音近词</li>
-      <li>你也可以用百词斩之类的软件, 只不过我觉得用这种传统方法记得深刻+更容易专注</li>
-      <li>听歌+背单词 yyds 令人快乐 :sparkle:</li>
-    </ul>
-  </li>
-  <li>:warning:注意: 背单词的时候, 拼写和读音还是蛮重要的, 尤其是高频词, 对于写作听力口语都有帮助!
-    <ul>
-      <li>当然了, 不同词的情况不一样. 脊椎动物(vertebrate)知道什么意思能和veteran(老兵), veterinarian(兽医)区分开来就可以, 但是elaborate(阐述)就要会读会写会认了</li>
-    </ul>
-  </li>
-</ul>
-
-<h5 id="语法-customs">语法 :customs:</h5>
-<p>单独看托福的话, 好像语法不是很重要, 但是在口语和写作里面其实还是蛮算分的, 尤其是综合写作. 毕竟大致内容一般同学都是可以描述出来的, 所以准确性就至关重要啦! 值得注意的是, 不要自己给自己下套, 每个句子用一个高级句式就可以了, 太多的话, 自己容易错, 评卷人也容易看懵. 语法其实会几个高级句式, 时态懂, 不写run-on sentences就够了. 之前SAT2400分的时候语法的考点琢磨透, 考其他的东西都不在话下.  我随便在知乎上找了一个知识点<a href="https://www.zhihu.com/question/22848646/answer/953721231">总结</a>, 感兴趣的话可以看一下.</p>
-
-<hr />
-
-<h3 id="科目技巧-gift_heart">科目技巧 :gift_heart:</h3>
-
-<h5 id="阅读-book">阅读 :book:</h5>
-<p>最重要的是看标题(哈哈没想到吧) 因为标题大部分的时候都会给你一个非常直观的概括, 告诉你这篇文章是讲什么的. 我建议在开始做题之前可以花1-2分钟读一下每段的首尾句, 看看它讲的是一个什么内容, 这样有助于之后6选3的题型. <br />还有一个重点就是不要在一道题上面浪费太长时间 :warning: 我觉得这个很大程度上是一个心理战, 越纠结花的时间越长, 结果最后一篇文章没有充足的时间来做题, 最后得不偿失. 每篇文章20分钟定好了, 一到时间不管做没做完都要做下一篇题目. 同理, 不要在一道题上花超过1-2分钟. 如果每道题都超, 文章是不可能做完的. 不要总觉得我再想想可能就会想通, 短时间内这种可能性比较小.</p>
-
-<h5 id="听力-headphones">听力 :headphones:</h5>
-<p>听力最重要的就是笔记了! 反正我没有笔记的话是记不太清都发生了什么的. 记笔记我建议中英文混杂记, 因为记录因果关系有时候写中文会更快捷一些! 毕竟写了十几二十多年了 :grin: <br />
-情景对话在这里不过多阐述, 主要是记住两个人一开始的态度或是要做的事情, 后来有没有转变, 因为什么. <br /></p>
-
-<p>科目课堂比较难, 因为讲好久, 有的还很复杂. 这个我建议找一个大一点的地方可以画思维导图, 把人物/主体关系可以用画图的方式展现出来. 用bullet point来记教授讲的关于这个主体的所有事情. 如果介绍的主体单词听不懂, 没关系, 靠拼音, 大概知道主体是这个词就可以, 不要纠结太久. 一纠结了就分神了, 容易漏掉重点.</p>
-
-<p>推荐把听懂的内容, 不管用中文还是英文速记下来, 但值得注意的是 :warning: 听力需要高度集中注意力, 讲同一个要点的时候要听、理解、记, 但如果听力主人公开始讲下一个要点了, 上一句的笔记不需要写完, 直接听主人公讲下一个要点, 再把理解下来的尽量写下来. 不要出现人家都讲另一件事了我们还在写上一件事笔记的情况.</p>
-
-<h5 id="口语-speaking_head">口语 :speaking_head:</h5>
-<p>我觉得口语有一点蛮重要的 —— <code class="language-plaintext highlighter-rouge">有头有尾</code> <br />
-开头前5-6秒形容一下你听到了什么以及这道题要求你做的事情, 比如说张贴告示下周体育馆关门, 听力里面的两个人一个觉得没什么一个比较烦, 题目叫你概括. 我们在开头就可以给个背景. <em>这个开头句其实可以在考前按照不同的题型我们自己写一个模版</em>, 到时候就可以直接套用, 不需要现想. <br />
-同理, 结束的时候也要留5-6秒总结一下. 比如说另一种题型, 听力里面是一个描述孩子不听话三种行为的原因的课堂, 让我们综合概括一下. 这种在最后就可以说 综上所述, 以上是三种孩子不听话的原因.</p>
-
-<p>:exclamation: 口语也是同理, 能用简单句说明白的话尽量不要用复杂句. 一般口语的考核标准是: 你是否把命题准确的回答了, 概括的内容是否准确, 语法是否正确(没有写作要求那么严格), 以及发音是否标准(与其说标准, 说成能让人听懂可能更准确一点). 大家可以录一下自己回答的音频, 听一听, 看看有什么问题可不可以专项练.</p>
-
-<h5 id="写作-wavy_dash">写作 :wavy_dash:</h5>
-<p>写作最重要的是写完! 听起来比较duh, 但是最好<code class="language-plaintext highlighter-rouge">提前3-5分钟</code>写完读一遍, 相信我, 你会发现自己写的不少语法错误的. 但一般情况下都是小的语法错误, 比如说缺个单三啦, 少个复数啦, 单词拼错啦之类的. 这样一遍读下来, 把语法错误改正, 就可以提个1-2分之类的. 以下有几个我觉得写作比较受用的技巧:<br /></p>
-<ul>
-  <li>不要背例子. 真的, 没有必要. 我从高中考托福SAT到大学考GRE, 没有背过例子. 用例子可能也是那种家喻户晓, 马斯克爱迪生比尔盖茨之类平时看新闻会知道的例子. 有背例子的时间, 我们可以考虑好好学一下语法, 这样可以直接写. 不用强行套.</li>
-  <li>随便找一个过渡词表, 背3-4种以下词汇, 真的, 3-4种够用了, 你只需要写两篇文章:
-    <ul>
-      <li>首先, 其次, 然后, 最后, 总结</li>
-      <li>常用逻辑连接词以及他们的正确用法. (比如, 虽然但是, 尽管如此)</li>
-      <li>说, 认为, 想, 觉得 (这个写综合写作还是挺重要的, 别满篇的think, 也可以用argue, state, prove, explain, introduce, 等等)</li>
-      <li>文章(passage, text, article), 讲述人 (lecturer, professor, speaker)</li>
-    </ul>
-  </li>
-  <li>在去考试之前写一个自己的模版 (自己写一个, 不要去网上找, 这样比较符合你的口吻)</li>
-  <li>写文章换段的时候空一行, 这样看起来整洁大气</li>
-</ul>
-
-<p>接下来的写作模版部分, 我简要介绍一下我写托福模版的思路.
-<br /></p>
-
-<hr />
-
-<h3 id="写作建议--模版思路--例文-writing_hand">写作建议 + 模版思路 + 例文 :writing_hand:</h3>
-
-<h4 id="综合写作-integrated-writing-framed_picture">综合写作 Integrated Writing :framed_picture:</h4>
-
-<p>20分钟创作时间, 写大概300-350字就差不多了. 虽然说字数要求在150-225, 但是写多字真的不扣分(相信我, 我考过3次写作满分, 每次写的字数都超多). 这个时候我们的模版就派上用场了, 可以提前写不会出错的复杂句式, 还可以凑字数!</p>
-
-<h5 id="模版思路-中文">模版思路 (中文)</h5>
-<ul>
-  <li>第一段: 在xxx话题上出现了两种不同的意见. 文章说 <code class="language-plaintext highlighter-rouge">*阐述文章意见*</code>, 但是教授说 <code class="language-plaintext highlighter-rouge">*阐述教授意见*</code>. 接下来的三段, 我会对于每一个论点进行详细阐述.</li>
-  <li>第二段: 首先, <code class="language-plaintext highlighter-rouge">*文章的第一个观点*</code>. (paraphrase一下). 但是 (第一个表示但是的词), <code class="language-plaintext highlighter-rouge">*教授的第一个观点*</code>. 所以 (第一个表示所以的词), <code class="language-plaintext highlighter-rouge">paraphrase说文章的观点不成立</code></li>
-  <li>第三段: 其次/第二, <code class="language-plaintext highlighter-rouge">*文章的第二个观点*</code>. (paraphrase一下). 但是 (第二个表示但是的词), <code class="language-plaintext highlighter-rouge">*教授的第二个观点*</code>. 所以 (第二个表示所以的词), <code class="language-plaintext highlighter-rouge">paraphrase说文章的观点不成立</code></li>
-  <li>第四段: 最后, <code class="language-plaintext highlighter-rouge">*文章的第三个观点*</code>. (paraphrase一下). 但是 (第三个表示但是的词), <code class="language-plaintext highlighter-rouge">*教授的第三个观点*</code>. 所以 (第三个表示所以的词), <code class="language-plaintext highlighter-rouge">paraphrase说文章的观点不成立</code></li>
-  <li>第五段(可选): 综上所述, 讲述人不同意文章的观点.</li>
-</ul>
-
-<details>
-    <summary>综合写作例文 :eyes:</summary>
-    <b>Question: Summarize the points made in the lecture, being sure to explain how they respond to the specific points made in the reading passage.</b><br /><br />
-
-<p>
-    There have been two sides of opinions on how to better battle the tropical disease malaria. The passage mainly lists out three main ways that will hopefully wipe out the disease, whereas the professor in the lecture states that none of the three strategies work effectively enough to completely eliminate malaria. I will state the reasoning for the lecturer on each of the strategies below.<br /><br />
-
-    For starters, the passage explains that administration of powerful prescription medicines can fight the symptoms of the infection by testing the exact malaria parasite strain in the patient's blood. However, the professor argues that the medication is only a treatment, not a cure, to the disease. Furthermore, the parasites have developed immunity towards modern medications. There are 2 known medications that no longer work for the strain of malaria parasite it was supposed to combat. It is not surprising that there will only be more parasites that become immune towards the medications in the future. Hence, the medications themselves will not eradicate malaria. <br /><br />
-
-    The second strategy introduced in the text is to directly kill the mosquitos through chemicals and to kill the larvae in still, warm water through chemicals and predatory fish. Nonetheless, the professor argues that it is hard to kill all of the mosquitos considering the sheer amount of them as well as their ability to fly. He mentions that killing the larvae through fish or chemicals presents the same challenges in the amount required to completely wipe out the mosquito larvae population. Therefore, chemical or predator elimination may also not work. <br /><br />
-
-    Lastly, the article describes the sterile insect technique, where humans breed millions of male mosquitoes with low-level gamma rays and release them into the wilderness to mate with female mosquitoes. The eggs produced this way do not hatch and this will eventually cause the mosquitoes to die out. But the professor points out that even though this has been effective to some extent, the males hatched this way do not mate as efficiently as the wild male mosquitoes. There might be a lot of reasons behind this, such as the breeded males do not attract the wild females as much, but the fact that they do not mate as effectively causes the professor to be concerned that this approach will also not get rid of the malaria disease completely. <br /><br />
-
-    Overall, the professor in the lecture does not agree that these three strategies are enough to eliminate the malaria disease. 
-</p>
-</details>
-<p><br /></p>
-
-<h4 id="独立写作-independent-writing-art">独立写作 Independent Writing :art:</h4>
-
-<p>30分钟创作时间, 同理, 虽然字数要求是300字, 一般我们都至少450-550字, 保证质量的前提下, 多写一点肯定是不吃亏的 :smile:</p>
-
-<p>独立写作我推荐<strong>5段</strong>: 开头段, 2个正面论点段落来论证你的观点, 1个让步段从另一个观点的角度来说 (虽然另一个观点也有道理, 但我还是坚持我的论点), 结尾段</p>
-
-<p>中间两个正面论点段前两句话必须把你的正面论点说清楚. 论点不要太复杂, 我们的目标是把它说清楚. 一般情况下, 托福独立写作不太关注我们的论点是否足够复杂和成熟, <em>更关注于你的论述能力和单词语法的基本功底</em>. 所以选观点的时候, 选择你有更多话说的观点, 而不是你觉得/你觉得对方觉得正确的观点.</p>
-
-<h5 id="模版思路-中文-1">模版思路 (中文)</h5>
-<ul>
-  <li>第一段: 浅开一个头, 简单写一下主题的社会背景 + 你的看法. 一般2-3句复合句就可以, 复合句句式不需要太复杂, 准确为主, 但还是不建议简单句开头.
-    <ul>
-      <li><code class="language-plaintext highlighter-rouge">社会背景</code>: 比如说, 比较线上上课和线下教学, 这里可以说现在科技发展, 教育越来越高效了, 不需要在同一个地方才能得到同等程度的教育.</li>
-      <li><code class="language-plaintext highlighter-rouge">你的看法</code>: 可以用逻辑联结词来写一个复合句 – 1) 因为我非常重视效率, 所以我更偏向于线上上课 OR 2) 尽管我很喜欢和我学校认识的人一起玩, 我认为线上上课有更多好处.</li>
-    </ul>
-  </li>
-  <li>第二段: <code class="language-plaintext highlighter-rouge">论点1</code>
-    <ul>
-      <li>首先 (要换一种和综合写作不一样的首先来用), 亮观点. (最好直接说, 如果要铺垫, 也不能超过1句铺垫)</li>
-      <li>举例(推荐)来论证或者直接逻辑论证. 我不是很推荐逻辑论证, 除非你觉得你能在10分钟内把你要表达的内容非常有逻辑的说清楚. 否则的话, 还是靠举例吧, 比较方便也很凑字数. 这里的例子不一定非要是名人名例, 也可以是身边人的例子或者是自己的过往经历, 主要还是需要扣题.</li>
-      <li>总结句: 总结一下你的论点1为什么支持你的观点</li>
-    </ul>
-  </li>
-  <li>第三段: <code class="language-plaintext highlighter-rouge">论点2</code>
-    <ul>
-      <li>和第二段同理, 用“其次”来开头引你的第二个论点.</li>
-      <li>举例/逻辑论证</li>
-      <li>总结句</li>
-    </ul>
-  </li>
-  <li>第四段: <code class="language-plaintext highlighter-rouge">让步段</code>
-    <ul>
-      <li>我一般直接会用 It is understandable why 你的相反观点成立. 这里我会用1-2个原因, 直接找最明显的原因. 但是 + 这些原因不足以让你选择这个观点的原因.</li>
-      <li>总结句: 所以我还是支持我自己的观点</li>
-    </ul>
-  </li>
-  <li>第五段: <code class="language-plaintext highlighter-rouge">结尾段</code>
-    <ul>
-      <li>总而言之 (In a nutshell/Overall/All in all, etc.), 我因为以上原因还是支持我自己的观点.</li>
-    </ul>
-  </li>
-</ul>
-
-<details>
-    <summary>独立写作例文 :eyes:</summary>
-    <b>Question: Do you agree or disagree with the following statement? <br />
-    People today spend too much money on clothing to improve their appearance. Use specific reasons and examples to support your answer. Be sure to use your own words. Do not use memorized examples.
-</b><br /><br />
-
-<p>
-   With the rapid development of economy and technology today, people have more and more disposable income to spend on entertainment and improvement of life quality including fashion and clothing. While I appreciate seeing more and more styles on the street, I agree with the statement that people today spend too much money on clothing to improve their appearance.<br /><br />
-   
-   First of all, improving one's appearance does not solely come from the amount or the price of clothing one owns, but from a healthy lifestyle and a good understanding of fashion. Appearance consists of two parts: body and the garnaments used to decorate the body. The first component, the appearance of the body, can only be improved through a healthy diet and regular exercises. I am not at all trying to promote a certain body type, but the natural glow coming out of a healthy lifestyle cannot be compensated by any clothing. Hence, the amount of money spent on clothing does not matter when it comes to the first part. The second component is indeed clothing. However, the understanding of what makes fashionable and stylish clothing outweighs the price and amount of the clothing. There are a vast amount of ways to find good-looking clothes without hurting one's wallet, such as thrifting or simply going to smaller, non-designer brands. Therefore, as my first point, money spent on clothing is not the most important thing when it comes to improving appearance.<br /><br />
-
-   Moreover, from the standpoint of the environment, it is also not a good idea to spend too much money on clothing. It is old but important news that we need to save and protect our planet Earth. Fast fashion brands like H&amp;M or Forever 21 not only promote people from buying an excessive amount of clothing at a relatively cheap price, but also make clothing with poor quality that forces people to replace them. Consumers today need to realize this unsustainable cycle, and break it by buying high quality clothing that can be worn multiple times. To add on to my first point, the best way to improve people's appearance not at the price of the environment is through buying good-looking clothing that can be worn over a long time and recycled.<br /><br />
-   
-   It is indeed understandable why some people would spend a massive amount of money on clothing. People need to feel confident in themselves in order to succeed in life. Nonetheless, it is significant to come to the realization that confidence and appearance improvement do not only come from the money one spends on clothing. It almost always comes from within. It is much more efficient and effective to improve one's appearance and confidence through exercise, meditation, or learning about fashion before purchase.<br /><br />
-   
-   In a nutshell, I stand by my opinion on not spending too much money on clothing and finding other more sustainable ways of improving one's appearance.
-
-</p>
-</details>
-
-<p><br />
-希望大家早日和托福分手!! 考上自己理想的学校!! 加油 :fuelpump: :bulb: <br /><br />
-<img src="/assets/img/toefl/bmo.jpg" width="100%" /></p>]]></content><author><name></name></author><category term="English-learning" /><category term="tutorial" /><category term="chinese" /><summary type="html"><![CDATA[I recently got full score in TOEFL and wrote down some of my hacks. This post is written in Chinese (for now).]]></summary></entry><entry><title type="html">你的心里有个魔鬼</title><link href="http://localhost:4000/blog/2021/monster-poem-chinese/" rel="alternate" type="text/html" title="你的心里有个魔鬼" /><published>2021-01-14T00:00:00-05:00</published><updated>2021-01-14T00:00:00-05:00</updated><id>http://localhost:4000/blog/2021/monster-poem-chinese</id><content type="html" xml:base="http://localhost:4000/blog/2021/monster-poem-chinese/"><![CDATA[<p>**</p>
-
-<p>你的心里有个魔鬼</p>
-
-<p>一个加勒比海的美人鱼</p>
-
-<p>一个美杜莎</p>
-
-<p>一个漩涡</p>
-
-<p>一个黑洞</p>
-
-<p>一座废墟</p>
-
-<p>一片虚无</p>
-
-<p>**</p>
-
-<p>你被封锁住了</p>
-
-<p>你的恐惧</p>
-
-<p>你的想象</p>
-
-<p>你的不知所措</p>
-
-<p>你的无所作为</p>
-
-<p>你的斤斤计较</p>
-
-<p>你被幻象误导了</p>
-
-<p>你的孤芳自赏</p>
-
-<p>顾影自怜</p>
-
-<p>自我麻痹</p>
-
-<p>自我安慰</p>
-
-<p>**</p>
-
-<p>不讨喜，又可悲</p>]]></content><author><name></name></author><category term="poem" /><category term="chinese" /><summary type="html"><![CDATA[poem written during a rather dark period of my life]]></summary></entry></feed>
+<p>-ATM</p>]]></content><author><name></name></author><category term="tech-tutorial" /><category term="tech" /><category term="tutorial" /><summary type="html"><![CDATA[My website setup process with bug fix for the al-polio template]]></summary></entry></feed>

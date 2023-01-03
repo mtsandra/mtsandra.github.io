@@ -2,11 +2,11 @@
 layout: page
 title: projects
 permalink: /projects/
-description: Fun projects I've done in technical work, music, and photography
+description: Projects I'm passionate about in technical work, music, and photography
 nav: true
 nav_order: 2
-display_categories: [work, music, photography]
-horizontal: false
+display_categories: [tech, music, photography]
+horizontal: true
 ---
 
 <!-- pages/projects.md -->

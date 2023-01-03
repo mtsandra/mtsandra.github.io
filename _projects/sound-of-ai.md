@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Sound of AI hackathon
-description: "Hackathon: Data Analysis + Source Separation + Sound Synthesis"
-img: assets/img/project-covers/sound-of-ai-project.jpeg
+title: Sound Of AI Hackfest
+description: "Hackathon: Spotify Data Analysis + Source Separation + Sound Synthesis"
+img: assets/img/project-covers/sound-of-ai.gif
 redirect: https://thesoundofthesoundofai.com/
-importance: 3
-category: work
+importance: 4
+category: tech
 ---

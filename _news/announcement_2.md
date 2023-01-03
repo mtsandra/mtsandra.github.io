@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The deworming research project I was working on for BITSS is now online!
+title: The open policy analysis research project I was working on for BITSS is now online!
 date: 2021-4-7
 inline: false
 ---
