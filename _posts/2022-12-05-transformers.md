@@ -112,7 +112,7 @@ Dot product attention consists of **queries** and **keys** (both of dimension $$
 
 You can think of query as the word that we are trying to assess the similarity of against words in a sequence and keys are the words in that sequence. Values and keys share the same index/position, but is a different extraction of the word. Queries, keys, and values are all calculated/learned from the the initial embedding (x) by the model. 
 
-Self attention and encoder-decoder attention both use scaled dot-product attnetion, and are very similar in nature. In self attention, *queries, keys, and values all come from the input sequence*. However, in encoder-decoder attention, *queries come from the target sequence and keys and values come from the input sequence*.  
+**Self attention** and **encoder-decoder attention** both use scaled dot-product attnetion, and are very similar in nature. In self attention, *queries, keys, and values all come from the input sequence*. However, in encoder-decoder attention, *queries come from the target sequence and keys and values come from the input sequence*.  
 
 Below we use self attention as an example. For simplicity, the input sequence we are looking at is "Thinking Machines".
 
@@ -147,6 +147,49 @@ This step converts the dot products into normalized scores that add up to 1.
 
 **Step 5. Multiply the softmaxed score with value.**
 This step gives us a weighted value vector that tells the model how much information the current word should have from other words, and for the last step, we add up all the weighted value vectors.
+
+
+**Step 6. Sum each elements of the softmaxed value vector together to get the final output vector.**
+The last step gives us the output of the attention mechanism. Note that even though we took the dot product of the current processing word with each word in the sequence, there is only one output vector for each word after element-wise summation of step 6. 
+
+#### Multi-Head Attention
+
+Now that we know how scaled dot product attention works, the rest should be a breeze. They are modification to the original dot product attention to allow the model to perform better.
+
+The first one is multi-head attention. Different words have different meanings in the same sentence, so only learning one representation of the word is not enough. Transformer proposes to learn *h* key, value, query vectors that are smaller in dimension for the same word (i.e. split the original attention mechanism into h attention heads) and perform the attention mechanism on each set of these k,v,q vectors. These attention functions can be run in parallel and in total, the attention mechanism will be run *h* times for each multi-head attention mechanism. 
+
+The specification in the paper is, there are 8 parallel attention layers (i.e. heads), and each key, value, query vectors have the dimension of 64 ($$d_{model}/h = 512/8$$). The dimension of the key, value, query vectors for each head does not need to follow exactly like the original paper, and it doesn't need to be equal to $$d_{model}$$ after multiplying with *h*. In order to return a vector that the model can continue training on with the following steps, we concatenate the output vectors from the 8 heads and apply an output weight matrix $$W^O$$. To quote the original formula in the paper:
+
+$$
+MultiHead(Q,K,V) = Concat(head_1, ..., head_h)W^O$$
+
+$$where\space head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)
+$$
+
+where the projections are parameter matrics $$W_i^Q \in \mathbb{R}^{d_{model}\times d_k}$$, $$W_i^K \in \mathbb{R}^{d_{model}\times d_k}$$, $$W_i^V \in \mathbb{R}^{d_{model}\times d_v}$$ and  $$W_i^O \in \mathbb{R}^{dhd_v\times d_{model}}$$.
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/deep-learning/transformers/multi-head.png" alt="multi-head attention" width = "100%" style="padding-bottom:0.5em;" />Multi-head attention. Source: <a href = "https://jalammar.github.io/illustrated-transformer/"> The Illustrated Transformer</a>
+</div>
+
+#### Masked Attention
+
+Masked attention means that the attention mechanism receives inputs with masks on and does not see the information after the current processing word. This is done by setting attention scores to negative infinity to the words behind the current processing word. Doing so will result in the softmax assigning almost-zero probability to the masked positions. Masked attention only exists in decoder. 
+
+As we move along the time steps, the masks will also be unveiled:
+> (1, 0, 0, 0, 0, …, 0) => (<\SOS>) <br>
+> (1, 1, 0, 0, 0, …, 0) => (<\SOS>, ‘动’)<br>
+> (1, 1, 1, 0, 0, …, 0) => (<\SOS>, ‘动’, ‘物’)<br>
+> (1, 1, 1, 1, 0, …, 0) => (<\SOS>, ‘动’, ‘物’, ‘没’)<br>
+> (1, 1, 1, 1, 1, …, 0) => (<\SOS>, ‘动’, ‘物’, ‘没’, ‘有’)<br>
+
+
+
+
+### Resources
+
+- [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) by Jay Alammar
+- [The Annotated Transformer](http://nlp.seas.harvard.edu/annotated-transformer/#embeddings-and-softmax) by Harvard NLP
+- [Glass Box ML](https://glassboxmedicine.com/2019/08/15/the-transformer-attention-is-all-you-need/) Transformer explained by Rachel Draelos
 
 
 
