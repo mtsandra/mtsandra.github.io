@@ -11,7 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Transformers Explained with NLP Example | Aleksandra T. Ma</title>
     <meta name="author" content="Aleksandra T. Ma" />
-    <meta name="description" content="Currently WIP." />
+    <meta name="description" content="Conceptual building blocks of Transformers" />
 
 
     <!-- Bootstrap & MDB -->
@@ -190,7 +190,7 @@ These input vectors will have <strong>positional encoding</strong> added to them
 <strong>Feed-forward network</strong> to add nonlinearity</li>
 </ul>
 
-<p>After the 6 decoder blocks, the output goes through a <strong>linear and softmax layer</strong> to output the final word. Then the final word is fed back to the right side to generate the next word, until we reach the end of the sentence.</p>
+<p>After the 6 decoder blocks, the output goes through a <strong>linear and softmax layer</strong> to output the final word. The linear layer is a fully connected layer that projects our decoder stack vectors to a very large logits vector, that has the same length as the number of our vocabulary size. Each cell of the logits vector corresponds to a word. The softmax function will be applied onto the logits vector to select the most likely word to be output. Then the final word is fed back to the right side to generate the next word, until we reach the end of the sentence.</p>
 
 <hr>
 
@@ -314,6 +314,66 @@ The last step gives us the output of the attention mechanism. Note that even tho
 (1, 1, 1, 1, 1, …, 0) =&gt; (&lt;\SOS&gt;, ‘动’, ‘物’, ‘没’, ‘有’)<br></p>
 </blockquote>
 
+<h3 id="add--norm-layers">Add &amp; Norm Layers</h3>
+
+<h4 id="residual-connection-the-add">Residual Connection (the Add)</h4>
+<p>Residual connections were first introduced in ResNet, a convolutional neural network that won a number of major image classification challenges at that time. It was introduced to combat vanishing gradients caused by the depth of the network. The deeper the network, the more vulnerable it is to vanishing or exploding gradients. The residual connection avoids this problem – in a conventional neural network, the output of the previous layer gets fed into the next layer as input, whereas the residual connections provide the output of the previous layer another path to reach latter parts of the network by skipping some layers, as shown in the diagram. <br></p>
+
+<p>Here F(x) refers to the outcome of layer i through layer i + n. In the example here, residual connection first applies the identity matrix to the input at layer i and then performs element-wise addition of F(x) and the outcome of the identity matrix operation x. The operation on the input at layer i (x) does not have to be identity matrix, it could also be more complicated operations. For example, if the dimensions of F(x) and x do not match, the operation could be a linear transformation on x.</p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;">
+<img src="/assets/img/deep-learning/transformers/residual-1.png" alt="multi-head attention" width="100%" style="padding-bottom:0.5em;">Residual Block. Source: <a href="https://towardsdatascience.com/what-is-residual-connection-efb07cab0d55" target="_blank" rel="noopener noreferrer"> Wanshun Wong</a>
+</div>
+
+<p>Residual connections can be added to each layer. In the Transformer model, a residual connection is employed around each of the two sub-layer (i.e. attention layer and feedforward neural network layer) in each encoder and decoder block.</p>
+
+<h4 id="layer-normalization-the-norm">Layer Normalization (the Norm)</h4>
+<p>To understand what a layer normalization is, let’s take a look at its sibling, batch normalization.</p>
+
+<h5 id="batch-normalization">Batch Normalization</h5>
+<h6 id="goal--benefit">Goal &amp; Benefit</h6>
+<ul>
+  <li>It is used to convert different inputs into similar value ranges.</li>
+  <li>Each epoch takes longer to train due to the amount of computations but overall the convergence of the model will be faster, and takes less epochs.</li>
+  <li>Batch normalization allows the model to achieve the same accuracy faster, so performance can be enhanced with the same amount of resources.</li>
+  <li>No need to have a separate standardization layer, where all the input data is transformed to have mean 0 and variance 1.</li>
+</ul>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;">
+<img src="/assets/img/deep-learning/transformers/batch-norm-1.png" alt="batch norm" width="100%" style="padding-bottom:0.5em;"> Batch Normalization Placement
+</div>
+
+<h6 id="process">Process</h6>
+<ol>
+  <li>Standardize the input data so that they all have mean 0 and variance 1</li>
+  <li>Train the layer to transform the data into another range
+    <ul>
+      <li>In the graph below, \(\hat{x}^{(i)}\) is the standardized values from step 1</li>
+      <li>\(\beta\) is offset</li>
+      <li>\(\gamma\) is scale</li>
+    </ul>
+  </li>
+</ol>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;">
+<img src="/assets/img/deep-learning/transformers/batch-norm-2.png" alt="batch norm transformation" width="100%" style="padding-bottom:0.5em;">Batch Normalization Transformation
+</div>
+
+<h5 id="layer-normalization">Layer Normalization</h5>
+<p>Batch normalization is hard to use because they are very dependent on batches. So layer normalization is introduced -  it is the same process but instead of standardizing the data across batches as shown in figure A, it standardizes the data across layer as shown in figure B.</p>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;">
+<img src="/assets/img/deep-learning/transformers/batch-norm-A.png" alt="layer norm" width="50%" style="padding-bottom:0.5em;"><br>Figure A. Batch Normalization
+</div>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;">
+<img src="/assets/img/deep-learning/transformers/layer-norm-B.png" alt="layer norm" width="50%" style="padding-bottom:0.5em;"><br>Figure B. Layer Normalization
+</div>
+
+<p>So if we were to visualize the Add &amp; Norm layer, it woud look something like this:</p>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;">
+<img src="/assets/img/deep-learning/transformers/addandnorm.png" alt="add and norm" width="100%" style="padding-bottom:0.5em;"><br>Add &amp; Norm in Transformer. Source: <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener noreferrer"> The Illustrated Transformer</a>
+</div>
+
+<p>Congrats! You’ve learned the basic concepts of the Transformer, now you can try out the code implementation in Tensorflow :)</p>
+
 <h3 id="resources">Resources</h3>
 
 <ul>
@@ -336,7 +396,7 @@ The last step gives us the output of the attention mechanism. Note that even tho
     <footer class="fixed-bottom">
       <div class="container mt-0">
         © Copyright 2023 Aleksandra T. Ma. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="noopener noreferrer">Jekyll</a>. Hosted by <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">GitHub Pages</a>. All photos &amp; opinions my own.
-Last updated: January 05, 2023.
+Last updated: January 07, 2023.
       </div>
     </footer>
 
