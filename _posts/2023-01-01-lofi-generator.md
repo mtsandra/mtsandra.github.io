@@ -9,7 +9,7 @@ description: 'AI solo tracks are generated with LSTM model and song tracks are m
 
 <div style = 'font-family: "Lucida Console", "Courier New", monospace; font-size:  100%;'>
 
-Try out the web player <a href='https://mtsandra.github.io/lofi-station'>here</a>! <br>
+Try out the web player <a href='https://mtsandra.github.io/lofi-station'>here</a>! <br> I recommend using the Chrome desktop browser for the best experience. You can also check out the Medium published version <a href='https://medium.com/towards-data-science/how-i-built-a-lo-fi-music-web-player-with-ai-generated-tracks-36f3915e39f8'>here</a>.
 <!-- demo gif -->
 <div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
 <img src="/assets/img/blog2023/lofi/lofi-station.gif" alt="lofi demo" width = "100%" style="padding-bottom:0.5em;" /><br>
@@ -27,7 +27,7 @@ The idea to create my own lofi web player occurred to me on one Sunday afternoon
 In a previous <a href='/blog/2022/dl4mir-4'>post</a>, I explained what an LSTM network is. For a quick refresher, it is a special type of RNN that handles long term dependencies better. It also has a recurrent structure that takes the output from the previous timestep at the current timestep. To better understand it, we can unroll the network and think of an LSTM cell as multiple copies of the same network, each passing a message to the next timestep, as shown below.
 
 <div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
-<img src="/assets/img/dl4mir/lstm-unrolled.png" alt="lofi demo" width = "100%" style="padding-bottom:0.5em;" /><br>
+<img src="/assets/img/blog2023/lofi/hand-drawn-lstm.jpg" alt="lofi demo" width = "100%" style="padding-bottom:0.5em;" /><br>
 Unrolled LSTM Model Architecture
 </div>
 <br>
@@ -40,7 +40,7 @@ Each cell contains four main components that allow them to handle long term depe
 <li> output gate: determines what information to output </li>
 
 <div style="font-size: 80%; color: #808080; text-align:center; font-style: italic; font-family: 'Lucida Console', 'Courier New', monospace;">
-<img src="/assets/img/dl4mir/lstm-components.jpeg" alt="lofi demo" width = "100%" style="padding-bottom:0.5em;" /><br>
+<img src="/assets/img/blog2023/lofi/lstm-cell.jpg" alt="lofi demo" width = "100%" style="padding-bottom:0.5em;" /><br>
 Inside an LSTM cell
 </div>
 
@@ -48,7 +48,7 @@ Inside an LSTM cell
 
 We have a couple of options when it comes to the music data format we are training the model on: raw audio, audio features (e.g. time frequency representations like Mel spectrogram), or symbolic music representation (e.g. midi files). Our goal is to generate a solo track (i.e. a sequence of notes, chords, and rests) to layer on other components like drum loops, so <a style='font-weight: 600;'>midi files</a> are the easiest and most effective format to achieve our goal. Raw audio is very computationally expensive to train on. To put it in perspective, music clips sampled at 48000kHz mean there are 48000 data points in one second of audio. Even if we downsample it to 8kHz, that is still 8000 data points for every second. In addition, clean audio of only the melody or chord progression is extremely rare. However, we could still find some midi files containing only the chord progression / melody if we try hard enough. <br><br>
 
-For this project, I found some free lofi midi samples on YouTube and sample download websites. I also leveraged some midi files in this Kaggle <a href='https://www.kaggle.com/code/zakarii/lo-fi-hip-hop-generation'>dataset</a>. In order to make sure that I am training my model on quality data (plausible chord progression and meter for lofi hip hop), I listened to a subset of tracks from each source and filtered out my training dataset. The model architecture is inspired by the classical piano composer repository <a href='https://github.com/Skuldur/Classical-Piano-Composer'>here</a>.<br><br>
+For this project, I used some lo-fi midi samples from YouTube creator <a href='https://www.youtube.com/watch?v=9gAgtc5A5UU&ab_channel=MichaelKim-Sheng'>Michael Kim-Sheng</a>, who have generously given me permission to use his files. I also leveraged some midi files in this Cymatics lo-fi toolkit licensed for commercial use.  In order to make sure that I am training my model on quality data (plausible chord progression and meter for lofi hip hop), I listened to a subset of tracks from each source and filtered out my training dataset. The model architecture is inspired by the classical piano composer repository <a href='https://github.com/Skuldur/Classical-Piano-Composer'>here</a>.<br><br>
 
 <h5>Load and encode the midi files</h5>
 
