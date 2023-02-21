@@ -2,7 +2,7 @@
 layout: post
 title:  "Transformers Explained with NLP Example"
 date:   2022-12-05
-tags: tech
+tags: tech tutorial
 categories: beginners-guide
 description: 'Conceptual building blocks of Transformers'
 ---
