@@ -1,11 +1,11 @@
 github_users:
   - mtsandra
-  - AleksandraMaa
+  # - AleksandraMaa
 
 github_repos:
   - mtsandra/lofi-station
+  - nabinkim0318/Customized_Playlist_Generator
   - mtsandra/user-centered-google-scholar-scraper
   - BITSS-OPA/opa-deworming
   - BITSS-OPA/Tutorials
-  - TSOx2AIC/data-visualisation-web
 

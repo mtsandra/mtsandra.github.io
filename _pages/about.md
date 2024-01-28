@@ -15,11 +15,9 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Hello! Nice to meet you :) My name is Aleksandra, or Leksa for short. 
+Hello! Nice to meet you :) My name is Aleksandra, or Sandra for short. 
 
-I graduated from UC Berkeley Statistics & Data Science in 2020. Now I'm a consultant at Deloitte, where I build and manage a data analytics engine for a global subscription streaming service client with my awesome teammates.
-
-I'm applying for grad school this year, and I'm hoping to focus on AI + audio. I'm especially interested in Music Information Retrieval. You can find some of my relevant projects and writings under the tab [projects](/projects) and [blog](/blog).
+I am currently a Music Technology Master's student at Georgia Tech doing research at the intersection of applied machine learning and music. Right before this, I was a consultant at Deloitte where I built and managed a data analytics engine for a global subscription streaming service client. I also spent some time in the Bay Area getting my Bachelors degree in Statistics and Data Science at UC Berkeley.
 
 I often contemplate on what it means to be human, so most of what I do outside of work is centered around it. I enjoy exploring new technology that enhances the human experience. I love music :notes: (I know, who doesn't?) I was classically trained in piano and have been teaching myself how to [mix music](https://soundcloud.com/aleksandra-ma-20897898). I take [pictures](/projects/alice-alice-photography/) of people, from my friends to strangers.
 

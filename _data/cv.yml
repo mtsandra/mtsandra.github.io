@@ -1,70 +1,70 @@
-- title: General Information
-  type: map
-  contents:
-    - name: Full Name
-      value: Aleksandra T Ma
-    # - name: Date of Birth
-    #   value: 14th March 1879
-    - name: Languages
-      value: English, Mandarin Chinese (native)
+# - title: General Information
+#   type: map
+#   contents:
+#     - name: Full Name
+#       value: Aleksandra T Ma
+#     # - name: Date of Birth
+#     #   value: 14th March 1879
+#     - name: Languages
+#       value: English, Mandarin Chinese (native)
 
-- title: Education
-  type: time_table
-  contents:
-    - title: UC Berkeley
-      institution: Bachelor of Arts, Statistics & Bachelor of Arts, Data Science
-      year: 2020
-      description:
-        - title: "Courses:"
-          contents: 
-            - Machine Learning, Time Series, Data Structures, Data Ethics, Linear Modelling, Econometrics, Microeconomics & Macroeconomics Theory
-        - title: "Activities:"
-          contents:
-            - Ascend at Berkeley, GirlUp at Berkeley, China Entrepreneur Network at Berkeley, <a href="https://www.youtube.com/watch?v=oBO48D-kQYA&ab_channel=OllieO%27Donnell">UC Women's Chorale</a>, AFX Dance
-    - title: Center for Computer Research in Music and Acoustics
-      institution: Stanford University
-      year: 2022
-      description:
-        - "Deep Learning for Music Information Retrieval, I & II"
-- title: Experience
-  type: time_table
-  contents:
-    - title: Deloitte & Touche LLP, Risk & Financial Advisory
-      institution: Analytics Consultant
-      year: 2021 - Present
-      description:
-        - title: "Data Analytics | Global Subscription Streaming Service Client" 
-          contents:
-            - Developed from scratch a rule-based cost account name normalization pipeline for 190+ productions (15000+ account names) across different genres and production studios using SQL and Python
-            - "Clustered vendor names on 30,000+ ledger transactions using NLP methods: cosine similarity and tf-idf"
-            - Separated independent contractor person names from organizations using Named Entity Recognition
-            - Built and deployed 6 Tableau dashboards that were well-received by Head of Production Finance and provided biweekly trainings to Production Finance Executives on Tableau navigation and tooling
-            - Lead a team of 6 off-shore members and report directly to Head of Production Finance
-        - title: "Advertising Risk | Global Social Media Client" 
-          contents:
-            - Created and deployed automation scripts in Google Apps Script that improved spreadsheet efficiency by 60%
-            - Performed data usage compliance assessments for 200+ third party advertisers and measurement partners
+# - title: Education
+#   type: time_table
+#   contents:
+#     - title: UC Berkeley
+#       institution: Bachelor of Arts, Statistics & Bachelor of Arts, Data Science
+#       year: 2020
+#       description:
+#         - title: "Courses:"
+#           contents: 
+#             - Machine Learning, Time Series, Data Structures, Data Ethics, Linear Modelling, Econometrics, Microeconomics & Macroeconomics Theory
+#         - title: "Activities:"
+#           contents:
+#             - Ascend at Berkeley, GirlUp at Berkeley, China Entrepreneur Network at Berkeley, <a href="https://www.youtube.com/watch?v=oBO48D-kQYA&ab_channel=OllieO%27Donnell">UC Women's Chorale</a>, AFX Dance
+#     - title: Center for Computer Research in Music and Acoustics
+#       institution: Stanford University
+#       year: 2022
+#       description:
+#         - "Deep Learning for Music Information Retrieval, I & II"
+# - title: Experience
+#   type: time_table
+#   contents:
+#     - title: Deloitte & Touche LLP, Risk & Financial Advisory
+#       institution: Analytics Consultant
+#       year: 2021 - Present
+#       description:
+#         - title: "Data Analytics | Global Subscription Streaming Service Client" 
+#           contents:
+#             - Developed from scratch a rule-based cost account name normalization pipeline for 190+ productions (15000+ account names) across different genres and production studios using SQL and Python
+#             - "Clustered vendor names on 30,000+ ledger transactions using NLP methods: cosine similarity and tf-idf"
+#             - Separated independent contractor person names from organizations using Named Entity Recognition
+#             - Built and deployed 6 Tableau dashboards that were well-received by Head of Production Finance and provided biweekly trainings to Production Finance Executives on Tableau navigation and tooling
+#             - Lead a team of 6 off-shore members and report directly to Head of Production Finance
+#         - title: "Advertising Risk | Global Social Media Client" 
+#           contents:
+#             - Created and deployed automation scripts in Google Apps Script that improved spreadsheet efficiency by 60%
+#             - Performed data usage compliance assessments for 200+ third party advertisers and measurement partners
 
 
-    - title: UC Berkeley Center for Effective Global Action
-      institution: Research Assitant
-      year: 2020 - 2021
-      description:
-        - Built and maintained an R Shiny web app to assist policymakers with understanding research papers on social and fiscal deworming impacts in developing countries under different assumptions
-        - Deployed the whole project in cloud for transparency after aesthetics enhancement through HTML & CSS
-        - Wrote tutorials on topics including R Shiny, Git, and mentored undergraduate researchers
+#     - title: UC Berkeley Center for Effective Global Action
+#       institution: Research Assitant
+#       year: 2020 - 2021
+#       description:
+#         - Built and maintained an R Shiny web app to assist policymakers with understanding research papers on social and fiscal deworming impacts in developing countries under different assumptions
+#         - Deployed the whole project in cloud for transparency after aesthetics enhancement through HTML & CSS
+#         - Wrote tutorials on topics including R Shiny, Git, and mentored undergraduate researchers
 
-- title: Leadership & Teaching
-  type: time_table
-  contents:
-    - title: Ascend at Berkeley
-      year: 2019
-      institution: President
-      description: 
-        - Organized and hosted a multi-round <a href='https://www.linkedin.com/pulse/travonde-bridging-generations-nga-nguyen-1f/'>tech case competition</a> featuring 8 pioneer judges, including the Apple co-founder Steve Wozniak, and 200+ students participated 
-        - Led the 64-member organization, including overseeing 34 hosted events and handling a budget of $12,000+
-    - title: InAmerica Education
-      year: 2017
-      institution: Teacher
-      description: 
-        - Wrote and taught lessons in TOEFL Writing, Speaking, and SAT Grammar and Math
+# - title: Leadership & Teaching
+#   type: time_table
+#   contents:
+#     - title: Ascend at Berkeley
+#       year: 2019
+#       institution: President
+#       description: 
+#         - Organized and hosted a multi-round <a href='https://www.linkedin.com/pulse/travonde-bridging-generations-nga-nguyen-1f/'>tech case competition</a> featuring 8 pioneer judges, including the Apple co-founder Steve Wozniak, and 200+ students participated 
+#         - Led the 64-member organization, including overseeing 34 hosted events and handling a budget of $12,000+
+#     - title: InAmerica Education
+#       year: 2017
+#       institution: Teacher
+#       description: 
+#         - Wrote and taught lessons in TOEFL Writing, Speaking, and SAT Grammar and Math

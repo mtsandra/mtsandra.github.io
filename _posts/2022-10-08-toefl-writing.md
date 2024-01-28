@@ -2,7 +2,7 @@
 layout: post
 title:  托福满分备考经验 | My Advice for High TOEFL Score 
 date:   2022-10-8
-tags: tutorial chinese
+tags: tutorial chinese featured
 categories: English-learning
 description: 'I recently got full score in TOEFL and wrote down some of my hacks. This post is written in Chinese (for now).'
 ---

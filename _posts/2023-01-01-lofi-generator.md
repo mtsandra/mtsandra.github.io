@@ -2,7 +2,7 @@
 layout: post
 title:  How I Built a Lofi Music Player with AI-Generated Tracks
 date:   2023-01-02
-tags: tech music
+tags: tech music featured
 categories: music-tech-project tech-tutorial
 description: 'AI solo tracks are generated with LSTM model and song tracks are made with Tone.js.'
 ---
