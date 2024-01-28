@@ -1,1 +1,0 @@
-This website is built with the ai-folio template. For more info on al-folio, please see the official github repo [here]https://github.com/alshedivat/al-folio). To see my personal website, please see [here](https://mtsandra.github.io).
