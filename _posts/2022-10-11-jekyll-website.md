@@ -5,6 +5,7 @@ date:   2022-10-11
 description: My website setup process with bug fix for the al-polio template
 tags: tech tutorial
 categories: tech-tutorial
+published: false
 comments: false
 ---
 

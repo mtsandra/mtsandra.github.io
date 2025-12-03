@@ -1,9 +1,9 @@
 ---
 layout: page
 title: AI lofi generator
-description: "Web player for lofi music with AI-generated tracks, built with Tone.js and LSTM model"
+description: "web player built with tone.js and lstm model"
 img: assets/img/project-covers/rain.gif
 redirect: https://mtsandra.github.io/lofi-station
-importance: 1
-category: tech
+importance: 2
+category: music tech
 ---

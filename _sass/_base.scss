@@ -429,8 +429,35 @@ footer.sticky-bottom {
   }
 
   .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .row {
+      height: 100%;
+      align-items: center;
+    }
     img {
       width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    .card-img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .card-body {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .card-title {
+        font-size: 98%;
+      }
     }
   }
 

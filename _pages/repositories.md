@@ -3,7 +3,7 @@ layout: page
 permalink: /repositories/
 title: repositories
 description: Aleksandra Teng Ma is my newly created GitHub account, Teng Aleksandra Ma uses my old Berkeley email.
-nav: true
+nav: false
 nav_order: 3
 ---
 

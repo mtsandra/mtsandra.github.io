@@ -1,0 +1,222 @@
+I"}<!-- pages/projects.md -->
+<div class="projects">
+  <!-- Display categorized projects -->
+  <h2 class="category">music tech</h2>
+  <!-- Generate cards for each project -->
+  <div class="container">
+    <div class="row row-cols-2"><div class="card-item col"><a href="/projects/6x4/"><div class="card hoverable">
+      <div class="row g-0 align-items-start"><div class="card-img col-md-6">
+          <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/project-covers/somax2.gif" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+        </div>
+        <div class="col-md-6"><div class="card-body">
+            <h3 class="card-title text-lowercase">6x4</h3>
+            <p class="card-text">structured improv piece for Somax2 and saxphone</p>
+            <div class="row ml-1 mr-1 p-0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+<div class="card-item col"><a href="/projects/lofimulator/"><div class="card hoverable">
+      <div class="row g-0 align-items-start"><div class="card-img col-md-6">
+          <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/project-covers/lofimulator_br.gif" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+        </div>
+        <div class="col-md-6"><div class="card-body">
+            <h3 class="card-title text-lowercase">lofimulator</h3>
+            <p class="card-text">algorithmic ambient music and soundscape</p>
+            <div class="row ml-1 mr-1 p-0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+<div class="card-item col"><a href="https://mtsandra.github.io/lofi-station"><div class="card hoverable">
+      <div class="row g-0 align-items-start"><div class="card-img col-md-6">
+          <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/project-covers/rain.gif" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+        </div>
+        <div class="col-md-6"><div class="card-body">
+            <h3 class="card-title text-lowercase">AI lofi generator</h3>
+            <p class="card-text">web player built with tone.js and lstm model</p>
+            <div class="row ml-1 mr-1 p-0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+<div class="card-item col"><a href="https://ase-2.gitbook.io/rust-web-synthesizer"><div class="card hoverable">
+      <div class="row g-0 align-items-start"><div class="card-img col-md-6">
+          <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/project-covers/web-synth.gif" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+        </div>
+        <div class="col-md-6"><div class="card-body">
+            <h3 class="card-title text-lowercase">rusty krabby synthie</h3>
+            <p class="card-text">web synthesizer built with rust</p>
+            <div class="row ml-1 mr-1 p-0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+
+    </div>
+  </div>
+  <h2 class="category">music</h2>
+  <!-- Generate cards for each project -->
+  <div class="container">
+    <div class="row row-cols-2"><div class="card-item col"><a href="https://soundcloud.com/aleksandra-ma-20897898/faded-zhu-x-when-i-was-older-billie-eilish?si=80091b2ee9a24b09ba43546fe7207169&amp;utm_source=clipboard&amp;utm_medium=text&amp;utm_campaign=social_sharing"><div class="card hoverable">
+      <div class="row g-0 align-items-start"><div class="card-img col-md-6">
+          <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/project-covers/amywinehouse.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+        </div>
+        <div class="col-md-6"><div class="card-body">
+            <h3 class="card-title text-lowercase">dear amy</h3>
+            <p class="card-text">a tribute concert to amy winehouse</p>
+            <div class="row ml-1 mr-1 p-0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+<div class="card-item col"><a href="https://soundcloud.com/aleksandra-ma-20897898/faded-zhu-x-when-i-was-older-billie-eilish?si=80091b2ee9a24b09ba43546fe7207169&amp;utm_source=clipboard&amp;utm_medium=text&amp;utm_campaign=social_sharing"><div class="card hoverable">
+      <div class="row g-0 align-items-start"><div class="card-img col-md-6">
+          <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/project-covers/zhu-remix.jpg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+        </div>
+        <div class="col-md-6"><div class="card-body">
+            <h3 class="card-title text-lowercase">ZHU x BILLIE EILISH</h3>
+            <p class="card-text">when i was older x faded remix</p>
+            <div class="row ml-1 mr-1 p-0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+<div class="card-item col"><a href="https://www.youtube.com/watch?v=vNd2wSzw5ag&amp;ab_channel=AleksandraMa"><div class="card hoverable">
+      <div class="row g-0 align-items-start"><div class="card-img col-md-6">
+          <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/project-covers/nothing-new.JPG" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+        </div>
+        <div class="col-md-6"><div class="card-body">
+            <h3 class="card-title text-lowercase">Nothing New</h3>
+            <p class="card-text">leksa cover, orig. taylor swift &amp; phoebe bridgers</p>
+            <div class="row ml-1 mr-1 p-0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+
+    </div>
+  </div>
+  <h2 class="category">photography</h2>
+  <!-- Generate cards for each project -->
+  <div class="container">
+    <div class="row row-cols-2"><div class="card-item col"><a href="/projects/alice-alice-photography/"><div class="card hoverable">
+      <div class="row g-0 align-items-start"><div class="card-img col-md-6">
+          <figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/Alice%20Alice!/cartoon.jpeg" width="auto" height="auto" alt="project thumbnail" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+        </div>
+        <div class="col-md-6"><div class="card-body">
+            <h3 class="card-title text-lowercase">Alice Alice!</h3>
+            <p class="card-text">welcome to wonderland?</p>
+            <div class="row ml-1 mr-1 p-0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+
+    </div>
+  </div></div>
+:ET

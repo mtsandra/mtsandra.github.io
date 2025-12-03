@@ -1,227 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-01-27T19:50:58-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">All You Need to Know about the Music Business Notes</title><link href="http://localhost:4000/blog/2023/music-biz/" rel="alternate" type="text/html" title="All You Need to Know about the Music Business Notes" /><published>2023-05-20T00:00:00-04:00</published><updated>2023-05-20T00:00:00-04:00</updated><id>http://localhost:4000/blog/2023/music-biz</id><content type="html" xml:base="http://localhost:4000/blog/2023/music-biz/"><![CDATA[]]></content><author><name></name></author><category term="book-notes" /><category term="music" /><summary type="html"><![CDATA[Book notes of "All You Need to Know about the Music Business" by Don Passman]]></summary></entry><entry><title type="html">ChatGPT Prompt Engineering</title><link href="http://localhost:4000/blog/2023/prompt-engineering/" rel="alternate" type="text/html" title="ChatGPT Prompt Engineering" /><published>2023-05-01T00:00:00-04:00</published><updated>2023-05-01T00:00:00-04:00</updated><id>http://localhost:4000/blog/2023/prompt-engineering</id><content type="html" xml:base="http://localhost:4000/blog/2023/prompt-engineering/"><![CDATA[<p>Over the weekend I watched the quick <a href="https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/">course</a> put out by Andrew Ng and Isa Fulford about ChatGPT Prompt Engineering for developers. In the video series, they showed a lot of examples that inspired me to come up with my own application ideas, so I definitely recommend watching the course. It took me around 2 hours to finish the whole series. Below are notes for quick reference and reminders.</p>
-
-<h3 id="types-of-llms">Types of LLMs</h3>
-
-<p><strong>Base LLM vs Instruction Tuned LLM</strong></p>
-
-<ul>
-  <li>
-    <p>Base LLM: predicts next word, based on text training data</p>
-
-    <ul>
-      <li>
-        <p>Example:</p>
-
-        <ul>
-          <li>
-            <p>Input: What is the capital of France?</p>
-          </li>
-          <li>
-            <p>Output: What is France’s largest city? What is France’s population?</p>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>Instruction Tuned LLM: tires to follow instructions</p>
-
-    <ul>
-      <li>
-        <p>Example:</p>
-
-        <ul>
-          <li>
-            <p>Input: What is the capital of France?</p>
-          </li>
-          <li>
-            <p>Output: The capital of France is Paris.</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>Start off with a base LLM that’s been trained on a huge amount of text data and further fine tune it with inputs and outputs that are instructions and good attempts to follow these instructions</p>
-      </li>
-      <li>
-        <p>Then further refined by RLHF -&gt; Reinforcement learning with human feedback</p>
-      </li>
-      <li>
-        <p>Recommended for most applications to be deveoped</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="guideline-for-prompting">Guideline for Prompting</h3>
-
-<p><strong>First principle</strong>: give clear and specific instructions</p>
-
-<ul>
-  <li>
-    <p>Clear \(\neq\) Short</p>
-  </li>
-  <li>
-    <p>Tactic 1: Use delimiters to clearly indicate distinct parts of the input</p>
-
-    <ul>
-      <li>
-        <p>Delimiters examples: ```, “““, &lt;&gt;, &lt;tag&gt; &lt;/tag&gt;, : , —</p>
-      </li>
-      <li>
-        <p>Helps avoid prompt injections as well</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>Tactic 2: Ask for a structured output (i.e. JSON, HTML)</p>
-  </li>
-  <li>
-    <p>Tactic 3: Ask the model to check whether conditions are satisfied</p>
-  </li>
-  <li>
-    <p>Tactic 4: Few-shot prompting -&gt; Give successful examples of completing tasks then ask model to perform the task</p>
-  </li>
-</ul>
-
-<p><strong>Second principle</strong>: give the model time to think</p>
-
-<ul>
-  <li>
-    <p>Tactic 1: Specify the steps required to complete a task and ask for output in a specified format</p>
-  </li>
-  <li>
-    <p>Tactic 2: Instruct the model to work out its own solution before rushing to a conclusion</p>
-  </li>
-</ul>
-
-<p>Model Limitations:</p>
-
-<ul>
-  <li>
-    <p>Hallucination: makes statements that sound plausible but are not true</p>
-
-    <ul>
-      <li>Reducing hallucinations: first find relevant information, then answer the question based on the relevant information</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="iterative-prompt-development">Iterative Prompt Development</h3>
-
-<p>Prompt guidelines</p>
-
-<ul>
-  <li>
-    <p>Be clear and specific the first time</p>
-  </li>
-  <li>
-    <p>Analyze why result does not give desired output</p>
-  </li>
-  <li>
-    <p>Clarify instructions, give more time to think</p>
-  </li>
-  <li>
-    <p>Refine the idea and the prompt with a batch of examples -&gt; build on the initial prompt</p>
-  </li>
-  <li>
-    <p>Repeat</p>
-  </li>
-</ul>
-
-<p><img src="/assets/img/blog2023/prompt-engineering/iterative.png" alt="iterative process" width="100%" style="padding-bottom:0.5em;" /></p>
-
-<h3 id="summarizing">Summarizing</h3>
-
-<ul>
-  <li>
-    <p>Could ask the model to summarize with specific requirements such as word limits and focus area.</p>
-  </li>
-  <li>
-    <p>Could also extract instead of summarize (summarize may include more information than asked for)</p>
-  </li>
-  <li>
-    <p>Could put a list of similar texts in a list and use a loop to iterate through the list to do the same type of summarizing</p>
-  </li>
-</ul>
-
-<h3 id="inferring">Inferring</h3>
-
-<ul>
-  <li>
-    <p>Given a paragraph, infer emotions, or answer questions with specific requirements</p>
-  </li>
-  <li>
-    <p>Infer topics and could also determine if the text talks about a certain topic</p>
-  </li>
-</ul>
-
-<h3 id="transforming">Transforming</h3>
-
-<ul>
-  <li>
-    <p>Can be used to do common transformation tasks such as translation, language detection</p>
-  </li>
-  <li>
-    <p>Could build a universal translator by iterating through messages in different languages in a loop</p>
-  </li>
-  <li>
-    <p>Could do tone transformation, format conversion (HTML -&gt; JSON, etc.)</p>
-  </li>
-  <li>
-    <p>Could use spellcheck/grammar check</p>
-
-    <ul>
-      <li>
-        <p>Cool library to use to display the edited version with red lines indicating the changes from the original version:</p>
-
-        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">from</span> <span class="nn">redlines</span> <span class="kn">import</span> <span class="n">Redlines</span>
-  <span class="n">diff</span> <span class="o">=</span> <span class="n">Redlines</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-  <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">output_markdown</span><span class="p">))</span>
-</code></pre></div>        </div>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="expanding">Expanding</h3>
-
-<ul>
-  <li>
-    <p>Could expand on existing content based on prompt</p>
-  </li>
-  <li>
-    <p>Temperature: degree of exploration or randomness of the model</p>
-
-    <ul>
-      <li>
-        <p>Temperature = 0: the model will always choose the most likely next word</p>
-      </li>
-      <li>
-        <p>Temperature higher: will choose more of the less likely next word</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="chatbot">Chatbot</h3>
-
-<ul>
-  <li>
-    <p>Build your own chatbot: instead of only giving ChatGPT one message at a time, give it multiple messages and specify roles in JSON format:</p>
-
-    <pre><code class="language-JSON">  messages = [
-      {'role': 'system', 'content': 'You are a friendly chatbot.'}, 
-      {'role': 'user', 'content': 'tell me a joke'}, 
-      {'role': 'assistant', 'content': 'Why did the chicken cross the road'}, 
-      {'role':'user', 'content':  'i don\'t know'} 
-      ]
-</code></pre>
-  </li>
-  <li>
-    <p>Add context -&gt; write a helper function that automatically collects context and add input and output responses from the user and chatbot interaction (i.e. adding to the messages list)</p>
-  </li>
-</ul>]]></content><author><name></name></author><category term="beginners-guide" /><category term="tech" /><category term="tutorial" /><summary type="html"><![CDATA[Quick notes based on the course taught by Andrew Ng and Isa Fulford]]></summary></entry><entry><title type="html">Music Source Separation – Pt.1 Background and Signal Basics</title><link href="http://localhost:4000/blog/2023/source-separation-basics/" rel="alternate" type="text/html" title="Music Source Separation – Pt.1 Background and Signal Basics" /><published>2023-02-20T00:00:00-05:00</published><updated>2023-02-20T00:00:00-05:00</updated><id>http://localhost:4000/blog/2023/source-separation-basics</id><content type="html" xml:base="http://localhost:4000/blog/2023/source-separation-basics/"><![CDATA[<p>This series is inspired by my recent efforts to learn about a classic MIR task from end to end in a comprehensive way. This post is part 1, which focuses on the overall context and background of music source separation, along with some signal processing fundamentals. The series is inspired by the Music Source Separation <a href="https://source-separation.github.io/tutorial/landing.html">tutorial</a> at ISMIR 2020.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2025-12-02T19:38:28-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for personal website. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">All You Need to Know about the Music Business Notes</title><link href="http://localhost:4000/blog/2023/music-biz/" rel="alternate" type="text/html" title="All You Need to Know about the Music Business Notes" /><published>2023-05-20T00:00:00-04:00</published><updated>2023-05-20T00:00:00-04:00</updated><id>http://localhost:4000/blog/2023/music-biz</id><content type="html" xml:base="http://localhost:4000/blog/2023/music-biz/"><![CDATA[]]></content><author><name></name></author><category term="book-notes" /><category term="music" /><summary type="html"><![CDATA[Book notes of "All You Need to Know about the Music Business" by Don Passman]]></summary></entry><entry><title type="html">Music Source Separation – Pt.1 Background and Signal Basics</title><link href="http://localhost:4000/blog/2023/source-separation-basics/" rel="alternate" type="text/html" title="Music Source Separation – Pt.1 Background and Signal Basics" /><published>2023-02-20T00:00:00-05:00</published><updated>2023-02-20T00:00:00-05:00</updated><id>http://localhost:4000/blog/2023/source-separation-basics</id><content type="html" xml:base="http://localhost:4000/blog/2023/source-separation-basics/"><![CDATA[<p>This series is inspired by my recent efforts to learn about a classic MIR task from end to end in a comprehensive way. This post is part 1, which focuses on the overall context and background of music source separation, along with some signal processing fundamentals. The series is inspired by the Music Source Separation <a href="https://source-separation.github.io/tutorial/landing.html">tutorial</a> at ISMIR 2020.</p>
 
 <h3 id="background">Background</h3>
 
@@ -1613,153 +1391,7 @@ The last step gives us the output of the attention mechanism. Note that even tho
       <li>High fidelity instrument enhancement also with a GAN</li>
     </ul>
   </li>
-</ul>]]></content><author><name></name></author><category term="beginners-guide" /><category term="paper" /><category term="tech" /><summary type="html"><![CDATA[Example papers (HiFi-GAN and HiFi-GAN2) are on high fidelity speech enhancement with GANs.]]></summary></entry><entry><title type="html">Latent Space and Contrastive Learning</title><link href="http://localhost:4000/blog/2022/cont-latent/" rel="alternate" type="text/html" title="Latent Space and Contrastive Learning" /><published>2022-11-16T00:00:00-05:00</published><updated>2022-11-16T00:00:00-05:00</updated><id>http://localhost:4000/blog/2022/cont-latent</id><content type="html" xml:base="http://localhost:4000/blog/2022/cont-latent/"><![CDATA[<h3 id="latent-space">Latent Space</h3>
-
-<ul>
-  <li>
-    <p>Definition: Representation of compressed data</p>
-  </li>
-  <li>
-    <p>Data compression: process of encoding information using fewer bits than the original representation</p>
-  </li>
-</ul>
-
-<p><img src="/assets/img/deep-learning/image1.png" alt="latent-space" width="100%" style="padding-bottom:0.5em;" /></p>
-
-<p>Ekin Tiu has a Medium article about why it is called latent “space” <a href="https://towardsdatascience.com/understanding-latent-space-in-machine-learning-de5a7c687d8d">here</a></p>
-
-<ul>
-  <li>
-    <p>Tasks where latent space is necessary</p>
-
-    <ul>
-      <li>
-        <p>Representation learning:</p>
-
-        <ul>
-          <li>
-            <p>Definition: set of techniques that allow a system to discover the representations needed for feature detection or classification from raw data</p>
-          </li>
-          <li>
-            <p>Latent space representation of our data <strong>must</strong> contain all the important info (<strong>features</strong>) to represent our original data input</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>Manifold learning (subfield of representation learning):</p>
-
-        <ul>
-          <li>
-            <p>Definition: groups or subsets of data that are “similar” in some way in the latent space, that does not quite show in the higher dimensional space.</p>
-          </li>
-          <li>
-            <p>Manifolds just mean groups of similar data</p>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>Autoencoders and Generative Models</p>
-
-        <ul>
-          <li>
-            <p>Autoencoders: a neural network that acts an identify function, that has both an encoder and a decoder</p>
-          </li>
-          <li>
-            <p>We need the model to compress the representation (<strong>encode</strong>) in a way that we can accurately reconstruct it (<strong>decode</strong>).</p>
-
-            <ul>
-              <li>i.e. image in image out, audio in audio out
-  <img src="/assets/img/deep-learning/image2.png" alt="auto-encoders" width="100%" style="padding-bottom:0.5em;" /></li>
-            </ul>
-          </li>
-          <li>
-            <p>Generative models: interpolate on latent space to generate “new” image</p>
-
-            <ul>
-              <li>
-                <p>Interpolate: make estimations of independent variables if the independent variable takes on a value in between the range</p>
-              </li>
-              <li>
-                <p>Example: if chair images have 2D latent space vectors as [0.4, 0.5] and [0.45, 0.45], whereas the table has [0.6, 0.75]. Then to generate a picture that is a morph between a chair and a desk, we would <em>sample points in latent space between</em> the chair cluster and the desk cluster.</p>
-              </li>
-              <li>
-                <p>Diff between discriminative and generative:</p>
-
-                <ul>
-                  <li>
-                    <p>Generative can generate new data instances, capture the joint probability of p(X,Y) or p(X) if Y does not exist</p>
-                  </li>
-                  <li>
-                    <table>
-                      <tbody>
-                        <tr>
-                          <td>Discriminative models classifies instances into different labels. It captures p(Y</td>
-                          <td>X) -&gt; given the image, how likely is it a cat?</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="contrastive-learning-with-simclrv2">Contrastive Learning with SimCLRv2</h3>
-
-<ul>
-  <li>
-    <p>Definition: a technique that learns general features of a dataset <strong>without labels</strong> by teaching the model which data points are similar or different.</p>
-
-    <ul>
-      <li>
-        <p>Happens <strong>before</strong> classification or segmentation.</p>
-      </li>
-      <li>
-        <p>A type of self-supervised learning. The other is non-contrastive learning.</p>
-      </li>
-      <li>
-        <p>Can significantly improve model performance even when only a fraction of the dataset is labeled.</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>Process:
-  <img src="/assets/img/deep-learning/image3.png" alt="contrastive" width="100%" style="padding-bottom:0.5em;" /></p>
-
-    <ol>
-      <li>
-        <p><strong>Data Augmentation</strong> through 2 augmentation combos (i.e. crop + resize + recolor, etc.)</p>
-      </li>
-      <li>
-        <p><strong>Encoding:</strong> Feed the two augmented images into deep learning model to create <strong>vector representations</strong>.</p>
-
-        <ul>
-          <li><strong>Goal</strong> is to train the model to output similar representations for similar images</li>
-        </ul>
-      </li>
-      <li>
-        <p><strong>Minimize loss:</strong> Maximize the similarity of the two vector representations by minimizing a contrastive loss function</p>
-
-        <ul>
-          <li>
-            <p>Goal is to <strong>quantify the similarity</strong> of the two vector representations, then <strong>maximize the probability</strong> that two vector representations are similar.</p>
-          </li>
-          <li>We use <em>cosine similarity</em> as an example to quantify similarities: the angle between the two vectors in space. The closer they are, the bigger the similarity score
- <img src="/assets/img/deep-learning/image4.png" alt="cosine-sim" width="100%" style="padding-bottom:0.5em;" /></li>
-          <li>Next compute the <em>probability</em> with softmax:
-  <img src="/assets/img/deep-learning/image5.png" alt="softmax" width="100%" style="padding-bottom:0.5em;" /></li>
-          <li>Last we use -log() to make it a loss function so that we are minimizing this value, which corresponds to maximizing the probability that two pairs are similar
-  <img src="/assets/img/deep-learning/image6.png" alt="cross-entropy" width="100%" style="padding-bottom:0.5em;" /></li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-</ul>]]></content><author><name></name></author><category term="beginners-guide" /><category term="tech" /><summary type="html"><![CDATA[Latent Space and Contrastive Learning]]></summary></entry><entry><title type="html">Intro to Music Recommender System</title><link href="http://localhost:4000/blog/2022/mrs/" rel="alternate" type="text/html" title="Intro to Music Recommender System" /><published>2022-11-01T00:00:00-04:00</published><updated>2022-11-01T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/mrs</id><content type="html" xml:base="http://localhost:4000/blog/2022/mrs/"><![CDATA[<h3 id="1-characteristics-of-the-music-recommender-domain">1 Characteristics of the Music Recommender Domain</h3>
+</ul>]]></content><author><name></name></author><category term="beginners-guide" /><category term="paper" /><category term="tech" /><summary type="html"><![CDATA[Example papers (HiFi-GAN and HiFi-GAN2) are on high fidelity speech enhancement with GANs.]]></summary></entry><entry><title type="html">Intro to Music Recommender System</title><link href="http://localhost:4000/blog/2022/mrs/" rel="alternate" type="text/html" title="Intro to Music Recommender System" /><published>2022-11-01T00:00:00-04:00</published><updated>2022-11-01T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/mrs</id><content type="html" xml:base="http://localhost:4000/blog/2022/mrs/"><![CDATA[<h3 id="1-characteristics-of-the-music-recommender-domain">1 Characteristics of the Music Recommender Domain</h3>
 
 <ul>
   <li>
@@ -2784,4 +2416,455 @@ Reference image is from Irhum Shafkat's Medium article.</div>
 
 <p>Chris Olah’s blog about CNNs <a href="http://colah.github.io/posts/2014-07-Conv-Nets-Modular/">here</a></p>
 
-<p>GA Tech’s Polo Club of Data Science’s Interactive CNN learner in browser <a href="https://poloclub.github.io/cnn-explainer/#article-convolution">here</a></p>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 3 introduces convolution and convolutional neural network.]]></summary></entry></feed>
+<p>GA Tech’s Polo Club of Data Science’s Interactive CNN learner in browser <a href="https://poloclub.github.io/cnn-explainer/#article-convolution">here</a></p>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 3 introduces convolution and convolutional neural network.]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 2</title><link href="http://localhost:4000/blog/2022/dl4mir-2/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 2" /><published>2022-10-21T00:00:00-04:00</published><updated>2022-10-21T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-2</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-2/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="music-information-retrieval">Music Information Retrieval</h2>
+
+<h4 id="background-of-mir">Background of MIR</h4>
+
+<ul>
+  <li>
+    <p>Usually means audio content, but also extends to lyrics, music metadata, or user listening history</p>
+  </li>
+  <li>
+    <p>Audio can be complemented with cultural and social background like genre or era to solve MIR topics</p>
+  </li>
+  <li>
+    <p>Lyric analysis is also MIR, but might not have much to do with audio content</p>
+  </li>
+</ul>
+
+<h4 id="problems-in-mir">Problems in MIR</h4>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image11.png" alt="mir problems" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p.6</div>
+
+<p><strong>Subjectivity</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: Absolute ground truth does not exist</p>
+  </li>
+  <li>
+    <p>Example: music genres, the mood for a song, listening context, music tags</p>
+  </li>
+  <li>
+    <p>Counter example: pitch, tempo are more defined, but sometimes also ambiguous</p>
+  </li>
+  <li>
+    <p>Why deep learning has achieved good results: it is difficult to manually design useful features when we cannot exactly analyze the logic behind subjectivity</p>
+  </li>
+</ul>
+
+<p><strong>Decision Time Scale</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: unit time length the prediction is made on</p>
+  </li>
+  <li>
+    <p>Example:</p>
+
+    <ul>
+      <li>
+        <p>Long decision time scale (time invariant problems): tempo and key usually do not change in an excerpt</p>
+      </li>
+      <li>
+        <p>Short decision time scale (time-varying problems): melody extraction usually uses time frames that are really short</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="audio-data-representations">Audio Data Representations</h3>
+
+<ul>
+  <li>
+    <p>General background: audio signals are 1D, time-frequency representations are 2D and have a couple of options (listed below)</p>
+  </li>
+  <li>
+    <p>Important to pre-process the data and optimize the effective representation of audio data to save computational costs</p>
+  </li>
+  <li>
+    <p>2D representations can be considered as images but there are differences between images and time-frequency representations</p>
+
+    <ul>
+      <li>
+        <p>Images are usually locally correlated (meaning nearby pixels will have similar intensities and colors)</p>
+      </li>
+      <li>
+        <p>But spectrograms are often harmonic correlations. Their correlations might be far down the frequency axis and the local correlations are weaker</p>
+      </li>
+      <li>
+        <p>Scale invariance is expected for visual object recognition but probably not for audio-related tasks.</p>
+
+        <ul>
+          <li>Here scale invariance means if you enlarge a picture of a cat, the model will still be able to recognize that it’s a cat.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image12.png" alt="mir problems" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p.6</div>
+
+<p><strong>Audio Signals</strong></p>
+
+<ul>
+  <li>
+    <p>Samples of the digital audio signals</p>
+  </li>
+  <li>
+    <p>Usually not the most popular choice, considering the sheer amount of data and the expensive cost of computation</p>
+
+    <ul>
+      <li>Sampling rate is usually 44100 Hz, which means one second of audio will have 44100 samples</li>
+    </ul>
+  </li>
+  <li>
+    <p>But recently one-dimensional convolutions can be used to learn an alternative of existing time-frequency conversions</p>
+  </li>
+</ul>
+
+<p><strong>Short Time Fourier Transform</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: The procedure for computing STFTs is to divide a longer time signal into shorter segments of equal length and then compute the Fourier transform separately on each shorter segment.</p>
+  </li>
+  <li>
+    <p>(+) Computes faster than other time-frequency representations thanks to FFTs</p>
+  </li>
+  <li>
+    <p>(+) invertible to the audio signal, thus can be used in sonification of learned features and source separation</p>
+  </li>
+  <li>
+    <p>(-) its frequencies are linearly centered and do not match the frequency resolution of human auditory system -&gt; mel spectrogram is</p>
+  </li>
+  <li>
+    <p>(-) not as efficient in size as mel sepctrogram (log scale), but also not as raw as audio signals</p>
+  </li>
+  <li>
+    <p>(-) it is not musically motivated like CQT</p>
+  </li>
+</ul>
+
+<p><strong>Mel Spectrogram</strong></p>
+
+<ul>
+  <li>
+    <p>2D representation that is optimized for human auditory perception.</p>
+  </li>
+  <li>
+    <p>(+) It compresses the STFT in frequency axis to match the logarithmic frequency scale of human hearing - hence efficient in size but preserves the most perceptually important information</p>
+  </li>
+  <li>
+    <p>(-) not invertible to audio signals</p>
+  </li>
+  <li>
+    <p>Popular for tagging, boundary detection, onset detection, and learning latent features of music recommendation due to its close proximity to human auditory perception.</p>
+  </li>
+</ul>
+
+<p><strong>Constant-Q Transform (CQT)</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: It is also a 2D time-frequency representation that provide log-scale centered frequencies. It perfectly matches the frequency distribution of pitches</p>
+  </li>
+  <li>
+    <p>(+) Perfectly matches the pitch frequency distribution so it should be used where fundamental frequencies of notes should be identified</p>
+
+    <ul>
+      <li>Example: Chord recognition and transcription</li>
+    </ul>
+  </li>
+  <li>
+    <p>(-) Computation is heavier than the other two</p>
+  </li>
+</ul>
+
+<p><strong>Chromagram</strong></p>
+
+<ul>
+  <li>
+    <p>Definition: Pitch class profile, provides the energy distribution on a set of pitch class (from C to B)</p>
+  </li>
+  <li>
+    <p>It is more processed than other representations and can be used as a feature by itself, just like MFCC</p>
+  </li>
+</ul>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 2 provides background on music information retrieval and audio representations.]]></summary></entry><entry><title type="html">Deep Learning for Music Information Retrieval – Pt. 1</title><link href="http://localhost:4000/blog/2022/dl4mir-1/" rel="alternate" type="text/html" title="Deep Learning for Music Information Retrieval – Pt. 1" /><published>2022-10-20T00:00:00-04:00</published><updated>2022-10-20T00:00:00-04:00</updated><id>http://localhost:4000/blog/2022/dl4mir-1</id><content type="html" xml:base="http://localhost:4000/blog/2022/dl4mir-1/"><![CDATA[<p>This series is inspired by my recent efforts to learn about applying deep learning in the music information retrieval field. I attended a two-week <a href="https://ccrma.stanford.edu/workshops/deep-learning-for-music-information-retrieval-I">workshop</a> on the same topic at Stanford’s Center for Computer Research in Music and Acoustics, which I highly recommend to anyone who is interested in AI + Music. This series is guided by Choi et al.’s 2018 <a href="https://arxiv.org/abs/1709.04396">paper</a>, <em>A Tutorial on Deep Learning for Music Information Retrieval</em>.</p>
+
+<p>It will consist of four parts: Background of Deep Learning, Audio Representations, Convolutional Neural Network, Recurrent Neural Network. This series is only a beginner’s guide.</p>
+
+<p>My intent of creating this series is to break down this topic in a bullet point format for easy motivation and consumption.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="brief-context-on-deep-learning">Brief Context on Deep Learning</h2>
+
+<h4 id="development-history-of-neural-networks">Development history of Neural Networks</h4>
+
+<ul>
+  <li>
+    <p>Error backpropagation: way to apply the gradient descent algorithm for deep neural networks</p>
+  </li>
+  <li>
+    <p>Convolutional neural network was introduced to recognize handwritten digits.</p>
+  </li>
+  <li>
+    <p>Long short-term memory recurrent unit was introduced for sequence modelling.</p>
+
+    <ul>
+      <li>Sequence models input and output streams of data. For example, text streams and audio clips. Applications include speech recognition, sentiment classification, and video activity recognition</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="recent-advancements-that-contributed-to-modern-deep-learning">Recent Advancements that Contributed to Modern Deep Learning</h4>
+
+<ul>
+  <li>
+    <p>Optimization technique: Training speed has improved by using rectified linear units (ReLUs) instead of sigmoid functions</p>
+  </li>
+  <li>
+    <p>Parallel computing on graphical computing units (GPUs) also encourages large-scale training</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="deep-learning-vs-conventional-machine-learning">Deep Learning vs Conventional Machine Learning</h2>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image1.png" alt="deep learning vs conventional machine learning" width="100%" style="padding-bottom:0.5em;" />Diagram for Conventional Machine Learning vs Deep Learning
+
+</div>
+
+<h4 id="conventional-machine-learning">Conventional machine learning</h4>
+
+<ul>
+  <li>
+    <p>Hand designing the features &amp; the machine learning a classifier</p>
+
+    <ul>
+      <li>
+        <p>Using MFCCs as inputs to train a classifier because we already know that MFCC can provide relevant information for the task</p>
+      </li>
+      <li>
+        <p>Only part of the model learns from the data (classifier part), the MFCCs are calculated by us and not learned by the model from the data</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="deep-learning">Deep Learning</h4>
+
+<ul>
+  <li>
+    <p>Both the feature extraction and the classifier part comes from the model.</p>
+
+    <ul>
+      <li>
+        <p>Having multiple layers coupled with the nonlinear activation functions allows the model to learn complicated relationships between inputs and outputs</p>
+      </li>
+      <li>
+        <p>Input and output might not be directly correlated. For example, input can be audio signals but output can be genres.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="when-to-use-deep-networks">When to use Deep Networks?</h4>
+
+<ul>
+  <li>
+    <p>When there are at least 1000 samples. Samples here do not necessarily mean number of tracks, it should be specific to the task that you are performing.</p>
+
+    <ul>
+      <li>For example, you don’t need a lot of tracks to train a model on chord recognition - as long as you have enough chords in those tracks</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="what-to-do-if-theres-not-enough-data">What to do if there’s not enough data?</h4>
+
+<ul>
+  <li>
+    <p><strong>Data augmentation:</strong> adding some sort of distortion while preserving the core properties. This step is also highly dependent on task.</p>
+
+    <ul>
+      <li>
+        <p>Example: time stretching and pitch scaling for genre classification</p>
+      </li>
+      <li>
+        <p>Note that this will not work for key or tempo detection</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Transfer learning</strong>: reusing a network that is previously trained on another task(source task) for current task (target tasks)</p>
+
+    <ul>
+      <li>
+        <p>Assuming that there are similarities in the source task and target tasks, so that the pre-trained networks can actually provide relevant representations</p>
+      </li>
+      <li>
+        <p>The pre-trained network serves as a <em>feature extractor</em> and learns a shallow classifier</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Random Weights Network</strong>: also known as networks without training.</p>
+
+    <ul>
+      <li>
+        <p>Network structure is built based on a strong assumption of the feature hierarchy, so the procedure is not completely random</p>
+      </li>
+      <li>
+        <p>Similar to transfer learning, random weights network also can serve as a <em>feature extractor</em></p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="designing--training-a-deep-neural-network">Designing &amp; Training a Deep Neural Network</h2>
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image2.png" alt="neural network structure" width="100%" style="padding-bottom:0.5em;" />
+Sneak peek of the overall structure of a deep neural network with 3 hidden layers.
+
+</div>
+
+<p><br /></p>
+
+<p>Here we assume you have a basic understanding of what a standard neural network looks like and how forward propagation and back propagation works. If not, I recommend this 12-min long <a href="https://youtu.be/EVeqrPGfuCY">video</a> by Andrew Ng.</p>
+
+<h4 id="gradient-descent">Gradient Descent</h4>
+
+<p><img src="/assets/img/dl4mir/image3.png" alt="gradient update" width="30%" style="padding-bottom:0.5em;" /></p>
+
+<ul>
+  <li>
+    <p>Training speed affects the overall performance because a significant difference on the training speed may result in different convergences of the training. We need to control the learning rate and the gradient smartly to optimize the training speed.</p>
+  </li>
+  <li>
+    <p>Learning rate η: can be adaptively controlled. When it is far away from local minima, our gradient should take big steps, but when it gets closer, it should take smaller steps.</p>
+
+    <ul>
+      <li>ADAM is an optimizer that uses learning rate. It is an extension to the stochastic gradient descent</li>
+    </ul>
+  </li>
+  <li>
+    <p>Gradient ∇J(w): due to backpropagation, gradient at l-th layer is affected by the gradient at l +1th layer.</p>
+  </li>
+  <li>
+    <p>Reminder on different types of gradient descent algorithms: batch Gradient Descent, Mini-batch Gradient Descent, Stochastic Gradient Descent</p>
+  </li>
+</ul>
+
+<h4 id="activation-functions">Activation functions</h4>
+
+<h5 id="why-do-we-need-activation-functions">Why do we need activation functions?</h5>
+
+<p>Activation functions determines whether or not a node is considered to be activated or deactivated.</p>
+
+<p>We also use it to add nonlinearity into our model. We need nonlinearity because real world data is complex and cannot be captured only through a linear model. It is also worth noting that without a <em>non-linear</em> activation function in the network, a NN, no matter how many layers it had, would behave just like a single-layer perceptron, because summing these layers would give you just another linear function.</p>
+
+<h5 id="sigmoid-vs-tanh-vs-relu-vs-leaky-relu-and-softmax">sigmoid vs tanh vs ReLU vs leaky ReLU and softmax</h5>
+
+<p><strong>Sigmoid</strong>: output range (0,1)
+<img src="/assets/img/dl4mir/image4.png" alt="sigmoid" width="80%" style="padding-bottom:0.5em;" /></p>
+
+<ol>
+  <li>
+    <p>Not centered around zero, all its output are positive. <br /><img src="/assets/img/dl4mir/image5.png" alt="y" width="30%" style="padding-bottom:0.5em;" /> f here is the sigmoid activation function.<br />We have <img src="/assets/img/dl4mir/image6.png" alt="derivative" width="30%" style="padding-bottom:0.5em;" /> as the gradient. Because x<sub>i</sub> (output from sigmoid layer) is always positive, the gradient is also always either positive or negative. But to get the optimum value, weights sometimes take on opposite signs. This will cause zig zag behavior.</p>
+  </li>
+  <li>
+    <p>In the blue box, the gradient vanishes when the input values are too big or too small (vanishing gradient problem)</p>
+  </li>
+</ol>
+
+<p><strong>Tanh</strong>: output range (-1,1)</p>
+
+<p><img src="/assets/img/dl4mir/image7.png" alt="tanh" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p>Similar to sigmoid, it also has the vanishing gradient problem. But it is zero centered.</p>
+
+<p><strong>ReLU -</strong> output range: [0, infinity)</p>
+
+<p><img src="/assets/img/dl4mir/image8.png" alt="ReLU" width="80%" style="padding-bottom:0.5em;" /><br /></p>
+
+<p>R(x) = max(0, x)</p>
+
+<p>(+) Faster to converge compared with other activation function. Computationally inexpensive.</p>
+
+<p>(-) It’s likely when we are updating the weights, the output of a neuron is always x&lt;0. Hence, ReLU always sets it to 0. If this happens, the neuron just never gets activated and does not make contributions.</p>
+
+<p><strong>Leaky ReLU</strong></p>
+
+<p><img src="/assets/img/dl4mir/image9.png" alt="leaky ReLU" width="80%" style="padding-bottom:0.5em;" /><br />
+Instead of the standard ReLU, it adds a parameter alpha that avoids having a “dead” neuron.</p>
+
+<p><strong>Softmax</strong></p>
+
+<p>Softmax is only applied in the last layer to predict probability values in classification tasks.</p>
+
+<p>The input vectors need to be mutually exclusive, and the probability output needs to sum up to 1.<br />
+<img src="/assets/img/dl4mir/image10.png" alt="softmax" width="80%" style="padding-bottom:0.5em;" /></p>
+
+<h3 id="deep-neural-networks-for-mir">Deep Neural Networks for MIR</h3>
+
+<p>This series will also cover convolutional neural network (part 3) and recurrent neural network (part 4) in details. Here we briefly discuss dense layers.</p>
+
+<p><strong>Dense Layers in Music</strong></p>
+
+<div style="font-size: 80%; color: #808080; text-align:center; font-style: italic;"><img src="/assets/img/dl4mir/image2.png" alt="neural network structure" width="100%" style="padding-bottom:0.5em;" />
+Choi et al., 2018, p. 6
+
+</div>
+<p>There could be dense layer that only looks at the current frame like d1, but there could also be dense layers with contexts that look at multiple frames like d2.</p>
+
+<ul>
+  <li>
+    <p>Note: A dense layer does not facilitate a shift or scale invariance.</p>
+
+    <ul>
+      <li>
+        <p>Example: A STFT with frame length of 257 will be mapped from 257 dimensional space to a V-dimensional space (where V is the number of nodes in a hidden layer)</p>
+      </li>
+      <li>
+        <p>Even a tiny shift in frequency will be a different representation in</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>We usually combine dense layers with CNNs or RNNs for various MIR tasks.</p>
+  </li>
+</ul>
+
+<h4 id="resources">Resources:</h4>
+
+<p>Stackoverflow answer about why we need nonlinearity in Neural Network <a href="https://stackoverflow.com/a/9783865">here</a></p>]]></content><author><name></name></author><category term="Deep-Learning" /><category term="MIR" /><category term="tech" /><category term="music" /><category term="tutorial" /><summary type="html"><![CDATA[Part 1 sets the foundation for deep learning concepts.]]></summary></entry></feed>

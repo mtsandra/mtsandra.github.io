@@ -204,7 +204,17 @@ footer.sticky-bottom { border-top: 1px solid var(--global-divider-color); paddin
 
 .projects a:hover .card-title { color: var(--global-theme-color); }
 
-.projects .card img { width: 100%; }
+.projects .card { display: flex; flex-direction: column; height: 100%; }
+
+.projects .card .row { height: 100%; align-items: center; }
+
+.projects .card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: center center; }
+
+.projects .card .card-img { display: flex; align-items: center; justify-content: center; height: 100%; }
+
+.projects .card .card-body { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+
+.projects .card .card-body .card-title { font-size: 98%; }
 
 .projects .card-item { width: auto; margin-bottom: 10px; }
 

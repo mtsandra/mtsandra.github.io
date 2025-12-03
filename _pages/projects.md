@@ -5,7 +5,7 @@ permalink: /projects/
 description: Projects I'm passionate about in technical work, music, and photography
 nav: true
 nav_order: 2
-display_categories: [tech, music, photography]
+display_categories: [music tech, music, photography]
 horizontal: true
 ---
 

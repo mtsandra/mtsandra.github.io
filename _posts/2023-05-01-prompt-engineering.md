@@ -3,6 +3,7 @@ layout: post
 title:  "ChatGPT Prompt Engineering"
 date:   2023-05-01
 tags: tech tutorial
+published: false
 categories: beginners-guide
 description: 'Quick notes based on the course taught by Andrew Ng and Isa Fulford'
 ---
