@@ -68,10 +68,10 @@ github_username: mtsandra # your GitHub user name
 gitlab_username: # your GitLab user name
 twitter_username: aleksandraa_ma # your Twitter handle
 linkedin_username: # your LinkedIn user name
-scholar_userid: # your Google Scholar ID
+scholar_userid: g9HVjIkAAAAJ # your Google Scholar ID
 semanticscholar_id: # your Semantic Scholar ID
 orcid_id: # your ORCID ID
-medium_username: leksa_86 # your Medium username
+medium_username:  # your Medium username
 quora_username: # your Quora username
 publons_id: # your ID on Publons
 research_gate_profile: # your profile on ResearchGate
@@ -228,8 +228,8 @@ display_tags: ['featured' ,'tech','tutorial','music','chinese', 'opinion'] # thi
 
 scholar:
 
-  last_name: [Einstein]
-  first_name: [Albert, A.]
+  last_name: [Ma]
+  first_name: [Aleksandra Teng, T. Aleksandra, T Aleksandra]
 
   style: apa
   locale: en
@@ -252,7 +252,7 @@ scholar:
   query: "@*"
 
 # Filter out certain bibtex entry keywords used internally from the bib output
-filtered_bibtex_keywords: [abbr, abstract, arxiv, bibtex_show, html, pdf, selected, supp, blog, code, poster, slides, website, preview, demo]
+filtered_bibtex_keywords: [abbr, abstract, arxiv, bibtex_show, html, pdf, selected, supp, blog, code, poster, slides, website, preview, demo, dataset]
 
 # Maximum number of authors to be shown for each publication (more authors are visible on click)
 max_author_limit: 3  # leave blank to always show all authors

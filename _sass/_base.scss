@@ -99,6 +99,7 @@ blockquote {
     margin-bottom: 5px;
     margin-top: 5px;
     font-family: monospace;
+    text-align: center;
     p {
       display: inline-block;
       margin: 0;
@@ -530,10 +531,11 @@ footer.sticky-bottom {
         abbr {
           display: inline-block;
           background-color: var(--global-theme-color);
+          color: var(--global-badge-text-color);
           padding-left: 1rem;
           padding-right: 1rem;
           a {
-            color: white;
+            color: var(--global-badge-text-color);
             &:hover {
               text-decoration: none;
             }
