@@ -103,6 +103,12 @@ env -i \
   JEKYLL_ENV=production \
   bundle exec jekyll build
 
+# Stash local gem install out of the repo so it survives the cleanup below
+# and never gets force-added to the DEPLOY_BRANCH.
+VENDOR_STASH="$(mktemp -d)"
+[[ -d vendor ]] && mv vendor "$VENDOR_STASH/"
+[[ -d .bundle ]] && mv .bundle "$VENDOR_STASH/"
+
 # Delete and move files
 find . -maxdepth 1 ! -name '_site' ! -name '.git' ! -name 'CNAME' ! -name '.gitignore' -exec rm -rf {} \;
 mv _site/* .
@@ -118,6 +124,11 @@ git commit --allow-empty -m "$(git log -1 --pretty=%B) [ci skip]"
 
 # Move back to SRC_BRANCH
 git checkout $SRC_BRANCH
+
+# Restore the stashed local gem install
+[[ -d "$VENDOR_STASH/vendor" ]] && mv "$VENDOR_STASH/vendor" .
+[[ -d "$VENDOR_STASH/.bundle" ]] && mv "$VENDOR_STASH/.bundle" .
+rm -rf "$VENDOR_STASH"
 
 echo "Deployed successfully!"
 
