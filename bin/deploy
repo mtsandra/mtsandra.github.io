@@ -91,11 +91,17 @@ then
 fi
 git checkout -b $DEPLOY_BRANCH
 
-# Export JEKYLL_ENV=production
-export JEKYLL_ENV=production
-
 # Build site
-bundle exec jekyll build
+# Uses a clean environment: this machine has a corrupted env var that makes
+# bundler crash with "invalid byte sequence in UTF-8" otherwise.
+env -i \
+  HOME="$HOME" \
+  USER="$USER" \
+  PATH="$HOME/.gem/ruby/2.6.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/homebrew/bin" \
+  LANG="en_US.UTF-8" \
+  LC_ALL="en_US.UTF-8" \
+  JEKYLL_ENV=production \
+  bundle exec jekyll build
 
 # Delete and move files
 find . -maxdepth 1 ! -name '_site' ! -name '.git' ! -name 'CNAME' ! -name '.gitignore' -exec rm -rf {} \;
